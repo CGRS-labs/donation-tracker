@@ -2,6 +2,7 @@ const path = require('path');
 const express = require('express');
 require('dotenv').config();
 
+const apiRouter = require('./routes/api');
 const AppError = require('./utils/AppError.js');
 
 const app = express();
@@ -15,11 +16,7 @@ app.get('/', (req, res, next) => {
   return res.status(200).sendFile(path.resolve(__dirname, '../client/index.html'));
 });
 
-
-
-// TODO: add routers
-
-
+app.use('/api', apiRouter);
 
 // 404 handler
 app.use((req, res) => {
