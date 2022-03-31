@@ -25,7 +25,7 @@ class App extends Component {
               <Link to='/login'>Login</Link>
             </li>
             <li>
-              <Link to='/login'>Register</Link>
+              <Link to='/register'>Register</Link>
             </li>
           </ul>
           <hr />
