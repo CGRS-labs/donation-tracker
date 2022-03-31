@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -16,12 +16,36 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 const theme = createTheme();
 
 export default function Login() {
+  const [inputs, setInputs] = useState({
+    email: '',
+    password: '',
+  });
+
+  const handleChange = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+    setInputs(values => ({...values, [name]: value}));
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    const data = new FormData(document.getElementById('login'));
     console.log({
       email: data.get('email'),
       password: data.get('password'),
+    });
+    fetch('/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data),
+    })
+      .then(res => console.log(res));
+
+    setInputs({
+      email: '',
+      password: '',
     });
   };
 
@@ -43,7 +67,7 @@ export default function Login() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Box id="login" component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
@@ -51,18 +75,22 @@ export default function Login() {
               id="email"
               label="Email Address"
               name="email"
+              value= { inputs.email || '' }
               autoComplete="email"
               autoFocus
+              onChange = { handleChange }
             />
             <TextField
               margin="normal"
               required
               fullWidth
               name="password"
+              value = { inputs.password || ''}
               label="Password"
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange = { handleChange }
             />
             <Button
               type="submit"

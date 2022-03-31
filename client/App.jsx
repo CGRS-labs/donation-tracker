@@ -6,7 +6,7 @@ import {
   Routes,
   Route,
   Link,
-} from "react-router-dom";
+} from 'react-router-dom';
 
 import './styles/styles.css';
 
@@ -38,7 +38,7 @@ class App extends Component {
         </div>
 
       </Router>
-    )
+    );
   }
 }
 
