@@ -20,7 +20,7 @@ chapterItemsController.getItem = async (req, res, next) => {
 };
 
 chapterItemsController.getAllItems = async (req, res, next) => {
-  return next(new AppError(new Error('Not implemented'), 'chapterItemsController', 'getItem', 500));
+  return next(new AppError(new Error('Not implemented'), 'chapterItemsController', 'getAllItem', 500));
 };
 
 

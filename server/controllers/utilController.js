@@ -1,3 +1,5 @@
+const AppError = require('../utils/AppError');
+
 const utilConroller = {};
 
 /**
@@ -10,13 +12,7 @@ utilConroller.toSqlUpdateQuery = (req, res, next) => {
   const fields = Object.keys(req.body);
 
   if (fields.length === 0) {
-    return next({
-      log: `ERROR: utilController.toSqlUpdateQuery: ${err};`,
-      status: 400,
-      message: {
-        error: 'ERROR: utilController.toSqlUpdateQuery: Empty body',
-      }
-    });
+    return new AppError(new Error('Expected request body to contain data'), 'utilConroller', 'toSqlUpdateQuery', 400);
   }
 
   const chunks = [];
@@ -27,7 +23,7 @@ utilConroller.toSqlUpdateQuery = (req, res, next) => {
     values.push(req.body[fields[i]]);
   }
 
-  values.push(req.params.id);
+  values.push(res.locals.id);
 
   res.locals.updateQuery = {
     text: `UPDATE ${res.locals.table} SET ${chunks.join(', ')} WHERE ${res.locals.column} = $${fields.length + 1};`,

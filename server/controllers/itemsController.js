@@ -29,6 +29,7 @@ itemsController.deleteItem = async (req, res, next) => {
 itemsController.storeTableAndColumnNames = (req, res, next) => {
   res.locals.table = 'items';
   res.locals.column = 'id';
+  res.locals.id = req.params.itemId;
   return next();
 };
 

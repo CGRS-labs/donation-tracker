@@ -25,6 +25,7 @@ chaptersController.deleteChapter = async (req, res, next) => {
 chaptersController.storeTableAndColumnNames = (req, res, next) => {
   res.locals.table = 'chapters';
   res.locals.column = 'id';
+  res.locals.id = req.params.chapterId;
   return next();
 };
 
