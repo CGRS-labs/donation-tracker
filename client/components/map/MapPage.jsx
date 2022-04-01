@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Map, {
   Marker,
   Popup,
@@ -12,27 +12,28 @@ import Pin from './Pin';
 
 // Mock data
 // import geojson from '../../../data/geojson';
-import cities from '../../../data/cities.json';
+// import cities from '../../../data/cities.json';
 
 export default function MapPage({ lat = 40, long = -100 }) {
 
-  // Fetch map data from database
-  // need to store lat, longitude in database
-  // can convert using https://developer.myptv.com/Documentation/Geocoding%20API/API%20Reference.htm
-  // or mapbox geocode api
-  // From elephantsql in prod
-  // from json-server in dev
-
   const [popupInfo, setPopupInfo] = useState(null);
+  const [markerData, setMarkerData] = useState([]);
 
-  const markers = useMemo(() => cities.map((city, index) => (
+  useEffect(async () => {
+    // get marker data on initial load. 
+    const markers = await fetch('/api/chapters').then(res => res.json());
+    setMarkerData(markers);
+  }, []);
+
+
+  const markers = useMemo(() => markerData.map((marker, index) => (
     <Marker
       key={index}
-      longitude={city.longitude}
-      latitude={city.latitude}
+      longitude={marker.longitude}
+      latitude={marker.latitude}
       anchor="bottom"
     >
-      <Pin onClick={() => setPopupInfo(city)} />
+      <Pin onClick={() => setPopupInfo(marker)} />
     </Marker>
   )));
 
@@ -62,10 +63,12 @@ export default function MapPage({ lat = 40, long = -100 }) {
         onClose={() => setPopupInfo(null)}
       >
         <div id="popup-info">
-          <b>Chapter:</b> {popupInfo.city}<br />
-          <b>Address:</b> {popupInfo.city}<br />
-          <b>Phone:</b> {popupInfo.city}<br />
-          <b>Email:</b> {popupInfo.city}<br />
+          <b>Chapter:</b> {popupInfo.name}<br />
+          <b>Phone:</b> {popupInfo.phone}<br />
+          <b>Email:</b> {popupInfo.email}<br />
+          <b>Address:</b> <br />
+          {`${popupInfo.street}`}<br />
+          {`${popupInfo.city}, ${popupInfo.state} ${popupInfo.zip}`}<br />
         </div>
       </Popup>
     }

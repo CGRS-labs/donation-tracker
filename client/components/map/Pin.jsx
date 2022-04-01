@@ -5,12 +5,13 @@ const ICON = 'M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 
 const pinStyle = {
   cursor: 'pointer',
   fill: '#d00',
-  stroke: 'none'
+  stroke: 'none',
+  display: 'block',
 };
 
-function Pin({ size = 32, onClick }) {
+function Pin({ size = 20, onClick }) {
   return (
-    <svg height={size} viewBox="0 0 24 24" style={pinStyle} onClick={onClick}>
+    <svg height={size} viewBox="0 0 16 16" style={pinStyle} onClick={onClick}>
       <path d={ICON} />
     </svg>
   );

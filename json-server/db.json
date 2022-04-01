@@ -1,0 +1,64 @@
+{
+  "chapters": [
+    {
+      "id": 1,
+      "name": "Plast Cleveland",
+      "street": "1270 W. 102nd St.",
+      "city": "Cleveland",
+      "state": "OH",
+      "zip": 44102,
+      "phone": "216-578-8888",
+      "email": "test@mail.com",
+      "latitude": 41.5052,
+      "longitude": -81.6934
+    },
+    {
+      "id": 2,
+      "name": "New York",
+      "street": "",
+      "city": "New York",
+      "state": "NY",
+      "zip": 0,
+      "phone": "216-578-8888",
+      "email": "test@mail.com",
+      "latitude": 40.76872225,
+      "longitude": -73.9826608125
+    },
+    {
+      "id": 3,
+      "name": "Boston",
+      "street": "",
+      "city": "Boston",
+      "state": "MA",
+      "zip": 0,
+      "phone": "216-578-8888",
+      "email": "test@mail.com",
+      "latitude": 42.3605,
+      "longitude": -71.0596
+    },
+    {
+      "id": 4,
+      "name": "Detroit",
+      "street": "",
+      "city": "Detroit",
+      "state": "MI",
+      "zip": 0,
+      "phone": "216-578-8888",
+      "email": "test@mail.com",
+      "latitude": 42.3487,
+      "longitude": -83.0567
+    },
+    {
+      "id": 5,
+      "name": "Chicago",
+      "street": "",
+      "city": "Chicago",
+      "state": "IL",
+      "zip": 44102,
+      "phone": "216-578-8888",
+      "email": "test@mail.com",
+      "latitude": 41.8756,
+      "longitude": -87.6244
+    }
+  ]
+}
