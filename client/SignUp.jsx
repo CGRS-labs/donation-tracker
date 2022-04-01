@@ -1,27 +1,54 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+import { MenuItem } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { InputLabel, Select, SelectChangeEvent } from '@mui/material';
 
 const theme = createTheme();
 
 export default function SignUp() {
+  const [inputs, setInputs] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    chapter: '',
+  });
+
+  const handleChange = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+    setInputs(values => ({...values, [name]: value}));
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+    const data = new FormData(document.getElementById('signup'));
+   
+    fetch('/api/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data),
+    })
+      .then(res => console.log(res));
+
+    setInputs({
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      chapter: '',
     });
   };
 
@@ -43,7 +70,7 @@ export default function SignUp() {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box id='signup' component="form" noValidate onSubmit={ handleSubmit } sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -53,7 +80,9 @@ export default function SignUp() {
                   fullWidth
                   id="firstName"
                   label="First Name"
+                  value= { inputs.firstName || '' }
                   autoFocus
+                  onChange={ handleChange }
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -63,7 +92,9 @@ export default function SignUp() {
                   id="lastName"
                   label="Last Name"
                   name="lastName"
+                  value= { inputs.lastName || '' }
                   autoComplete="family-name"
+                  onChange = { handleChange }
                 />
               </Grid>
               <Grid item xs={12}>
@@ -73,7 +104,9 @@ export default function SignUp() {
                   id="email"
                   label="Email Address"
                   name="email"
+                  value= { inputs.email || '' }
                   autoComplete="email"
+                  onChange = { handleChange }
                 />
               </Grid>
               <Grid item xs={12}>
@@ -84,8 +117,37 @@ export default function SignUp() {
                   label="Password"
                   type="password"
                   id="password"
+                  value= { inputs.password || '' }
                   autoComplete="new-password"
+                  onChange = { handleChange }
                 />
+              </Grid>
+              <Grid item xs={12}>
+                <InputLabel id='chapterSelect'>Chapter</InputLabel>
+                <Select
+                  labelId='chapter-select-label'
+                  id='menu'
+                  name='chapter'
+                  value={inputs.chapter || ''}
+                  label='Chapter'
+                  onChange={ handleChange }
+                >
+                  <MenuItem value={'albany'}>Albany</MenuItem>
+                  <MenuItem value={'boston'}>Boston</MenuItem>
+                  <MenuItem value={'buffalo'}>Buffalo</MenuItem>
+                  <MenuItem value={'cleveland'}>Chicago</MenuItem>
+                  <MenuItem value={'cleveland'}>Cleveland</MenuItem>
+                  <MenuItem value={'detriot'}>Detriot</MenuItem>
+                  <MenuItem value={'hartford'}>Hartford</MenuItem>
+                  <MenuItem value={'newYork'}>New York</MenuItem>
+                  <MenuItem value={'newark'}>Newark</MenuItem>
+                  <MenuItem value={'passaic'}>Passaic</MenuItem>
+                  <MenuItem value={'philadelphia'}>Philadephia</MenuItem>
+                  <MenuItem value={'rochester'}>Rochester</MenuItem>
+                  <MenuItem value={'seattle'}>Seattle</MenuItem>
+                  <MenuItem value={'washingtonDC'}>Washington D.C.</MenuItem>
+                  <MenuItem value={'yonkers'}>Yonkers</MenuItem>
+                </Select>
               </Grid>
             </Grid>
             <Button
