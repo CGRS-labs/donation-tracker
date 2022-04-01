@@ -10,37 +10,31 @@ import {
 
 import './styles/styles.css';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-  }
+const App = props => {
 
-  render() {
-
-    return (
-      <Router>
-        <div className="navigation">
-          <ul>
-            <li>
-              <Link to='/login'>Login</Link>
-            </li>
-            <li>
-              <Link to='/register'>Register</Link>
-            </li>
-          </ul>
-          <hr />
-          <div>
-            <Routes>
-              <Route exact path="/login" element={ <Login /> } />
-              <Route exact path="/register" element={ <SignUp /> } />
-            </Routes>
-          </div>
+  return (
+    <Router>
+      <div className="navigation">
+        <ul>
+          <li>
+            <Link to='/login'>Login</Link>
+          </li>
+          <li>
+            <Link to='/register'>Register</Link>
+          </li>
+        </ul>
+        <hr />
+        <div>
+          <Routes>
+            <Route exact path="/login" element={ <Login /> } />
+            <Route exact path="/register" element={ <SignUp /> } />
+          </Routes>
         </div>
+      </div>
 
-      </Router>
-    );
-  }
-}
+    </Router>
+  );
+};
 
 
 
