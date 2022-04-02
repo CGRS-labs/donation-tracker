@@ -7,35 +7,22 @@ import {
   Route,
   Link,
 } from 'react-router-dom';
-
+import Layout from './Layout.jsx';
+import Homepage from './Homepage.jsx';
 import './styles/styles.css';
 
 const App = props => {
 
   return (
     <Router>
-      <div className="navigation">
-        <ul>
-          <li>
-            <Link to='/login'>Login</Link>
-          </li>
-          <li>
-            <Link to='/register'>Register</Link>
-          </li>
-        </ul>
-        <hr />
-        <div>
-          <Routes>
-            <Route exact path="/login" element={ <Login /> } />
-            <Route exact path="/register" element={ <SignUp /> } />
-          </Routes>
-        </div>
-      </div>
-
+      <Routes>
+        <Route exact path="/" element= {<Layout><Homepage /></Layout>} />
+        <Route exact path="/signin" element={ <Layout><Login /></Layout> } />
+        <Route exact path="/signup" element={ <Layout><SignUp /></Layout> } />
+      </Routes>
     </Router>
   );
 };
-
 
 
 export default App;
