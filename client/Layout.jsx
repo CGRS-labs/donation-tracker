@@ -28,7 +28,7 @@ function Copyright() {
 
 const theme = createTheme();
 
-export default function Layout() {
+export default function Layout({children}) {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -42,17 +42,7 @@ export default function Layout() {
             pb: 6,
           }}
         >
-          <Container maxWidth="sm">
-            <Typography
-              component="h1"
-              variant="h2"
-              align="center"
-              color="text.primary"
-              gutterBottom
-            >
-              Map
-            </Typography>
-          </Container>
+          {children}
         </Box>
 
       </main>
