@@ -43,6 +43,8 @@ router.delete('/:chapterId',
 );
 
 router.post('/',
+  chaptersController.validateAddressInfo,
+  chaptersController.getGeocode,
   chaptersController.addChapter,
   (req, res) => {
     return res.status(200).send('Add chapter success');

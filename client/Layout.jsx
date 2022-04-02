@@ -22,7 +22,7 @@ function Copyright() {
 
 function Footer() {
   return (
-    <Box sx={{ bgcolor: 'background.paper', p: 6 }} component="footer">
+    <Box sx={{ bgcolor: 'background.paper', pb: 2 }} component="footer">
       <Typography variant="h6" align="center" gutterBottom>
         Footer
       </Typography>
@@ -55,8 +55,7 @@ export default function Layout({ children }) {
         <Box
           sx={{
             bgcolor: 'background.paper',
-            pt: 8,
-            pb: 6,
+            py: 2,
             flexGrow: 1,
           }}
           component='main'

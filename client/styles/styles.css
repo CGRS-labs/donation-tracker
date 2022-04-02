@@ -1,0 +1,12 @@
+#map-container {
+  width: 100%;
+  height: 100%;
+  flex-grow: 1;
+
+  display: flex;
+}
+
+#map-panel {
+  flex-basis: 20%;
+  padding: 15px 20px;
+}

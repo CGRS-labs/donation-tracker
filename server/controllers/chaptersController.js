@@ -1,4 +1,5 @@
 const AppError = require('../utils/AppError');
+const getGeocodeFromAddress = require('../utils/geocode');
 
 const chaptersController = {};
 
@@ -28,5 +29,31 @@ chaptersController.storeTableAndColumnNames = (req, res, next) => {
   res.locals.id = req.params.chapterId;
   return next();
 };
+
+chaptersController.validateAddressInfo = (req, res, next) => {
+  if (!req.body.street || !req.body.city || !req.body.state || !req.body.zip) {
+    return next(new AppError(new Error('Expected street, city, state and zip to exist on request body'), 'chaptersController', 'validateAddressInfo', 400));
+  }
+
+  return next();
+
+};
+
+chaptersController.getGeocode = async (req, res, next) => {
+  const { street, city, state, zip } = req.body;
+
+  try {
+
+    const [longitude, latitude] = await getGeocodeFromAddress(steet, city, state, zip);
+    res.locals.longitude = longitude;
+    res.locals.latitude = latitude;
+
+    return next();
+
+  } catch (err) {
+    return next(new AppError(err, 'chaptersController', 'getGeocode', 500));
+  }
+};
+
 
 module.exports = chaptersController;
