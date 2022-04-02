@@ -18,27 +18,21 @@ const App = props => {
       <div className="navigation">
         <ul>
           <li>
-            <Link to='/login'>Login</Link>
+            <Link to='/signin'>Sign In</Link>
           </li>
           <li>
-            <Link to='/register'>Register</Link>
+            <Link to='/signup'>Sign Up</Link>
           </li>
         </ul>
         <hr />
-        <div>
-          <Layout></Layout>
-        </div>
-        <div>
-          <Routes>
-            <Route exact path="/login" element={ <Login /> } />
-            <Route exact path="/register" element={ <SignUp /> } />
-          </Routes>
-        </div>
       </div>
+      <Routes>
+        <Route exact path="/signin" element={ <Layout><Login /></Layout> } />
+        <Route exact path="/signup" element={ <Layout><SignUp /></Layout> } />
+      </Routes>
     </Router>
   );
 };
-
 
 
 export default App;
