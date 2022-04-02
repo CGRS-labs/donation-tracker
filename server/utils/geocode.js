@@ -1,6 +1,6 @@
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
-const cities = require('../../data/db.json');
+const cities = require('../../json-server/db.json');
 
 /**
  * Obtains coordinates for first result mathcing the provided address or an empty array if not match found. 
