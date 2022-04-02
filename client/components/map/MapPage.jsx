@@ -29,7 +29,7 @@ export default function MapPage() {
     // get marker data on initial load. 
     if (chapter) {
       const items = await fetch(`/api/chapters/${chapter.id}/items`).then(res => res.json());
-      const itemList = items.map(item => item.name);
+      const itemList = items.filter(item => item.total_needed > 0).map(item => item.name);
       setChapterItems(itemList);
     }
   }, [chapter]);
