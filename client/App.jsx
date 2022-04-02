@@ -29,14 +29,12 @@ const App = props => {
           </li>
         </ul>
         <hr />
-        <div>
-          <Routes>
-            <Route exact path="/login" element={<Login />} />
-            <Route exact path="/register" element={<SignUp />} />
-            <Route exact path="/map" element={<MapPage />} />
-          </Routes>
-        </div>
       </div>
+      <Routes>
+        <Route exact path="/login" element={<Login />} />
+        <Route exact path="/register" element={<SignUp />} />
+        <Route exact path="/map" element={<MapPage />} />
+      </Routes>
 
     </Router>
   );

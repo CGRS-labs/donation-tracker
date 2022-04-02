@@ -60,5 +60,32 @@
       "latitude": 41.8756,
       "longitude": -87.6244
     }
+  ],
+  "items": [
+    {
+      "id": 1,
+      "need": 2,
+      "name": "diapers"
+    },
+    {
+      "id": 2,
+      "need": 2,
+      "name": "clothes"
+    },
+    {
+      "id": 3,
+      "need": 100,
+      "name": "canned goods"
+    },
+    {
+      "id": 4,
+      "need": 2,
+      "name": "toothpase"
+    },
+    {
+      "id": 5,
+      "need": 2,
+      "name": "first aid kits"
+    }
   ]
 }

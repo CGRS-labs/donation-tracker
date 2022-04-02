@@ -1,0 +1,22 @@
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 95vh;
+  /* Without specifying height explicitly The map will be 0 px if using a percentage as height is not explicitly specified in it's container
+  so it uses the content height of the parent (which is empty) */
+  height: 1px;
+
+}
+
+#map-container {
+  width: 100%;
+  height: 100%;
+  flex-grow: 1;
+
+  display: flex;
+}
+
+#map-panel {
+  flex-basis: 20%;
+  padding: 15px 20px;
+}

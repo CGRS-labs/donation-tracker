@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import Map, {
   Marker,
   Popup,
@@ -10,21 +10,7 @@ import Map, {
 
 import Pin from './Pin';
 
-// Mock data
-// import geojson from '../../../data/geojson';
-// import cities from '../../../data/cities.json';
-
-export default function MapPage({ lat = 40, long = -100 }) {
-
-  const [popupInfo, setPopupInfo] = useState(null);
-  const [markerData, setMarkerData] = useState([]);
-
-  useEffect(async () => {
-    // get marker data on initial load. 
-    const markers = await fetch('/api/chapters').then(res => res.json());
-    setMarkerData(markers);
-  }, []);
-
+export default function MarkerMap({ lat = 40, long = -100, markerData, setSelected, popupInfo }) {
 
   const markers = useMemo(() => markerData.map((marker, index) => (
     <Marker
@@ -33,9 +19,9 @@ export default function MapPage({ lat = 40, long = -100 }) {
       latitude={marker.latitude}
       anchor="bottom"
     >
-      <Pin onClick={() => setPopupInfo(marker)} />
+      <Pin onClick={() => setSelected(marker)} />
     </Marker>
-  )));
+  )), [markerData]);
 
   return <Map
     initialViewState={{
@@ -43,10 +29,11 @@ export default function MapPage({ lat = 40, long = -100 }) {
       latitude: lat,
       zoom: 4,
       bearing: 0,
-      pitch: 50,
+      pitch: 0,
     }}
-    style={{ width: '100%', height: '100vh' }}
-    mapStyle="mapbox://styles/mapbox/streets-v9"
+    style={{ width: '100%', height: '100%' }}
+    // mapStyle="mapbox://styles/mapbox/light-v10"
+    mapStyle="mapbox://styles/mapbox/dark-v10"
     mapboxAccessToken={process.env.MAPBOX_ACCESS_TOKEN}
   >
     <GeolocateControl position="top-left" />
@@ -60,7 +47,7 @@ export default function MapPage({ lat = 40, long = -100 }) {
         longitude={popupInfo.longitude}
         latitude={popupInfo.latitude}
         closeOnClick={false}
-        onClose={() => setPopupInfo(null)}
+        onClose={() => setSelected(null)}
       >
         <div id="popup-info">
           <b>Chapter:</b> {popupInfo.name}<br />
