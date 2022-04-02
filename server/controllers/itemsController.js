@@ -1,4 +1,11 @@
 const AppError = require('../utils/AppError');
+const db = require ('./models');
+
+//totals needed in items table be global need across all chapters
+//doesn't need to be tracked in chapters title
+
+//totals received tracked in chapters title
+
 
 const itemsController = {};
 

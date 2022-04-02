@@ -1,4 +1,6 @@
 const AppError = require('../utils/AppError');
+const express = require('express');
+const db = require ('./models');
 
 const chaptersController = {};
 
@@ -11,7 +13,28 @@ chaptersController.getChapter = async (req, res, next) => {
 };
 
 chaptersController.addChapter = async (req, res, next) => {
-  return next(new AppError(new Error('Not implemented'), 'chaptersController', 'addChapter', 500));
+  const {
+    name,
+    street,
+    city,
+    state,
+    zip, 
+    phone,
+    email
+  } = req.body;
+
+
+  // latitude,
+  // longitude on res.locals
+
+  try {
+    const text = 'INSERT INTO public.chapters (name, street, city, state, zip, phone, email, latitude, longitude) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING * ';
+    const params = [name, street, city, state, zip, phone, email, latitude, longitude];
+    const res = await db.query(text, params);
+    console.log(`Successfully added ${res.rows[0]} to the database`);
+  } catch (err) {
+    return next(new AppError(new Error('Not implemented'), 'chaptersController', 'addChapter', 500));
+  }
 };
 
 chaptersController.updateChapter = async (req, res, next) => {
