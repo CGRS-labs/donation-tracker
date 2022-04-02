@@ -7,7 +7,8 @@ import {
   Route,
   Link,
 } from 'react-router-dom';
-
+import Layout from './Layout.jsx';
+import ResponsiveAppBar from './NavBar';
 import './styles/styles.css';
 
 const App = props => {
@@ -25,13 +26,15 @@ const App = props => {
         </ul>
         <hr />
         <div>
+          <Layout></Layout>
+        </div>
+        <div>
           <Routes>
             <Route exact path="/login" element={ <Login /> } />
             <Route exact path="/register" element={ <SignUp /> } />
           </Routes>
         </div>
       </div>
-
     </Router>
   );
 };
