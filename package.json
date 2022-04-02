@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon server/server.js",
-    "dev": "concurrently 'webpack serve --open' 'nodemon server/server.js'",
+    "dev": "concurrently 'webpack serve --open' 'nodemon server/server.js' ",
+    "json-dev": "concurrently 'webpack serve --open' 'json-server --watch json-server/db.json --routes json-server/routes.json'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -28,6 +29,7 @@
     "express": "^4.17.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-map-gl": "^7.0.10",
     "react-router-dom": "^6.2.2"
   },
   "devDependencies": {
@@ -38,12 +40,15 @@
     "babel-loader": "^8.2.4",
     "concurrently": "^7.0.0",
     "css-loader": "^6.7.1",
+    "dotenv-webpack": "^7.1.0",
     "eslint": "^7.32.0",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.29.4",
     "html-webpack-plugin": "^5.5.0",
+    "json-server": "^0.17.0",
+    "node-fetch": "^3.2.3",
     "nodemon": "^2.0.15",
     "style-loader": "^3.3.1",
     "webpack": "^5.70.0",
