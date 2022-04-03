@@ -10,6 +10,7 @@ import Login from './Login';
 import SignUp from './SignUp';
 import MapPage from './components/map/MapPage';
 import Homepage from './Homepage.jsx';
+import Dashboard from './components/dashboard/Dashboard';
 
 import './styles/styles.css';
 
@@ -22,6 +23,7 @@ const App = () => {
         <Route exact path="/signin" element={<Layout><Login /></Layout>} />
         <Route exact path="/signup" element={<Layout><SignUp /></Layout>} />
         <Route exact path="/map" element={<Layout><MapPage /></Layout>} />
+        <Route exact path="/dashboard" element={<Layout><Dashboard /></Layout>} />
       </Routes>
     </Router>
   );
