@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -10,7 +9,8 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MenuItem from '@mui/material/MenuItem';
 import { InputLabel, Select } from '@mui/material';
-
+import OutlinedInput from '@mui/material/OutlinedInput';
+import FormControl from '@mui/material/FormControl';
 
 const theme = createTheme();
 
@@ -53,18 +53,11 @@ export default function Add() {
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h5" sx={{mt: 3}}>
             New Donation
           </Typography>
           <Box id="addItem" component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <FormControl sx={{ mx: "auto", width: 350 }}>
             <TextField
               margin="normal"
               required
@@ -75,20 +68,20 @@ export default function Add() {
               value= { inputs.item || '' }
               autoComplete="item"
               autoFocus
+
               onChange = { handleChange }
             />
+            </FormControl>
             <Grid item xs={12}>
-              <InputLabel id='category-select'>Category</InputLabel>
+            <FormControl sx={{ mt: 1, width: 350 }}>
+              <InputLabel id='outlined-category-label'>Category</InputLabel>
               <Select
-                labelId='category-select-label'
+                labelId='outlined-category-label'
                 id='category-select'
                 name='category'
                 value={inputs.category || ''}
-                label='Category'
+                input={<OutlinedInput label="Category" />}
                 onChange={handleChange}
-                style={{
-                  minWidth: '100%',
-                }}
               >
                 {categories.map((category) => {
                   return (
@@ -100,7 +93,9 @@ export default function Add() {
                     </MenuItem>)
                 })}
               </Select>
+              </FormControl>
             </Grid>
+            <FormControl sx={{ mt: 1, width: 350 }}>
             <TextField
               margin="normal"
               required
@@ -108,21 +103,21 @@ export default function Add() {
               name="quantity"
               value = { inputs.quantity || 0}
               label="Quantity"
-              type="quantity"
+              type="number"
               id="quantity"
               autoComplete="quantity"
               onChange = { handleChange }
             />
+            </FormControl>
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ width: 350, mt: 2, mb: 1 }}
             >
               Add Item
             </Button>
           </Box>
-        </Box>
       </Container>
     </ThemeProvider>
   );
