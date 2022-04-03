@@ -8,7 +8,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { MenuItemUnstyled } from '@mui/base';
+import MenuItem from '@mui/material/MenuItem';
 import { InputLabel, Select } from '@mui/material';
 
 
@@ -91,12 +91,13 @@ export default function Add() {
                 }}
               >
                 {categories.map((category) => {
-                  <MenuItemUnstyled
-                    key={category}
-                    value={category}
+                  return (
+                    <MenuItem
+                      key={category}
+                      value={category}
                     >
                       {category}
-                  </MenuItemUnstyled>
+                    </MenuItem>)
                 })}
               </Select>
             </Grid>
