@@ -8,9 +8,12 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { MenuItemUnstyled } from '@mui/base';
 
 
 const theme = createTheme();
+
+const categories = ['Childcare', 'Clothing', 'Education', 'Food', 'Healthcare', 'Homegoods', 'Personal hygiene', 'Other']
 
 export default function Add() {
   const [inputs, setInputs] = useState({
@@ -27,11 +30,8 @@ export default function Add() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(document.getElementById('login'));
-    console.log({
-      email: data.get('name'),
-      password: data.get('password'),
-    });
+    const data = new FormData(document.getElementById('addItem'));
+    console.log('item', data.get('item'), 'category', data.get('category'), 'quantity', data.get('quantity'));
     fetch('/api/items', {
       method: 'POST',
       headers: {
@@ -42,8 +42,9 @@ export default function Add() {
       .then(res => console.log(res));
 
     setInputs({
-      email: '',
-      password: '',
+      item: '',
+      category: '',
+      quantity: 0,
     });
   };
 
@@ -62,29 +63,52 @@ export default function Add() {
           <Typography component="h1" variant="h5">
             New Donation
           </Typography>
-          <Box id="login" component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Box id="addItem" component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
+              id="item"
+              label="Item"
               name="item"
               value= { inputs.item || '' }
               autoComplete="item"
               autoFocus
               onChange = { handleChange }
             />
+            <Grid item xs={12}>
+              <InputLabel id='category-select'>Category</InputLabel>
+              <Select
+                labelId='category-select-label'
+                id='category-select'
+                name='category'
+                value={inputs.category || ''}
+                label='Category'
+                onChange={handleChange}
+                style={{
+                  minWidth: '100%',
+                }}
+              >
+                {categories.map((category) => {
+                  <MenuItemUnstyled
+                    key={category}
+                    value={category}
+                    >
+                      {category}
+                  </MenuItemUnstyled>
+                })}
+              </Select>
+            </Grid>
             <TextField
               margin="normal"
               required
               fullWidth
-              name="password"
-              value = { inputs.password || ''}
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
+              name="quantity"
+              value = { inputs.quantity || 0}
+              label="Quantity"
+              type="quantity"
+              id="quantity"
+              autoComplete="quantity"
               onChange = { handleChange }
             />
             <Button
