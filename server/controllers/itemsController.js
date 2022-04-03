@@ -1,10 +1,5 @@
 const AppError = require('../utils/AppError');
-const db = require ('./models');
-
-//totals needed in items table be global need across all chapters
-//doesn't need to be tracked in chapters title
-
-//totals received tracked in chapters title
+const db = require ('../models.js');
 
 
 const itemsController = {};
@@ -18,6 +13,10 @@ itemsController.getItem = async (req, res, next) => {
 };
 
 itemsController.addItem = async (req, res, next) => {
+
+  //Items received: This will be a calculation of all of the chapters received
+  //Items needed: separate path to update items needed
+
   return next(new AppError(new Error('Not implemented'), 'itemsController', 'addItem', 500));
 };
 

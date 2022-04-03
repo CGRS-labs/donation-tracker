@@ -1,6 +1,7 @@
 const AppError = require('../utils/AppError');
 const express = require('express');
-const db = require ('./models');
+const db = require ('../models.js');
+require('dotenv').config();
 
 const chaptersController = {};
 
@@ -23,15 +24,17 @@ chaptersController.addChapter = async (req, res, next) => {
     email
   } = req.body;
 
-
-  // latitude,
-  // longitude on res.locals
-
+  // const {
+  //   latitude,
+  //   longitude
+  // } = res.locals;
+  console.log(`name ${req.body.name}`);
   try {
-    const text = 'INSERT INTO public.chapters (name, street, city, state, zip, phone, email, latitude, longitude) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING * ';
-    const params = [name, street, city, state, zip, phone, email, latitude, longitude];
-    const res = await db.query(text, params);
-    console.log(`Successfully added ${res.rows[0]} to the database`);
+    // eslint-disable-next-line semi
+    const text = 'INSERT INTO public.chapters (name, street, city, state, zip, phone, email) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *'
+    const values = [name, street, city, state, zip, phone, email];
+    const result = await db.query(text, values);
+    console.log(result.rows[0]);
   } catch (err) {
     return next(new AppError(new Error('Not implemented'), 'chaptersController', 'addChapter', 500));
   }

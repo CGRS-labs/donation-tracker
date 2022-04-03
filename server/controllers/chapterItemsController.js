@@ -1,19 +1,19 @@
 const AppError = require('../utils/AppError');
 const express = require('express');
-const db = require ('./models');
+const db = require ('../models.js');
 
 chapterItemsController = {};
 
 
 chapterItemsController.addItem = async (req, res, next) => {
   const {
-    chapter_id,
     item_id,
     total_needed,
     total_received
   } = req.body;
 
-  //chapter_id is in the request parameters
+  const {chapter_id} = req.params;
+
   //query that updates the totals based on the items table-- make separate controller for this and put in middleware
 
   // const total_needed= *****;
