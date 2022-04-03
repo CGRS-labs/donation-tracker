@@ -11,7 +11,8 @@ import SignUp from './SignUp';
 import MapPage from './components/map/MapPage';
 import Homepage from './Homepage.jsx';
 import Dashboard from './components/dashboard/Dashboard';
-import Add from './components/dashboard/AddItem.jsx';
+// import Add from './components/dashboard/AddItem.jsx';
+import ItemTable from './components/dashboard/ItemTable.jsx';
 
 import './styles/styles.css';
 
@@ -25,7 +26,7 @@ const App = () => {
         <Route exact path="/signup" element={<Layout><SignUp /></Layout>} />
         <Route exact path="/map" element={<Layout><MapPage /></Layout>} />
         <Route exact path="/dashboard" element={<Layout><Dashboard /></Layout>} />
-        <Route exact path="/test" element={<Layout><Add /></Layout>} /> 
+        <Route exact path="/test" element={<Layout><ItemTable /></Layout>} /> 
       </Routes>
     </Router>
   );
