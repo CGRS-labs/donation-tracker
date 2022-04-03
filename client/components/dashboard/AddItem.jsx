@@ -14,7 +14,7 @@ const theme = createTheme();
 
 export default function Add() {
   const [inputs, setInputs] = useState({
-    name: '',
+    item: '',
     category: '',
     quantity: 0,
   });
@@ -32,7 +32,7 @@ export default function Add() {
       email: data.get('name'),
       password: data.get('password'),
     });
-    fetch('/api/login', {
+    fetch('/api/items', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -69,9 +69,9 @@ export default function Add() {
               fullWidth
               id="email"
               label="Email Address"
-              name="email"
-              value= { inputs.email || '' }
-              autoComplete="email"
+              name="item"
+              value= { inputs.item || '' }
+              autoComplete="item"
               autoFocus
               onChange = { handleChange }
             />
