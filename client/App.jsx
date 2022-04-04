@@ -16,7 +16,6 @@ import Dashboard from './components/dashboard/Dashboard';
 // import Sunflower from './components/layout/Sunflower';
 
 import './styles/styles.css';
-// import './styles/sunflower.svg';
 
 const App = () => {
 
