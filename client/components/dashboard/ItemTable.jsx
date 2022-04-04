@@ -10,14 +10,16 @@ import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
 // }, []);
 
 const rows = [
-  { id: 1, col1: 'Hello', col2: 'World' },
-  { id: 2, col1: 'DataGridPro', col2: 'is Awesome' },
-  { id: 3, col1: 'MUI', col2: 'is Amazing' },
+  { id: 1, item: 'Hello', category: 'World', chapter: 'Boston', qty: '100' },
+  { id: 2, item: 'DataGrid', category: 'is Awesome', chapter: 'Boston', qty: '100' },
+  { id: 3, item: 'MUI', category: 'is Amazing', chapter: 'Boston', qty: '100' },
 ];
 
 const columns = [
-  { field: 'col1', headerName: 'Column 1', width: 150 },
-  { field: 'col2', headerName: 'Column 2', width: 150 },
+  { field: 'item', headerName: 'Item', width: 300 },
+  { field: 'category', headerName: 'Category', width: 300 },
+  { field: 'chapter', headerName: 'Chapter', width: 300 },
+  { field: 'qty', headerName: 'Quantity', width: 150 },
 ];
 export default function ItemTable() {
   return (
