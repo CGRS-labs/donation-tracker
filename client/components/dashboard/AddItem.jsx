@@ -57,7 +57,7 @@ export default function Add() {
           New Donation
         </Typography>
         <Box id="addItem" component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <FormControl sx={{ mx: 'auto', width: 350 }}>
+          <FormControl sx={{ mx: 'auto', width: '100%' }}>
             <TextField
               margin="normal"
               required
@@ -73,7 +73,7 @@ export default function Add() {
             />
           </FormControl>
           <Grid item xs={12}>
-            <FormControl sx={{ mt: 1, width: 350 }}>
+            <FormControl sx={{ mt: 1, width: '100%' }}>
               <InputLabel id='outlined-category-label'>Category</InputLabel>
               <Select
                 labelId='outlined-category-label'
@@ -95,7 +95,7 @@ export default function Add() {
               </Select>
             </FormControl>
           </Grid>
-          <FormControl sx={{ mt: 1, width: 350 }}>
+          <FormControl sx={{ mt: 1, width: '100%' }}>
             <TextField
               margin="normal"
               required
@@ -113,7 +113,7 @@ export default function Add() {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ width: 350, mt: 2, mb: 1 }}
+            sx={{ width: '100%', mt: 2, mb: 1 }}
           >
               Add Item
           </Button>
