@@ -3,13 +3,13 @@ import Box from '@mui/material/Box';
 
 import Logo from '../../styles/images/sunflower_white.svg';
 
-const Sunflower = () => {
+const Sunflower = ({height, width}) => {
   return (
     <Box
       component="img"
       sx={{
-        height: 48,
-        width: 48,
+        height: {height},
+        width: {width}
       }}
       alt="Sunflower"
       src={Logo}
