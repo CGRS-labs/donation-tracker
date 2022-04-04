@@ -12,7 +12,7 @@ import { InputLabel, Select } from '@mui/material';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import FormControl from '@mui/material/FormControl';
 
-const theme = createTheme();
+import theme from '../../../client/styles/theme.js';
 
 const categories = ['Childcare', 'Clothing', 'Education', 'Food', 'Healthcare', 'Homegoods', 'Personal hygiene', 'Other'];
 
