@@ -44,10 +44,10 @@ module.exports = {
           }
         ]
       },
-      {
-        test: /\.svg$/,
-        use: ['@svgr/webpack'],
-      },
+      // {
+      //   test: /\.svg$/,
+      //   use: ['@svgr/webpack'],
+      // },
       // {
       //   test: /\.svg$/,
       //   use: [
@@ -59,12 +59,12 @@ module.exports = {
       //     },
       //   ],
       // },
-      {
-        test: /\.(jpg|png)$/,
-        use: {
-          loader: 'url-loader',
-        },
-      },
+      // {
+      //   test: /\.(jpg|png)$/,
+      //   use: {
+      //     loader: 'url-loader',
+      //   },
+      // },
     ],
   },
   devServer: {
