@@ -33,6 +33,10 @@ module.exports = {
         test: /\.css$/i,
         use: ['style-loader', 'css-loader'],
       },
+      {
+        test: /\.(png|svg|jpg|gif|jpe?g)$/,
+        type: 'asset/resource'
+      },
     ],
   },
   devServer: {
@@ -41,6 +45,9 @@ module.exports = {
     },
     historyApiFallback: true,
     hot: true,
+    static: {
+      directory: path.join(__dirname, 'assets')
+    },
   },
   resolve: {
     extensions: ['.js', '.jsx', '.json'],

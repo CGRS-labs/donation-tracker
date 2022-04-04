@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon server/server.js",
-    "dev": "concurrently 'webpack serve --open' 'nodemon server/server.js' ",
+    "dev": "concurrently 'webpack serve --open' 'nodemon server/server.js'",
     "json-dev": "concurrently 'webpack serve --open' 'json-server --watch json-server/db.json --routes json-server/routes.json'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -46,6 +46,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.29.4",
+    "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.5.0",
     "json-server": "^0.17.0",
     "node-fetch": "^3.2.3",

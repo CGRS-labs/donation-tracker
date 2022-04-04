@@ -87,5 +87,91 @@
       "total_needed": 0,
       "name": "first aid kits"
     }
+  ],
+  "users": [
+    {
+      "username": "shalarewicz",
+      "firstName": "Stephan",
+      "lastName": "Halarewicz",
+      "phone": "1234567890",
+      "email": "test@mail.com"
+    },
+    {
+      "username": "shalarewicz",
+      "firstName": "John",
+      "lastName": "Smith",
+      "phone": "1234567890",
+      "email": "test@mail.com"
+    },
+    {
+      "username": "shalarewicz",
+      "firstName": "Andy",
+      "lastName": "Townsend",
+      "phone": "1234567890",
+      "email": "test@mail.com"
+    },
+    {
+      "username": "shalarewicz",
+      "firstName": "Stephan",
+      "lastName": "Halarewicz",
+      "phone": "1234567890",
+      "email": "test@mail.com"
+    },
+    {
+      "username": "shalarewicz",
+      "firstName": "John",
+      "lastName": "Smith",
+      "phone": "1234567890",
+      "email": "test@mail.com"
+    },
+    {
+      "username": "shalarewicz",
+      "firstName": "Andy",
+      "lastName": "Townsend",
+      "phone": "1234567890",
+      "email": "test@mail.com"
+    },
+    {
+      "username": "shalarewicz",
+      "firstName": "Stephan",
+      "lastName": "Halarewicz",
+      "phone": "1234567890",
+      "email": "test@mail.com"
+    },
+    {
+      "username": "shalarewicz",
+      "firstName": "John",
+      "lastName": "Smith",
+      "phone": "1234567890",
+      "email": "test@mail.com"
+    },
+    {
+      "username": "shalarewicz",
+      "firstName": "Andy",
+      "lastName": "Townsend",
+      "phone": "1234567890",
+      "email": "test@mail.com"
+    },
+    {
+      "username": "shalarewicz",
+      "firstName": "Stephan",
+      "lastName": "Halarewicz",
+      "phone": "1234567890",
+      "email": "test@mail.com"
+    },
+    {
+      "username": "shalarewicz",
+      "firstName": "John",
+      "lastName": "Smith",
+      "phone": "1234567890",
+      "email": "test@mail.com"
+    },
+    {
+      "username": "shalarewicz",
+      "firstName": "Andy",
+      "lastName": "Townsend",
+      "phone": "1234567890",
+      "email": "test@mail.com"
+    }
   ]
 }
