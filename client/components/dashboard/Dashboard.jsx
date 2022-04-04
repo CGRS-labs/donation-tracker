@@ -64,7 +64,7 @@ function DashboardContent() {
                     height: 390,
                   }}
                 >
-                  <Typography>Donation stats goes here.</Typography>
+                  <Typography>Donation stats go here.</Typography>
                 </Paper>
               </Grid>
               {/* Items table */}
