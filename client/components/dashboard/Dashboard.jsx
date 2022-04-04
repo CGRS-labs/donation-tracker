@@ -17,6 +17,7 @@ import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 
 import Add from './AddItem';
+import ItemTable from './ItemTable';
 
 const mdTheme = createTheme();
 
@@ -40,7 +41,7 @@ function DashboardContent() {
         >
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
-              {/* Chart */}
+              {/* Add Item Form */}
               <Grid item xs={12} md={4} lg={4.5}>
                 <Paper
                   sx={{
@@ -69,7 +70,7 @@ function DashboardContent() {
               {/* Items table */}
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  <Typography>Datagrid goes here.</Typography>
+                  <ItemTable />
                 </Paper>
               </Grid>
             </Grid>
