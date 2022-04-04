@@ -14,7 +14,7 @@ import FormControl from '@mui/material/FormControl';
 
 const theme = createTheme();
 
-const categories = ['Childcare', 'Clothing', 'Education', 'Food', 'Healthcare', 'Homegoods', 'Personal hygiene', 'Other']
+const categories = ['Childcare', 'Clothing', 'Education', 'Food', 'Healthcare', 'Homegoods', 'Personal hygiene', 'Other'];
 
 export default function Add() {
   const [inputs, setInputs] = useState({
@@ -53,10 +53,10 @@ export default function Add() {
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-          <Typography component="h1" variant="h5" sx={{mt: 3}}>
-            New Donation
-          </Typography>
-          <Box id="addItem" component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <Typography component="h1" variant="h5" sx={{mt: 3}}>
+          New Donation
+        </Typography>
+        <Box id="addItem" component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <FormControl sx={{ mx: "auto", width: 350 }}>
             <TextField
               margin="normal"
@@ -71,8 +71,8 @@ export default function Add() {
 
               onChange = { handleChange }
             />
-            </FormControl>
-            <Grid item xs={12}>
+          </FormControl>
+          <Grid item xs={12}>
             <FormControl sx={{ mt: 1, width: 350 }}>
               <InputLabel id='outlined-category-label'>Category</InputLabel>
               <Select
@@ -90,12 +90,12 @@ export default function Add() {
                       value={category}
                     >
                       {category}
-                    </MenuItem>)
+                    </MenuItem>);
                 })}
               </Select>
-              </FormControl>
-            </Grid>
-            <FormControl sx={{ mt: 1, width: 350 }}>
+            </FormControl>
+          </Grid>
+          <FormControl sx={{ mt: 1, width: 350 }}>
             <TextField
               margin="normal"
               required
@@ -108,16 +108,16 @@ export default function Add() {
               autoComplete="quantity"
               onChange = { handleChange }
             />
-            </FormControl>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ width: 350, mt: 2, mb: 1 }}
-            >
+          </FormControl>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ width: 350, mt: 2, mb: 1 }}
+          >
               Add Item
-            </Button>
-          </Box>
+          </Button>
+        </Box>
       </Container>
     </ThemeProvider>
   );
