@@ -34,16 +34,31 @@ module.exports = {
         use: ['style-loader', 'css-loader'],
       },
       {
-        test: /\.svg$/,
+        test: /\.(png|jp(e*)g|svg|gif)$/,
         use: [
           {
-            loader: 'svg-url-loader',
+            loader: 'file-loader',
             options: {
-              limit: 10000,
+              name: 'images/[hash]-[name].[ext]',
             },
-          },
-        ],
+          }
+        ]
       },
+      {
+        test: /\.svg$/,
+        use: ['@svgr/webpack'],
+      },
+      // {
+      //   test: /\.svg$/,
+      //   use: [
+      //     {
+      //       loader: 'svg-url-loader',
+      //       options: {
+      //         limit: 10000,
+      //       },
+      //     },
+      //   ],
+      // },
       {
         test: /\.(jpg|png)$/,
         use: {

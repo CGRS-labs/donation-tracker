@@ -57,7 +57,7 @@ export default function Add() {
           New Donation
         </Typography>
         <Box id="addItem" component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <FormControl sx={{ mx: "auto", width: 350 }}>
+          <FormControl sx={{ mx: 'auto', width: 350 }}>
             <TextField
               margin="normal"
               required
