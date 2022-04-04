@@ -13,7 +13,7 @@ import Homepage from './Homepage.jsx';
 import Dashboard from './components/dashboard/Dashboard';
 // import Add from './components/dashboard/AddItem.jsx';
 // import ItemTable from './components/dashboard/ItemTable.jsx';
-import Sunflower from './components/layout/Sunflower';
+// import Sunflower from './components/layout/Sunflower';
 
 import './styles/styles.css';
 // import './styles/sunflower.svg';
@@ -28,7 +28,7 @@ const App = () => {
         <Route exact path="/signup" element={<Layout><SignUp /></Layout>} />
         <Route exact path="/map" element={<Layout><MapPage /></Layout>} />
         <Route exact path="/dashboard" element={<Layout><Dashboard /></Layout>} />
-        <Route exact path="/test" element={<Layout><Sunflower /></Layout>} /> 
+        {/* <Route exact path="/test" element={<Layout><Sunflower /></Layout>} />  */}
       </Routes>
     </Router>
   );
