@@ -51,7 +51,7 @@ export default function Add() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
+      <Container component="dashboardAddForm" maxWidth="xs">
         <CssBaseline />
         <Typography component="h1" variant="h5" sx={{mt: 3}}>
           New Donation
