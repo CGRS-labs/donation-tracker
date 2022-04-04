@@ -6,6 +6,7 @@ import Link from '@mui/material/Link';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import ResponsiveAppBar from './NavBar';
+import theme from '../../../client/styles/theme.js';
 
 function Copyright() {
   return (
@@ -39,7 +40,7 @@ function Footer() {
   );
 };
 
-const theme = createTheme();
+// const theme = createTheme();
 
 export default function Layout({ children }) {
   return (
