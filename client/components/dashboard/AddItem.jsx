@@ -48,7 +48,7 @@ export default function Add() {
   };
 
   return (
-    <Container component="dashboardAddForm" maxWidth="xs">
+    <Container maxWidth="xs">
       <Typography component="h1" variant="h5" sx={{mt: 3}}>
         New Donation
       </Typography>
