@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Link, Typography } from '@mui/material';
-import Avatar from '@mui/material/Avatar';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import GitHubIcon from '@mui/icons-material/GitHub';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import ContentBanner from './ContentBanner';
@@ -14,7 +11,7 @@ import Sidebar from './Sidebar';
 
 // import sunflower from '../assets/images/sunflower.jpg';
 // import hands from '../assets/images/hands.jpg';
-import avatar from '../assets/images/broken-image.png';
+// import avatar from '../assets/images/broken-image.png';
 
 const helpingHand = 'https://images.unsplash.com/photo-1587027066597-e9b5dea8cbf2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1167&q=80';
 const ukrainianFlag = 'https://images.unsplash.com/photo-1565711561500-49678a10a63f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80';
@@ -25,12 +22,7 @@ const sidebar = {
   title: 'About',
   description:
     'Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.',
-  social: [
-    { name: 'GitHub', icon: GitHubIcon },
-    { name: 'Twitter', icon: TwitterIcon },
-    { name: 'Facebook', icon: FacebookIcon },
-  ],
-  listTitle: 'Current Needs'
+  listTitle: 'Meet Our Team'
 };
 
 
@@ -88,6 +80,10 @@ export default function ChapterPage(props) {
         `${chapter.phone}`,
       image: ukrainianFlag,
       imageLabel: 'Ukraine',
+      social: [
+        { name: 'Twitter', icon: TwitterIcon },
+        { name: 'Facebook', icon: FacebookIcon },
+      ],
     },
   ];
 
@@ -109,11 +105,12 @@ export default function ChapterPage(props) {
         ))}
       </Grid>
       <Grid container spacing={5} sx={{ mt: 3 }}>
-        <Main title="Meet Our Team" users={users} />
+        {/* TODO: Consider grouping items by category */}
+        <Main title="Current Needs" items={items} />
         <Sidebar
           title={sidebar.title}
           description={sidebar.description}
-          listItems={items} // TODO: Group items by category
+          users={users}
           social={sidebar.social}
           listTitle={sidebar.listTitle}
         />

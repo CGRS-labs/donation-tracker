@@ -1,14 +1,15 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@mui/material/Grid';
-import Stack from '@mui/material/Stack';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import Container from '@mui/material/Container';
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
 
 function Sidebar(props) {
-  const { listItems, description, social, title, listTitle } = props;
+  const { users, description, title, listTitle } = props;
 
   return (
     <Grid item xs={12} md={4}>
@@ -22,60 +23,55 @@ function Sidebar(props) {
         {listTitle}
       </Typography>
       <Container display='flex' sx={{
-        display: 'flex',
+        display: 'flex', // Consider using grid layout here
         flexDirection: 'row',
         flexWrap: 'wrap',
         maxHeight: '500px',
         overflowY: 'scroll'
       }}>
-        {listItems.map((item, i) => (
-          // <Link display="block" variant="body1" href={archive.url} key={archive.title}>
-          <Typography key={i} width='50%' sx={{ textAlign: 'center' }}>
-            {item.name}
-          </Typography>
-          // </Link>
-        ))}
-
-      </Container>
-
-      <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
-        Social
-      </Typography>
-      {
-        social.map((network) => (
-          <Link
-            display="block"
-            variant="body1"
-            href="#"
-            key={network.name}
-            sx={{ mb: 0.5 }}
+        {users.map((user, index) => (
+          <Box
+            key={index}
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              p: 2,
+              width: 0.5
+            }}
           >
-            <Stack direction="row" spacing={1} alignItems="center">
-              <network.icon />
-              <span>{network.name}</span>
-            </Stack>
-          </Link>
+            <Avatar
+              alt={`${user.firstName} ${user.lastName}`}
+              // src="../assets/images/broken-image.png"
+              src='https://source.unsplash.com/random' // get avatar from database? 
+              sx={{ width: 50, height: 50, mb: 1 }}
+            />
+            <Typography variant="caption" sx={{ textAlign: 'center' }}>
+              {`${user.firstName} ${user.lastName}`}<br />
+              <Link href={`mailto:${user.email}`} underline='none'>{user.email}</Link><br />
+              {user.phone}
+            </Typography>
+          </Box>
+
         ))
-      }
+        }
+      </Container>
     </Grid >
   );
 }
 
 Sidebar.propTypes = {
   listTitle: PropTypes.string.isRequired,
-  listItems: PropTypes.arrayOf(
+  users: PropTypes.arrayOf(
     PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      // url: PropTypes.string.isRequired,
+      firstName: PropTypes.string.isRequired,
+      lastName: PropTypes.string.isRequired,
+      email: PropTypes.string.isRequired,
+      phone: PropTypes.string.isRequired,
     }),
   ).isRequired,
   description: PropTypes.string.isRequired,
-  social: PropTypes.arrayOf(
-    PropTypes.shape({
-      icon: PropTypes.elementType.isRequired,
-      name: PropTypes.string.isRequired,
-    }),
-  ).isRequired,
   title: PropTypes.string.isRequired,
 };
 
