@@ -37,6 +37,11 @@ module.exports = {
         test: /\.(png|svg|jpg|gif|jpe?g)$/,
         type: 'asset/resource'
       },
+      {
+        test: /\.js$/,
+        enforce: 'pre',
+        use: ['source-map-loader'],
+      },
     ],
   },
   devServer: {
