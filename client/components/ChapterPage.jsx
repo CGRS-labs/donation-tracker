@@ -105,7 +105,6 @@ export default function ChapterPage(props) {
         ))}
       </Grid>
       <Grid container spacing={5} sx={{ mt: 3 }}>
-        {/* TODO: Consider grouping items by category */}
         <Main title="Current Needs" items={items} />
         <Sidebar
           title={sidebar.title}
