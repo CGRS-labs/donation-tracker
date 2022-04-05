@@ -10,8 +10,8 @@ import Login from './Login';
 import SignUp from './SignUp';
 import MapPage from './components/map/MapPage';
 import Homepage from './Homepage';
-import ChapterPage from './components/ChapterPage';
-import AllChaptersPage from './components/AllChaptersPage';
+import ChapterPage from './components/chapters/ChapterPage';
+import AllChaptersPage from './components/chapters/AllChaptersPage';
 
 import './styles/styles.css';
 

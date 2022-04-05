@@ -4,8 +4,8 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
-import ContentBanner from './ContentBanner';
-import InfoCard from './InfoCard';
+import ContentBanner from '../layout/ContentBanner';
+import InfoCard from '../layout/InfoCard';
 import Main from './Main';
 import Sidebar from './Sidebar';
 
