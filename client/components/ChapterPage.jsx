@@ -44,7 +44,8 @@ export default function ChapterPage(props) {
 
   useEffect(async () => {
     // TODO: Cancel this request if compoent unmounts
-    // FIXME: Can probably have this sent on the get to chapters to get admins
+    // FIXME: Determin endpoint to get chapter admins only. 
+    // Might include on get request to chapters
     const response = await fetch('/api/users/');
 
     if (response.ok) {
@@ -54,7 +55,7 @@ export default function ChapterPage(props) {
 
   useEffect(async () => {
     // TODO: Cancel this request if compoent unmounts
-    // FIXME: Can probably have this sent on the get to chapters to get admins
+    // FIXME: Can probably have this sent on the get to chapters
     if (chapter) {
       const response = await fetch(`/api/chapter/${chapter.id}/items`);
 

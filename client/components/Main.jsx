@@ -24,7 +24,6 @@ function ItemGroup({ category, items }) {
             lg={4}
             xl={3}
             key={i}
-          // textAlign='center'
           >
             {item}
           </Grid>
@@ -62,7 +61,6 @@ function Main(props) {
       <Grid container
         columnSpacing={4}
         rowSpacing={{ xs: 1, md: 2 }}
-        // justifyContent='center'
         sx={{
           pt: 2,
         }}>

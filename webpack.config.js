@@ -50,9 +50,6 @@ module.exports = {
     },
     historyApiFallback: true,
     hot: true,
-    static: {
-      directory: path.join(__dirname, 'assets')
-    },
   },
   resolve: {
     extensions: ['.js', '.jsx', '.json'],
