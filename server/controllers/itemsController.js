@@ -5,7 +5,17 @@ const db = require ('../models.js');
 const itemsController = {};
 
 itemsController.getAllItems = async (req, res, next) => {
-  return next(new AppError(new Error('Not implemented'), 'itemsController', 'getItems', 500));
+  try {
+    // eslint-disable-next-line semi
+    const text = 'SELECT * FROM public."Items" ORDER BY name ASC'
+    await db.query(text, (err, result) => {
+      if (!result.rows[0]) return res.send('There are no items in the database');
+      if (result) return res.send(result.rows);
+      if (err) return res.send('error getting items from database');
+    });
+  } catch (err) {
+    return next(new AppError(new Error('Not implemented'), 'itemsController', 'getItems', 500));
+  };
 };
 
 itemsController.getItem = async (req, res, next) => {
