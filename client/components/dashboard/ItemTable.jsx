@@ -27,7 +27,7 @@ export default function ItemTable() {
       });
   }, []);
 
-  console.log(tableData);
+  // console.log(tableData);
 
   return (
     <div style={{ height: 500, width: '100%' }}>
