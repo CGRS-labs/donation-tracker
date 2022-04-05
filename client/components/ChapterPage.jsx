@@ -4,12 +4,35 @@ import { Box, Link, Typography } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import ContentBanner from './ContentBanner';
+import InfoCard from './InfoCard';
+import Main from './Main';
+import Sidebar from './Sidebar';
 
-import sunflower from '../assets/images/sunflower.jpg';
+// import sunflower from '../assets/images/sunflower.jpg';
+// import hands from '../assets/images/hands.jpg';
 import avatar from '../assets/images/broken-image.png';
+
+const helpingHand = 'https://images.unsplash.com/photo-1587027066597-e9b5dea8cbf2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1167&q=80';
+const ukrainianFlag = 'https://images.unsplash.com/photo-1565711561500-49678a10a63f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80';
+const bannerImage = 'https://images.unsplash.com/photo-1529511582893-2d7e684dd128?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1633&q=80';
+// https://images.unsplash.com/photo-1485286162995-aa63d31c06cb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80'
+
+const sidebar = {
+  title: 'About',
+  description:
+    'Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.',
+  social: [
+    { name: 'GitHub', icon: GitHubIcon },
+    { name: 'Twitter', icon: TwitterIcon },
+    { name: 'Facebook', icon: FacebookIcon },
+  ],
+  listTitle: 'Current Needs'
+};
+
 
 export default function ChapterPage(props) {
   const { id } = useParams();
@@ -49,96 +72,52 @@ export default function ChapterPage(props) {
     }
   }, [chapter]);
 
+  const infoCards = [
+    {
+      title: 'Donation Center',
+      subtitle: 'hours',
+      content:
+        `${chapter.street}, ${chapter.city} ${chapter.state}, ${chapter.zip}`,
+      image: helpingHand,
+      imageLabel: 'Helping Hands',
+    },
+    {
+      title: 'Contact Us',
+      subtitle: `${chapter.email}`,
+      content:
+        `${chapter.phone}`,
+      image: ukrainianFlag,
+      imageLabel: 'Ukraine',
+    },
+  ];
 
   return (
-    <>
-      {/* FIXME: Find a banner */}
-      <Box style={{
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'space-around',
-      }} >
-        <Box>
-          <Typography variant='h3'>Welcome to {chapter.name}!</Typography>
-          <Box
-            sx={{
-              mt: 4,
-              display: 'flex',
-              justifyContent: 'space-around',
-            }}
-          >
-            <Box sx={{
-              flexBasis: 100,
-              flexGrow: 1,
-              mr: 4,
-            }}>
-              <Typography variant='h5'>How to help</Typography>
-              <Typography variant='body2'>
-                Donations are currently being received at the following address<br />
-                {chapter.street}<br />
-                {chapter.city}, {chapter.state} {chapter.zip}
-              </Typography>
-            </Box>
-            <Box sx={{
-              flexBasis: 100,
-              flexGrow: 1,
-            }}>
-              <Typography variant='h5'>Donation needs</Typography>
-              <Typography variant='body2'>
-                We currently have need for the following items:
-              </Typography>
-              <List sx={{ listStyleType: 'disc', marginLeft: 4 }}>
-                {
-                  items.map((item, i) => (
-                    <ListItem key={i} disablePadding sx={{ display: 'list-item' }}><ListItemText>{item.name}</ListItemText></ListItem>
-                  ))
-                }
-              </List>
-            </Box>
-          </Box>
-        </Box>
-        <img style={{ width: '25%' }} src={sunflower} />
-      </Box>
 
-      <Container
-        sx={{
-          py: 8,
-          textAlign: 'center',
+    <Container maxWidth="lg">
+      <ContentBanner
+        content={{
+          title: `${chapter.name}`,
+          description: 'Multiple lines of text that form the lede, informing new readers quickly and efficiently about what\'s most interesting in this post\'s contents.',
+          image: bannerImage,
+          imageText: 'main image description',
+          linkText: '',
         }}
-        maxWidth="md"
-      >
-        <Typography variant='h4' sx={{ mb: 8 }}>Our Team</Typography>
-        <Box>
-          <Grid container spacing={4} sx={{
-            justifyContent: 'center',
-          }}>
-            {users.map((user, index) => (
-              <Box
-                key={index}
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  p: 2,
-                }}
-              >
-                <Avatar
-                  alt={`${user.firstName} ${user.lastName}`}
-                  // src="../assets/images/broken-image.png"
-                  src={avatar}
-                  sx={{ width: 75, height: 75 }}
-                />
-
-                {`${user.firstName} ${user.lastName}`}
-                <Typography variant="caption">
-                  <Link href={`mailto:${user.email}`} underline='none'>{user.email}</Link> | {user.phone}
-                </Typography>
-              </Box>
-            ))}
-          </Grid>
-        </Box>
-      </Container>
-    </>
+      />
+      <Grid container spacing={4}>
+        {infoCards.map((card) => (
+          <InfoCard key={card.title} cardInfo={card} />
+        ))}
+      </Grid>
+      <Grid container spacing={5} sx={{ mt: 3 }}>
+        <Main title="Meet Our Team" users={users} />
+        <Sidebar
+          title={sidebar.title}
+          description={sidebar.description}
+          listItems={items} // TODO: Group items by category
+          social={sidebar.social}
+          listTitle={sidebar.listTitle}
+        />
+      </Grid>
+    </Container>
   );
 }
