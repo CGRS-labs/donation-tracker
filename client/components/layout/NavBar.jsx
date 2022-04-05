@@ -13,8 +13,8 @@ import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom';
 import Sunflower from './Sunflower';
 
-const pages = ['Sign In', 'Sign Up', 'Chapters', 'Map'];
-const links = ['/signin', '/signup', '/chapters', '/map'];
+const pages = ['Sign In', 'Sign Up', 'Chapters', 'Map', 'Dashboard'];
+const links = ['/signin', '/signup', '/chapters', '/map', '/dashboard'];
 
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
