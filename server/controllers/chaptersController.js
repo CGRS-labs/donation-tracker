@@ -49,10 +49,10 @@ chaptersController.addChapter = async (req, res, next) => {
     email
   } = req.body;
 
-  // const {
-  //   latitude,
-  //   longitude
-  // } = res.locals
+  const {
+    latitude,
+    longitude
+  } = res.locals;
 
   try {
     // eslint-disable-next-line semi
@@ -60,11 +60,11 @@ chaptersController.addChapter = async (req, res, next) => {
     const values = [name, zip];
     const response = await db.query(text, values);
     if (response.rows[0]) {
-      return res.send('This chapter already exists in the database')
+      return res.send('This chapter already exists in the database');
     } else {
     // eslint-disable-next-line semi
-      const text2 = 'INSERT INTO public.chapters (name, zip, street, city, state,  phone, email) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *'
-      const values2 = [name, zip, street, city, state, phone, email];
+      const text2 = 'INSERT INTO public.chapters (name, zip, street, city, state,  phone, email, latitude, longitude) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *'
+      const values2 = [name, zip, street, city, state, phone, email, latitude, longitude];
       const addedChapter = await db.query(text2, values2);
       return res.send('Chapter added to database');
     }
@@ -88,10 +88,15 @@ chaptersController.updateChapter = async (req, res, next) => {
     email
   } = req.body;
 
+  const {
+    latitude,
+    longitude
+  } = res.locals;
+
   try {
     // eslint-disable-next-line semi
-    const text = 'UPDATE public.chapters SET name = $2, street = $3, city = $4, state = $5, zip = $6, phone = $7, email = $8 WHERE id = $1'
-    const values = [chapterId, name, street, city, state, zip, phone, email];
+    const text = 'UPDATE public.chapters SET name = $2, street = $3, city = $4, state = $5, zip = $6, phone = $7, email = $8, latitude = $9, longitude = $10 WHERE id = $1'
+    const values = [chapterId, name, street, city, state, zip, phone, email, latitude, longitude];
     db.query(text, values);
     res.send('successfully updated');
   } catch (err) {
