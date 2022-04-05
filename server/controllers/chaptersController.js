@@ -6,11 +6,36 @@ require('dotenv').config();
 const chaptersController = {};
 
 chaptersController.getAllChapters = async (req, res, next) => {
-  return next(new AppError(new Error('Not implemented'), 'chaptersController', 'getAllChapters', 500));
+  try {
+    // eslint-disable-next-line semi
+    const text = 'SELECT * FROM public.chapters ORDER BY name ASC'
+    await db.query(text, (err, result) => {
+      if (!result.rows[0]) return res.send('Error: There are no chapters in the database');
+      if (result) return res.send(result.rows);
+      if (err) return res.send('error getting records from database');
+    });
+  } catch (err) {
+    return next(new AppError(new Error('Not implemented'), 'chaptersController', 'getAllChapters', 500));
+  }
 };
 
 chaptersController.getChapter = async (req, res, next) => {
-  return next(new AppError(new Error('Not implemented'), 'chaptersController', 'getChapter', 500));
+  const {
+    chapterId
+  } = req.params;
+
+  try {
+    // eslint-disable-next-line semi
+    const text = 'SELECT * FROM public.chapters WHERE id = $1'
+    const values = [chapterId];
+    await db.query(text, values, (err, result) => {
+      if (!result.rows[0]) return res.send('Error: No Chapter with this ID is in the database');
+      if (result) return res.send(result.rows[0]);
+      if (err) return res.send('error getting records from database');
+    });
+  } catch (err) {
+    return next(new AppError(new Error('Not implemented'), 'chaptersController', 'getChapter', 500));
+  }  
 };
 
 chaptersController.addChapter = async (req, res, next) => {
@@ -27,24 +52,53 @@ chaptersController.addChapter = async (req, res, next) => {
   // const {
   //   latitude,
   //   longitude
-  // } = res.locals;
-
-  // console.log(`name ${req.body.name}`);
+  // } = res.locals
 
   try {
     // eslint-disable-next-line semi
-    const text = 'INSERT INTO public.chapters (name, street, city, state, zip, phone, email) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *'
-    const values = [name, street, city, state, zip, phone, email];
-    const result = await db.query(text, values);
-    res.send(result.rows[0]);
+    const text = 'SELECT name, zip FROM public.chapters WHERE name = $1 AND zip = $2'
+    const values = [name, zip];
+    const response = await db.query(text, values);
+    if (response.rows[0]) {
+      return res.send('This chapter already exists in the database')
+    } else {
+    // eslint-disable-next-line semi
+      const text2 = 'INSERT INTO public.chapters (name, zip, street, city, state,  phone, email) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *'
+      const values2 = [name, zip, street, city, state, phone, email];
+      const addedChapter = await db.query(text2, values2);
+      return res.send('Chapter added to database');
+    }
   } catch (err) {
     return next(new AppError(new Error('Not implemented'), 'chaptersController', 'addChapter', 500));
   }
 };
 
 chaptersController.updateChapter = async (req, res, next) => {
-  return next(new AppError(new Error('Not implemented'), 'chaptersController', 'updateChapter', 500));
+  const {
+    chapterId
+  } = req.params;
+
+  const {
+    name,
+    street,
+    city,
+    state,
+    zip, 
+    phone,
+    email
+  } = req.body;
+
+  try {
+    // eslint-disable-next-line semi
+    const text = 'UPDATE public.chapters SET name = $2, street = $3, city = $4, state = $5, zip = $6, phone = $7, email = $8 WHERE id = $1'
+    const values = [chapterId, name, street, city, state, zip, phone, email];
+    db.query(text, values);
+    res.send('successfully updated');
+  } catch (err) {
+    return next(new AppError(new Error('Not implemented'), 'chaptersController', 'updateChapter', 500));
+  };
 };
+
 
 chaptersController.deleteChapter = async (req, res, next) => {
   const {
@@ -52,6 +106,7 @@ chaptersController.deleteChapter = async (req, res, next) => {
   } = req.params;
 
   try {
+    // eslint-disable-next-line semi
     const text = 'DELETE FROM public.chapters WHERE id = $1'
     const values = [chapterId];
     db.query(text, values);
