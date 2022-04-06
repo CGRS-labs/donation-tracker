@@ -13,6 +13,7 @@ import AllChaptersPage from './components/chapters/AllChaptersPage';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
 import Dashboard from './components/dashboard/Dashboard';
+import AddChapterPage from './components/chapters/AddChapterPage';
 
 import './styles/styles.css';
 
@@ -28,6 +29,7 @@ const App = () => {
         <Route exact path="/signup" element={<Layout><SignUp /></Layout>} />
         <Route exact path="/map" element={<Layout><MapPage /></Layout>} />
         <Route exact path="/chapter/:id" element={<Layout><ChapterPage /></Layout>} />
+        <Route exact path="/chapter/add" element={<Layout><AddChapterPage /></Layout>} />
         <Route exact path="/dashboard" element={<Layout><Dashboard /></Layout>} />
       </Routes >
     </Router >
