@@ -9,7 +9,7 @@ const itemsController = {};
 itemsController.getAllItems = async (req, res, next) => {
   try {
     // eslint-disable-next-line semi
-    const text = 'SELECT * FROM public."Items" ORDER BY name ASC'
+    const text = 'SELECT * FROM public.items ORDER BY name ASC'
     await db.query(text, (err, result) => {
       if (!result.rows[0]) return res.send('There are no items in the database');
       if (result) return res.send(result.rows);
@@ -27,7 +27,7 @@ itemsController.getItem = async (req, res, next) => {
 
   try {
     // eslint-disable-next-line semi
-    const text = 'SELECT * FROM public."Items" WHERE id = $1'
+    const text = 'SELECT * FROM public.items WHERE id = $1'
     const values = [itemId];
     await db.query(text, values, (err, result) => {
       if (!result.rows[0]) return res.send('Error: No Item with this ID is in the database');
@@ -49,14 +49,14 @@ itemsController.addItem = async (req, res, next) => {
   
   try {
     // eslint-disable-next-line semi
-    const text = 'SELECT name, category FROM public."Items" WHERE name = $1 AND category = $2'
+    const text = 'SELECT name, category FROM public.items WHERE name = $1 AND category = $2'
     const values = [name, category];
     const response = await db.query(text, values);
     if (response.rows[0]) {
       return res.send('This item already exists in the database. Please update the existing item instead');
     } else {
       // eslint-disable-next-line semi
-      const text2 = 'INSERT INTO public."Items" (name, total_received, total_needed, category) VALUES ($1, $2, $3, $4) RETURNING *'
+      const text2 = 'INSERT INTO public.items (name, total_received, total_needed, category) VALUES ($1, $2, $3, $4) RETURNING *'
       const values2 = [name, total_received, total_needed, category];
       const addedItem = await db.query(text2, values2);
       return res.send('Item added to database');
@@ -80,7 +80,7 @@ itemsController.updateItem = async (req, res, next) => {
 
   try {
     // eslint-disable-next-line semi
-    const text = 'UPDATE public."Items" SET name = $2, total_needed = $3, total_received = $4, category = $5 WHERE id = $1'
+    const text = 'UPDATE public.items SET name = $2, total_needed = $3, total_received = $4, category = $5 WHERE id = $1'
     const values = [itemId, name, total_needed, total_received, category];
     db.query(text, values);
     return res.send('successfully updated');
@@ -94,8 +94,20 @@ itemsController.updateItem = async (req, res, next) => {
 
 
 itemsController.deleteItem = async (req, res, next) => {
-  return next(new AppError(new Error('Not implemented'), 'itemsController', 'deleteItem', 500));
+  const {
+    itemId
+  } = req.params;
 
+  try {
+    // eslint-disable-next-line semi
+    const text = 'DELETE FROM public.items WHERE id = $1'
+    const values = [itemId];
+    db.query(text, values);
+    res.send('successfully deleted');
+
+  } catch (err) {
+    return next(new AppError(new Error('Not implemented'), 'itemsController', 'deleteItem', 500));
+  }
 };
 
 /**
