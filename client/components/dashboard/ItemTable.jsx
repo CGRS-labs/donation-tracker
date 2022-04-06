@@ -19,27 +19,29 @@ import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 const columns = [
   { field: 'name', headerName: 'Item', width: 300 },
   { field: 'id', headerName: 'Chapter', width: 150 },
-  { field: 'total_needed', headerName: 'Quantity', width: 150 },
-  { field: 'Increase', renderCell: (cellValues) => { 
+  { field: 'total_needed', headerName: 'Quantity', width: 100 },
+  { field: 'Increment', renderCell: (cellValues) => { 
     return (
-      <IconButton
-        variant="contained"
-        color="primary"
-        onClick={(event) => {
-          handleClick(event, cellValues);
-        }}
-      >< AddCircleIcon /></IconButton>
-    );},
-  },
-  { field: 'Decrease', renderCell: (cellValues) => { 
-    return (
-      <IconButton
-        variant="contained"
-        color="primary"
-        onClick={(event) => {
-          handleClick(event, cellValues);
-        }}
-      >< RemoveCircleIcon /></IconButton>
+      <div>
+        <span>
+          <IconButton
+            variant="contained"
+            color="primary"
+            onClick={(event) => {
+              handleClick(event, cellValues);
+            }}
+          >< AddCircleIcon /></IconButton>
+        </span>
+        <span>
+          <IconButton
+            variant="contained"
+            color="primary"
+            onClick={(event) => {
+              handleClick(event, cellValues);
+            }}
+          >< RemoveCircleIcon /></IconButton> 
+        </span>
+      </div>
     );},
   },
   { field: 'Distribute', renderCell: (cellValues) => { 
