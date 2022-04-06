@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
+import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
+import SendIcon from '@mui/icons-material/Send';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 
 // const rows = [
 //   { id: 1, item: 'Hello', category: 'World', chapter: 'Boston', qty: '100' },
@@ -11,8 +18,41 @@ import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
 
 const columns = [
   { field: 'name', headerName: 'Item', width: 300 },
-  { field: 'id', headerName: 'Chapter', width: 300 },
+  { field: 'id', headerName: 'Chapter', width: 150 },
   { field: 'total_needed', headerName: 'Quantity', width: 150 },
+  { field: 'Increase', renderCell: (cellValues) => { 
+    return (
+      <IconButton
+        variant="contained"
+        color="primary"
+        onClick={(event) => {
+          handleClick(event, cellValues);
+        }}
+      >< AddCircleIcon /></IconButton>
+    );},
+  },
+  { field: 'Decrease', renderCell: (cellValues) => { 
+    return (
+      <IconButton
+        variant="contained"
+        color="primary"
+        onClick={(event) => {
+          handleClick(event, cellValues);
+        }}
+      >< RemoveCircleIcon /></IconButton>
+    );},
+  },
+  { field: 'Distribute', renderCell: (cellValues) => { 
+    return (
+      <IconButton
+        variant="contained"
+        color="warning"
+        onClick={(event) => {
+          handleClick(event, cellValues);
+        }}
+      >< RocketLaunchIcon /></IconButton>
+    );},
+  },
 ];
 
 export default function ItemTable() {
