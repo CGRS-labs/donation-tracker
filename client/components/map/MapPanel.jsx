@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box } from '@mui/system';
 import { Link, List, ListItem, ListItemText, Typography } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
 
 
 export default function MapPanel({ chapter, itemList }) {
@@ -24,7 +25,7 @@ export default function MapPanel({ chapter, itemList }) {
         <List sx={{ listStyleType: 'disc', marginLeft: 4 }}>
           {items}
         </List>
-        {chapter && <Link href={`/chapter/${chapter?.id}`}><Typography variant='caption'>Go to chapter page</Typography></Link>}
+        {chapter && <Link to={`/chapter/${chapter?.id}`} component={RouterLink}><Typography variant='caption'>Go to chapter page</Typography></Link>}
       </Box>
     </Box>
   );
