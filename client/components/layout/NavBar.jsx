@@ -8,9 +8,8 @@ import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import Link from '@mui/material/Link'
+import Link from '@mui/material/Link';
 import { Link as RouterLink } from 'react-router-dom';
 import Sunflower from './Sunflower';
 
@@ -36,7 +35,10 @@ const ResponsiveAppBar = () => {
             component="div"
             sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
           >
-            <Sunflower width={48} height={48} />
+            <Link to='/' component={RouterLink} underline='none'>
+              <Sunflower width={48} height={48} />
+            </Link>
+
           </Box>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -81,7 +83,9 @@ const ResponsiveAppBar = () => {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
           >
-            <Sunflower width={48} height={48} />
+            <Link to='/' component={RouterLink} underline='none'>
+              <Sunflower width={48} height={48} />
+            </Link>
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page, i) => (
