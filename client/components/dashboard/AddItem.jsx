@@ -24,32 +24,40 @@ export default function Add() {
   const handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-    setInputs(values => ({...values, [name]: value}));
+    setInputs(values => ({ ...values, [name]: value }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(document.getElementById('addItem'));
-    console.log('item', data.get('item'), 'category', data.get('category'), 'quantity', data.get('quantity'));
-    fetch('/api/items', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data),
-    })
-      .then(res => console.log(res));
+    // const data = new FormData(document.getElementById('addItem'));
+    // console.log('item', data.get('item'), 'category', data.get('category'), 'quantity', data.get('quantity'));
+    try {
 
-    setInputs({
-      item: '',
-      category: '',
-      quantity: 0,
-    });
+      const response = await fetch('/api/items', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(inputs),
+      })
+      if (response.ok) {
+        setInputs({
+          item: '',
+          category: '',
+          quantity: 0,
+        });
+      } else {
+        console.error(await response.json());
+      }
+
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
     <Container maxWidth="xs">
-      <Typography component="h1" variant="h5" sx={{mt: 3}}>
+      <Typography component="h1" variant="h5" sx={{ mt: 3 }}>
         New Donation
       </Typography>
       <Box id="addItem" component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
@@ -61,11 +69,11 @@ export default function Add() {
             id="item"
             label="Item"
             name="item"
-            value= { inputs.item || '' }
+            value={inputs.item || ''}
             autoComplete="item"
             autoFocus
 
-            onChange = { handleChange }
+            onChange={handleChange}
           />
         </FormControl>
         <Grid item xs={12}>
@@ -97,12 +105,12 @@ export default function Add() {
             required
             fullWidth
             name="quantity"
-            value = { inputs.quantity || 0}
+            value={inputs.quantity || 0}
             label="Quantity"
             type="number"
             id="quantity"
             autoComplete="quantity"
-            onChange = { handleChange }
+            onChange={handleChange}
           />
         </FormControl>
         <Button
@@ -111,7 +119,7 @@ export default function Add() {
           variant="contained"
           sx={{ width: '100%', mt: 2, mb: 1 }}
         >
-            Add Item
+          Add Item
         </Button>
       </Box>
     </Container>
