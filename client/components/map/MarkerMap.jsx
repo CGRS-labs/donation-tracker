@@ -13,7 +13,7 @@ import Pin from './Pin';
 export default function MarkerMap({ lat = 40, long = -100, markerData, setSelected, popupInfo }) {
 
   const markers = useMemo(() => markerData.map((marker, index) => (
-    <Marker
+    marker.latitude && marker.longitude && <Marker
       key={index}
       longitude={marker.longitude}
       latitude={marker.latitude}
