@@ -50,11 +50,10 @@ export default function Layout({ children }) {
         flexDirection: 'column',
       }}>
         <ResponsiveAppBar></ResponsiveAppBar>
-        {/* Hero unit */}
         <Box
           sx={{
             bgcolor: 'background.paper',
-            py: 2,
+            p: 2,
             flexGrow: 1,
           }}
           component='main'

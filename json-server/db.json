@@ -65,27 +65,196 @@
     {
       "id": 1,
       "total_needed": 2,
-      "name": "diapers"
+      "name": "diapers",
+      "category": "Baby Supplies"
     },
     {
       "id": 2,
       "total_needed": 2,
-      "name": "clothes"
+      "name": "clothes",
+      "category": "Clothing"
     },
     {
       "id": 3,
       "total_needed": 100,
-      "name": "canned goods"
+      "name": "canned goods",
+      "category": "Food"
     },
     {
       "id": 4,
       "total_needed": 2,
-      "name": "toothpase"
+      "name": "toothpase",
+      "category": "Hygeine"
+    },
+    {
+      "id": 5,
+      "total_needed": 20,
+      "name": "first aid kits",
+      "category": "Medical"
+    },
+    {
+      "id": 5,
+      "total_needed": 17,
+      "name": "Band Aids",
+      "category": "Medical"
+    },
+    {
+      "id": 5,
+      "total_needed": 30,
+      "name": "Painkillers",
+      "category": "Medical"
+    },
+    {
+      "id": 5,
+      "total_needed": 10,
+      "name": "Tourniqets",
+      "category": "Medical"
+    },
+    {
+      "id": 5,
+      "total_needed": 10,
+      "name": "Formula",
+      "category": "Baby Supplies"
+    },
+    {
+      "id": 5,
+      "total_needed": 25,
+      "name": "Baby Wipes",
+      "category": "Baby Supplies"
     },
     {
       "id": 5,
       "total_needed": 0,
-      "name": "first aid kits"
+      "name": "Men's Clothing",
+      "category": "Clothing"
+    },
+    {
+      "id": 5,
+      "total_needed": 0,
+      "name": "Women's Clothing",
+      "category": "Clothing"
+    },
+    {
+      "id": 5,
+      "total_needed": 0,
+      "name": "Children's Clothing",
+      "category": "Clothing"
+    },
+    {
+      "id": 5,
+      "total_needed": 0,
+      "name": "Canned Goods",
+      "category": "Food"
+    },
+    {
+      "id": 5,
+      "total_needed": 0,
+      "name": "Non-perishable",
+      "category": "Food"
+    },
+    {
+      "id": 5,
+      "total_needed": 0,
+      "name": "Rice",
+      "category": "Food"
+    },
+    {
+      "id": 5,
+      "total_needed": 0,
+      "name": "Granola Bars",
+      "category": "Food"
+    },
+    {
+      "id": 5,
+      "total_needed": 0,
+      "name": "Toothbrush",
+      "category": "Hygeine"
+    }
+  ],
+  "users": [
+    {
+      "username": "shalarewicz",
+      "firstName": "Stephan",
+      "lastName": "Halarewicz",
+      "phone": "1234567890",
+      "email": "test@mail.com"
+    },
+    {
+      "username": "shalarewicz",
+      "firstName": "John",
+      "lastName": "Smith",
+      "phone": "1234567890",
+      "email": "test@mail.com"
+    },
+    {
+      "username": "shalarewicz",
+      "firstName": "Andy",
+      "lastName": "Townsend",
+      "phone": "1234567890",
+      "email": "test@mail.com"
+    },
+    {
+      "username": "shalarewicz",
+      "firstName": "Stephan",
+      "lastName": "Halarewicz",
+      "phone": "1234567890",
+      "email": "test@mail.com"
+    },
+    {
+      "username": "shalarewicz",
+      "firstName": "John",
+      "lastName": "Smith",
+      "phone": "1234567890",
+      "email": "test@mail.com"
+    },
+    {
+      "username": "shalarewicz",
+      "firstName": "Andy",
+      "lastName": "Townsend",
+      "phone": "1234567890",
+      "email": "test@mail.com"
+    },
+    {
+      "username": "shalarewicz",
+      "firstName": "Stephan",
+      "lastName": "Halarewicz",
+      "phone": "1234567890",
+      "email": "test@mail.com"
+    },
+    {
+      "username": "shalarewicz",
+      "firstName": "John",
+      "lastName": "Smith",
+      "phone": "1234567890",
+      "email": "test@mail.com"
+    },
+    {
+      "username": "shalarewicz",
+      "firstName": "Andy",
+      "lastName": "Townsend",
+      "phone": "1234567890",
+      "email": "test@mail.com"
+    },
+    {
+      "username": "shalarewicz",
+      "firstName": "Stephan",
+      "lastName": "Halarewicz",
+      "phone": "1234567890",
+      "email": "test@mail.com"
+    },
+    {
+      "username": "shalarewicz",
+      "firstName": "John",
+      "lastName": "Smith",
+      "phone": "1234567890",
+      "email": "test@mail.com"
+    },
+    {
+      "username": "shalarewicz",
+      "firstName": "Andy",
+      "lastName": "Townsend",
+      "phone": "1234567890",
+      "email": "test@mail.com"
     }
   ]
 }
