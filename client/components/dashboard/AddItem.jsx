@@ -16,9 +16,9 @@ const categories = ['Childcare', 'Clothing', 'Education', 'Food', 'Healthcare', 
 
 export default function Add() {
   const [inputs, setInputs] = useState({
-    item: '',
+    name: '',
     category: '',
-    quantity: 0,
+    total_needed: 0,
   });
 
   const handleChange = (event) => {
@@ -30,7 +30,7 @@ export default function Add() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(document.getElementById('addItem'));
-    console.log('item', data.get('item'), 'category', data.get('category'), 'quantity', data.get('quantity'));
+    console.log('name', data.get('name'), 'category', data.get('category'), 'total_needed', data.get('total_needed'));
     fetch('/api/items', {
       method: 'POST',
       headers: {
@@ -41,9 +41,9 @@ export default function Add() {
       .then(res => console.log(res));
 
     setInputs({
-      item: '',
+      name: '',
       category: '',
-      quantity: 0,
+      total_needed: 0,
     });
   };
 
@@ -60,8 +60,8 @@ export default function Add() {
             fullWidth
             id="item"
             label="Item"
-            name="item"
-            value= { inputs.item || '' }
+            name="name"
+            value= { inputs.name || '' }
             autoComplete="item"
             autoFocus
 
@@ -96,8 +96,8 @@ export default function Add() {
             margin="normal"
             required
             fullWidth
-            name="quantity"
-            value = { inputs.quantity || 0}
+            name="total_needed"
+            value = { inputs.total_needed || 0}
             label="Quantity"
             type="number"
             id="quantity"
