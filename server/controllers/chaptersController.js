@@ -99,7 +99,7 @@ chaptersController.updateChapter = async (req, res, next) => {
     const text = 'UPDATE public.chapters SET name = $2, street = $3, city = $4, state = $5, zip = $6, phone = $7, email = $8 WHERE id = $1'
     const values = [chapterId, name, street, city, state, zip, phone, email];
     db.query(text, values);
-    res.send('successfully updated');
+    return res.send('successfully updated');
   } catch (err) {
     return next(new AppError(new Error('Not implemented'), 'chaptersController', 'updateChapter', 500));
   };
