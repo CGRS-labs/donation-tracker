@@ -2,6 +2,7 @@ const AppError = require('../utils/AppError');
 const express = require('express');
 const db = require ('../models.js');
 require('dotenv').config();
+const getGeocodeFromAddress = require('../utils/geocode');
 
 const chaptersController = {};
 
@@ -49,10 +50,10 @@ chaptersController.addChapter = async (req, res, next) => {
     email
   } = req.body;
 
-  const {
-    latitude,
-    longitude
-  } = res.locals;
+  // const {
+  //   latitude,
+  //   longitude
+  // } = res.locals;
 
   try {
     // eslint-disable-next-line semi
@@ -63,8 +64,8 @@ chaptersController.addChapter = async (req, res, next) => {
       return res.send('This chapter already exists in the database');
     } else {
     // eslint-disable-next-line semi
-      const text2 = 'INSERT INTO public.chapters (name, zip, street, city, state,  phone, email, latitude, longitude) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *'
-      const values2 = [name, zip, street, city, state, phone, email, latitude, longitude];
+      const text2 = 'INSERT INTO public.chapters (name, zip, street, city, state, phone, email) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *'
+      const values2 = [name, zip, street, city, state, phone, email];
       const addedChapter = await db.query(text2, values2);
       return res.send('Chapter added to database');
     }
@@ -88,15 +89,15 @@ chaptersController.updateChapter = async (req, res, next) => {
     email
   } = req.body;
 
-  const {
-    latitude,
-    longitude
-  } = res.locals;
+  // const {
+  //   latitude,
+  //   longitude
+  // } = res.locals;
 
   try {
     // eslint-disable-next-line semi
-    const text = 'UPDATE public.chapters SET name = $2, street = $3, city = $4, state = $5, zip = $6, phone = $7, email = $8, latitude = $9, longitude = $10 WHERE id = $1'
-    const values = [chapterId, name, street, city, state, zip, phone, email, latitude, longitude];
+    const text = 'UPDATE public.chapters SET name = $2, street = $3, city = $4, state = $5, zip = $6, phone = $7, email = $8 WHERE id = $1'
+    const values = [chapterId, name, street, city, state, zip, phone, email];
     db.query(text, values);
     res.send('successfully updated');
   } catch (err) {
@@ -128,5 +129,31 @@ chaptersController.storeTableAndColumnNames = (req, res, next) => {
   res.locals.id = req.params.chapterId;
   return next();
 };
+
+chaptersController.validateAddressInfo = (req, res, next) => {
+  if (!req.body.street || !req.body.city || !req.body.state || !req.body.zip) {
+    return next(new AppError(new Error('Expected street, city, state and zip to exist on request body'), 'chaptersController', 'validateAddressInfo', 400));
+  }
+
+  return next();
+
+};
+
+chaptersController.getGeocode = async (req, res, next) => {
+  const { street, city, state, zip } = req.body;
+
+  try {
+
+    const [longitude, latitude] = await getGeocodeFromAddress(street, city, state, zip);
+    res.locals.longitude = longitude;
+    res.locals.latitude = latitude;
+
+    return next();
+
+  } catch (err) {
+    return next(new AppError(err, 'chaptersController', 'getGeocode', 500));
+  }
+};
+
 
 module.exports = chaptersController;
