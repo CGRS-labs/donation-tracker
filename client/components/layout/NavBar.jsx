@@ -10,7 +10,8 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import { Link } from 'react-router-dom';
+import Link from '@mui/material/Link'
+import { Link as RouterLink } from 'react-router-dom';
 import Sunflower from './Sunflower';
 
 const pages = ['Sign In', 'Sign Up', 'Chapters', 'Map', 'Dashboard'];
@@ -24,7 +25,7 @@ const ResponsiveAppBar = () => {
   };
 
   const handleCloseNavMenu = () => {
-    setAnchorElNav(null); 
+    setAnchorElNav(null);
   };
 
   return (
@@ -68,11 +69,11 @@ const ResponsiveAppBar = () => {
               }}
             >
               {pages.map((page, i) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Link to={links[i]}>
+                <Link key={page} to={links[i]} underline="none" component={RouterLink}>
+                  <MenuItem key={page} onClick={handleCloseNavMenu}>
                     <Typography textAlign="center">{page}</Typography>
-                  </Link>
-                </MenuItem>
+                  </MenuItem>
+                </Link>
               ))}
             </Menu>
           </Box>
@@ -84,14 +85,14 @@ const ResponsiveAppBar = () => {
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page, i) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-                href={links[i]}
-              >
-                {page}
-              </Button>
+              <Link key={page} to={links[i]} underline="none" component={RouterLink}>
+                <Button
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: 'white', display: 'block' }}
+                >
+                  {page}
+                </Button>
+              </Link>
             ))}
           </Box>
         </Toolbar>
