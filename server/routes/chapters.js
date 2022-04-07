@@ -21,7 +21,7 @@ router.get('/:chapterId',
   chaptersController.getChapter,
   (req, res) => {
     return res.status(200).json({
-      chapters: res.locals.chapter,
+      chapter: res.locals.chapter,
     });
   }
 );

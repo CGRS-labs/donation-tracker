@@ -1,7 +1,6 @@
+const db = require('../models.js');
+
 const AppError = require('../utils/AppError');
-const express = require('express');
-const db = require ('../models.js');
-require('dotenv').config();
 const getGeocodeFromAddress = require('../utils/geocode');
 
 const chaptersController = {};
@@ -9,10 +8,10 @@ const chaptersController = {};
 chaptersController.getAllChapters = async (req, res, next) => {
   try {
     // eslint-disable-next-line semi
-    const text = 'SELECT * FROM public.chapters ORDER BY name ASC'
+    const text = 'SELECT * FROM public.chapters ORDER BY name ASC;'
     const result = await db.query(text);
     res.locals.chapters = result.rows;
-    next();
+    return next();
   } catch (err) {
     return next(new AppError(err, 'chaptersController', 'getAllChapters', 500));
   }
@@ -25,14 +24,14 @@ chaptersController.getChapter = async (req, res, next) => {
 
   try {
     // eslint-disable-next-line semi
-    const text = 'SELECT * FROM public.chapters WHERE id = $1'
+    const text = 'SELECT * FROM public.chapters WHERE id = $1;'
     const values = [chapterId];
     const result = await db.query(text, values);
-    res.locals.chapter = result.rows;
+    [res.locals.chapter] = result.rows;
     next();
   } catch (err) {
     return next(new AppError(err, 'chaptersController', 'getChapter', 500));
-  }  
+  }
 };
 
 chaptersController.addChapter = async (req, res, next) => {
@@ -41,7 +40,7 @@ chaptersController.addChapter = async (req, res, next) => {
     street,
     city,
     state,
-    zip, 
+    zip,
     phone,
     email
   } = req.body;
@@ -53,17 +52,17 @@ chaptersController.addChapter = async (req, res, next) => {
 
   try {
     // eslint-disable-next-line semi
-    const text = 'SELECT name, zip FROM public.chapters WHERE name = $1 AND zip = $2'
+    const text = 'SELECT name, zip FROM public.chapters WHERE name = $1 AND zip = $2;'
     const values = [name, zip];
     const response = await db.query(text, values);
     if (response.rows[0]) {
-      res.send('This chapter already exists in the database');
+      return res.status(400).send('This chapter already exists in the database');
     } else {
-    // eslint-disable-next-line semi
-      const text2 = 'INSERT INTO public.chapters (name, zip, street, city, state, phone, email, latitude, longitude) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *'
+      // eslint-disable-next-line semi
+      const text2 = 'INSERT INTO public.chapters (name, zip, street, city, state, phone, email, latitude, longitude) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *;'
       const values2 = [name, zip, street, city, state, phone, email, latitude, longitude];
       await db.query(text2, values2);
-      next();
+      return next();
     }
   } catch (err) {
     return next(new AppError(err, 'chaptersController', 'addChapter', 500));
@@ -80,7 +79,7 @@ chaptersController.updateChapter = async (req, res, next) => {
     street,
     city,
     state,
-    zip, 
+    zip,
     phone,
     email
   } = req.body;
@@ -89,13 +88,15 @@ chaptersController.updateChapter = async (req, res, next) => {
     latitude,
     longitude
   } = res.locals;
-
   try {
     // eslint-disable-next-line semi
-    const text = 'UPDATE public.chapters SET name = $2, street = $3, city = $4, state = $5, zip = $6, phone = $7, email = $8, latitude = $9, longitude = $10 WHERE id = $1'
+    const text = 'UPDATE public.chapters SET name = $2, street = $3, city = $4, state = $5, zip = $6, phone = $7, email = $8, latitude = $9, longitude = $10 WHERE id = $1;'
     const values = [chapterId, name, street, city, state, zip, phone, email, latitude, longitude];
-    await db.query(text, values);
-    next();
+    const { rowCount } = await db.query(text, values);
+    if (rowCount === 0) {
+      return res.status(404).send('Error: 404 Chapter not found');
+    }
+    return next();
   } catch (err) {
     return next(new AppError(err, 'chaptersController', 'updateChapter', 500));
   };
@@ -109,10 +110,10 @@ chaptersController.deleteChapter = async (req, res, next) => {
 
   try {
     // eslint-disable-next-line semi
-    const text = 'DELETE FROM public.chapters WHERE id = $1'
+    const text = 'DELETE FROM public.chapters WHERE id = $1;'
     const values = [chapterId];
     await db.query(text, values);
-    next();
+    return next();
   } catch (err) {
     return next(new AppError(err, 'chaptersController', 'deleteChapter', 500));
   }
