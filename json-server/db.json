@@ -93,131 +93,79 @@
       "category": "Medical"
     },
     {
-<<<<<<< HEAD
-      "id": 6,
-=======
       "id": 7,
->>>>>>> 61ba4589936bd6d14aaaded2b49663858471b2e2
       "total_needed": 17,
       "name": "Band Aids",
       "category": "Medical"
     },
     {
-<<<<<<< HEAD
-      "id": 7,
-=======
       "id": 8,
->>>>>>> 61ba4589936bd6d14aaaded2b49663858471b2e2
       "total_needed": 30,
       "name": "Painkillers",
       "category": "Medical"
     },
     {
-<<<<<<< HEAD
-      "id": 8,
-=======
       "id": 9,
->>>>>>> 61ba4589936bd6d14aaaded2b49663858471b2e2
       "total_needed": 10,
       "name": "Tourniqets",
       "category": "Medical"
     },
     {
-<<<<<<< HEAD
-      "id": 9,
-=======
       "id": 10,
->>>>>>> 61ba4589936bd6d14aaaded2b49663858471b2e2
       "total_needed": 10,
       "name": "Formula",
       "category": "Baby Supplies"
     },
     {
-<<<<<<< HEAD
-      "id": 10,
-=======
       "id": 11,
->>>>>>> 61ba4589936bd6d14aaaded2b49663858471b2e2
       "total_needed": 25,
       "name": "Baby Wipes",
       "category": "Baby Supplies"
     },
     {
-<<<<<<< HEAD
-      "id": 11,
-=======
       "id": 12,
->>>>>>> 61ba4589936bd6d14aaaded2b49663858471b2e2
       "total_needed": 0,
       "name": "Men's Clothing",
       "category": "Clothing"
     },
     {
-<<<<<<< HEAD
-      "id": 12,
-=======
       "id": 13,
->>>>>>> 61ba4589936bd6d14aaaded2b49663858471b2e2
       "total_needed": 0,
       "name": "Women's Clothing",
       "category": "Clothing"
     },
     {
-<<<<<<< HEAD
-      "id": 13,
-=======
       "id": 14,
->>>>>>> 61ba4589936bd6d14aaaded2b49663858471b2e2
       "total_needed": 0,
       "name": "Children's Clothing",
       "category": "Clothing"
     },
     {
-<<<<<<< HEAD
-      "id": 14,
-=======
       "id": 15,
->>>>>>> 61ba4589936bd6d14aaaded2b49663858471b2e2
       "total_needed": 0,
       "name": "Canned Goods",
       "category": "Food"
     },
     {
-<<<<<<< HEAD
-      "id": 15,
-=======
       "id": 16,
->>>>>>> 61ba4589936bd6d14aaaded2b49663858471b2e2
       "total_needed": 0,
       "name": "Non-perishable",
       "category": "Food"
     },
     {
-<<<<<<< HEAD
-      "id": 16,
-=======
       "id": 17,
->>>>>>> 61ba4589936bd6d14aaaded2b49663858471b2e2
       "total_needed": 0,
       "name": "Rice",
       "category": "Food"
     },
     {
-<<<<<<< HEAD
-      "id": 17,
-=======
       "id": 18,
->>>>>>> 61ba4589936bd6d14aaaded2b49663858471b2e2
       "total_needed": 0,
       "name": "Granola Bars",
       "category": "Food"
     },
     {
-<<<<<<< HEAD
-      "id": 18,
-=======
       "id": 19,
->>>>>>> 61ba4589936bd6d14aaaded2b49663858471b2e2
       "total_needed": 0,
       "name": "Toothbrush",
       "category": "Hygeine"
