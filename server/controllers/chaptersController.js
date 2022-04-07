@@ -44,7 +44,7 @@ chaptersController.getGeocode = async (req, res, next) => {
 
   try {
 
-    const [longitude, latitude] = await getGeocodeFromAddress(steet, city, state, zip);
+    const [longitude, latitude] = await getGeocodeFromAddress(street, city, state, zip);
     res.locals.longitude = longitude;
     res.locals.latitude = latitude;
 

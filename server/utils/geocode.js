@@ -1,13 +1,11 @@
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
-const cities = require('../../data/db.json');
-
 /**
- * Obtains coordinates for first result mathcing the provided address or an empty array if not match found. 
- * @param {String} street 
- * @param {String} city 
- * @param {String} state 
- * @param {String} zip 
+ * Obtains coordinates for first result mathcing the provided address or an empty array if not match found.
+ * @param {String} street
+ * @param {String} city
+ * @param {String} state
+ * @param {String} zip
  * @returns {Array} Array containing [longitude, latitude]
  */
 const getGeocodeFromAddress = async (street, city, state, zip = '') => {
@@ -30,7 +28,7 @@ const getGeocodeFromAddress = async (street, city, state, zip = '') => {
 
 /**
  * Iterates through the provided data and adds latitute and longitude coordinates
- * Currently uses city and state only. 
+ * Currently uses city and state only.
  * @param {Array} data Array of objects containing street, city and state attributes
  */
 const geoCodeInitialData = async (data) => {

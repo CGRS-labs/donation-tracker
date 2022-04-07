@@ -1,14 +1,15 @@
 const express = require('express');
 const itemsRouter = require('./items');
 const chaptersRouter = require('./chapters');
-
+const usersRouter = require('./users');
+const authController = require('../controllers/authController');
 const router = express.Router();
 
-// TODO: add auth router
+router.use('/', usersRouter);
 
-// TODO: use auth controller to validate any requests that get to this point to 
-// protect backend api routes from the public
-
+router.use(authController.validateToken, (req, res, next) => {
+  next('route');
+});
 router.use('/items', itemsRouter);
 router.use('/chapters', chaptersRouter);
 
