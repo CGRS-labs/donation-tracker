@@ -10,11 +10,9 @@ itemsController.getAllItems = async (req, res, next) => {
   try {
     // eslint-disable-next-line semi
     const text = 'SELECT * FROM public.items ORDER BY name ASC'
-    await db.query(text, (err, result) => {
-      if (!result.rows[0]) return res.send('There are no items in the database');
-      if (result) return res.send(result.rows);
-      if (err) return res.send('error getting items from database');
-    });
+    const result = await db.query(text);
+    res.locals.items = result.rows;
+    next();
   } catch (err) {
     return next(new AppError(err, 'itemsController', 'getItems', 500));
   };
@@ -29,11 +27,9 @@ itemsController.getItem = async (req, res, next) => {
     // eslint-disable-next-line semi
     const text = 'SELECT * FROM public.items WHERE id = $1'
     const values = [itemId];
-    await db.query(text, values, (err, result) => {
-      if (!result.rows[0]) return res.send('No Item with this ID is in the database');
-      if (result) return res.send(result.rows[0]);
-      if (err) return res.send('error getting items from database');
-    });
+    const result = await db.query(text, values);
+    res.locals.item = result.rows;
+    next();
   } catch (err) {
     return next(new AppError(err, 'itemsController', 'getItem', 500));
   };
@@ -59,7 +55,8 @@ itemsController.addItem = async (req, res, next) => {
       const text2 = 'INSERT INTO public.items (name, total_received, total_needed, category) VALUES ($1, $2, $3, $4) RETURNING *'
       const values2 = [name, total_received, total_needed, category];
       const addedItem = await db.query(text2, values2);
-      return res.send('Item added to database');
+      res.locals.item = addedItem.rows;
+      next();
     } 
   } catch {
     return next(new AppError(err, 'itemsController', 'addItem', 500));
@@ -82,8 +79,8 @@ itemsController.updateItem = async (req, res, next) => {
     // eslint-disable-next-line semi
     const text = 'UPDATE public.items SET name = $2, total_needed = $3, total_received = $4, category = $5 WHERE id = $1'
     const values = [itemId, name, total_needed, total_received, category];
-    db.query(text, values);
-    return res.send('successfully updated');
+    await db.query(text, values);
+    next();
   } catch (err) {
     return next(new AppError(err, 'itemsController', 'updateItem', 500));
   };
@@ -102,8 +99,8 @@ itemsController.deleteItem = async (req, res, next) => {
     // eslint-disable-next-line semi
     const text = 'DELETE FROM public.items WHERE id = $1'
     const values = [itemId];
-    db.query(text, values);
-    res.send('successfully deleted');
+    await db.query(text, values);
+    next();
 
   } catch (err) {
     return next(new AppError(err, 'itemsController', 'deleteItem', 500));

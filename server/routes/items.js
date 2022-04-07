@@ -42,7 +42,7 @@ router.post('/',
   itemsController.addItem,
   (req, res) => {
     return res.status(200).json({
-      item: res.locals.id,
+      item: res.locals.item,
     });
   }
 );
