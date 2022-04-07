@@ -1,20 +1,20 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 
-import Logo from '../../styles/images/sunflower_white.svg';
+import Logo from '../../assets/images/sunflower_white.svg';
 
-const Sunflower = ({height, width}) => {
+const Sunflower = ({ height, width }) => {
   return (
     <Box
       component="img"
       sx={{
-        height: {height},
-        width: {width}
+        height: { height },
+        width: { width }
       }}
       alt="Sunflower"
       src={Logo}
     />
-    
+
   );
 };
 

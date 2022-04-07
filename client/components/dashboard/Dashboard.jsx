@@ -21,8 +21,6 @@ function DashboardContent() {
               ? theme.palette.grey[100]
               : theme.palette.grey[900],
           flexGrow: 1,
-          height: '100vh',
-          overflow: 'auto',
         }}
       >
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
@@ -34,7 +32,7 @@ function DashboardContent() {
                   p: 1,
                   display: 'flex',
                   flexDirection: 'column',
-                  height: 390,
+                  height: 1,
                 }}
               >
                 <Add />
