@@ -23,7 +23,8 @@ export default function Login() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(document.getElementById('login'));
+    let data = new FormData(document.getElementById('login'));
+    data = Object.fromEntries(data);
     console.log({
       email: data.get('email'),
       password: data.get('password'),

@@ -29,7 +29,8 @@ export default function SignUp() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(document.getElementById('signup'));
+    let data = new FormData(document.getElementById('signup'));
+    data = Object.fromEntries(data);
 
     fetch('/api/register', {
       method: 'POST',
