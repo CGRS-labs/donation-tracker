@@ -8,10 +8,18 @@ import Paper from '@mui/material/Paper';
 import AddNeed from './AddNeed';
 import GlobalItemTable from './GlobalItemTable';
 import Chart from './Chart';
-// import categories from '../../categories';
 
 
-function DashboardContent() {
+// How to make dashboard content modular => use render Props
+// Pass in Chart, Form, Table as props.
+// Parent needs to
+// 1. Compute and pre - process chart data
+// pass in labels and datasets
+// 2. Compute and pre process item tables
+// pass in columsn and row Data
+// 3. Decide with form to pass in
+
+function DashboardContent({ form, chart, table }) {
 
   return (
     <Box sx={{ display: 'flex' }}>
