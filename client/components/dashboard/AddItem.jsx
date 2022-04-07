@@ -15,11 +15,23 @@ import FormControl from '@mui/material/FormControl';
 const categories = ['Childcare', 'Clothing', 'Education', 'Food', 'Healthcare', 'Homegoods', 'Personal hygiene', 'Other'];
 
 export default function Add() {
+  
   const [inputs, setInputs] = useState({
     name: '',
     category: '',
     total_needed: 0,
+    items: [],
   });
+
+  useEffect(() => {
+    fetch('/api/items')
+      .then((data) => data.json())
+      .then((rows) => {
+        console.log(rows);
+        setTableData(rows);
+      });
+  }, []);
+
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -29,8 +41,12 @@ export default function Add() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(document.getElementById('addItem'));
-    console.log('name', data.get('name'), 'category', data.get('category'), 'total_needed', data.get('total_needed'));
+    let data = new FormData(document.getElementById('addItem'));
+    data = Object.fromEntries(data);
+    const test = JSON.stringify(data);
+    console.log('test', test);
+    // console.log('name', data.get('name'), 'category', data.get('category'), 'total_needed', data.get('total_needed'));
+
     fetch('/api/items', {
       method: 'POST',
       headers: {

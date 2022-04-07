@@ -11,6 +11,17 @@ import ItemTable from './ItemTable';
 
 function DashboardContent() {
 
+  const [tableData, setTableData] = useState([]);
+
+  useEffect(() => {
+    fetch('/chapterItems/all')
+      .then((data) => data.json())
+      .then((rows) => {
+        console.log(rows);
+        setTableData(rows);
+      });
+  }, []);
+
   return (
     <Box sx={{ display: 'flex' }}>
       <Box

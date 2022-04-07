@@ -58,16 +58,6 @@ const columns = [
 ];
 
 export default function ItemTable() {
-  const [tableData, setTableData] = useState([]);
-
-  useEffect(() => {
-    fetch('/api/items')
-      .then((data) => data.json())
-      .then((rows) => {
-        console.log(rows);
-        setTableData(rows);
-      });
-  }, []);
 
   // console.log(tableData);
 
