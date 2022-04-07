@@ -1,7 +1,6 @@
 const path = require('path');
 const express = require('express');
 require('dotenv').config();
-const db = require ('./models');
 
 const apiRouter = require('./routes/api');
 const AppError = require('./utils/AppError.js');

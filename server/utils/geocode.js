@@ -22,7 +22,6 @@ const getGeocodeFromAddress = async (street, city, state, zip = '') => {
       // no results found
       return [];
     }
-    console.log(data.features[0].geometry.coordinates)
     return data.features[0].geometry.coordinates;
   }
 };

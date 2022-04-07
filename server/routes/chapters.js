@@ -29,6 +29,7 @@ router.get('/:chapterId',
 router.put('/:chapterId',
   chaptersController.storeTableAndColumnNames,
   utilController.toSqlUpdateQuery,
+  chaptersController.getGeocode,
   chaptersController.updateChapter,
   (req, res) => {
     return res.status(200).send('Update chapter success');

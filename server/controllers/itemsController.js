@@ -16,7 +16,7 @@ itemsController.getAllItems = async (req, res, next) => {
       if (err) return res.send('error getting items from database');
     });
   } catch (err) {
-    return next(new AppError(new Error('Not implemented'), 'itemsController', 'getItems', 500));
+    return next(new AppError(err, 'itemsController', 'getItems', 500));
   };
 };
 
@@ -30,12 +30,12 @@ itemsController.getItem = async (req, res, next) => {
     const text = 'SELECT * FROM public.items WHERE id = $1'
     const values = [itemId];
     await db.query(text, values, (err, result) => {
-      if (!result.rows[0]) return res.send('Error: No Item with this ID is in the database');
+      if (!result.rows[0]) return res.send('No Item with this ID is in the database');
       if (result) return res.send(result.rows[0]);
       if (err) return res.send('error getting items from database');
     });
   } catch (err) {
-    return next(new AppError(new Error('Not implemented'), 'itemsController', 'getItem', 500));
+    return next(new AppError(err, 'itemsController', 'getItem', 500));
   };
 };
 
@@ -62,7 +62,7 @@ itemsController.addItem = async (req, res, next) => {
       return res.send('Item added to database');
     } 
   } catch {
-    return next(new AppError(new Error('Not implemented'), 'itemsController', 'addItem', 500));
+    return next(new AppError(err, 'itemsController', 'addItem', 500));
   }
 };
 
@@ -85,7 +85,7 @@ itemsController.updateItem = async (req, res, next) => {
     db.query(text, values);
     return res.send('successfully updated');
   } catch (err) {
-    return next(new AppError(new Error('Not implemented'), 'itemsController', 'updateItem', 500));
+    return next(new AppError(err, 'itemsController', 'updateItem', 500));
   };
 };
 
@@ -106,7 +106,7 @@ itemsController.deleteItem = async (req, res, next) => {
     res.send('successfully deleted');
 
   } catch (err) {
-    return next(new AppError(new Error('Not implemented'), 'itemsController', 'deleteItem', 500));
+    return next(new AppError(err, 'itemsController', 'deleteItem', 500));
   }
 };
 
