@@ -37,7 +37,6 @@ router.delete('/:itemId',
     return res.status(200).send('Delete item succesful');
   }
 );
-
 router.post('/',
   itemsController.addItem,
   (req, res) => {
