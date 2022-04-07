@@ -13,7 +13,7 @@ import Pin from './Pin';
 export default function MarkerMap({ lat = 40, long = -100, markerData, setSelected, popupInfo }) {
 
   const markers = useMemo(() => markerData.map((marker, index) => (
-    <Marker
+    marker.latitude && marker.longitude && <Marker
       key={index}
       longitude={marker.longitude}
       latitude={marker.latitude}
@@ -25,12 +25,12 @@ export default function MarkerMap({ lat = 40, long = -100, markerData, setSelect
 
   return <Map
     initialViewState={{
-      longitude: long,
-      latitude: lat,
       zoom: 4,
       bearing: 0,
       pitch: 0,
     }}
+    longitude={long}
+    latitude={lat}
     style={{ width: '100%', height: '100%' }}
     // mapStyle="mapbox://styles/mapbox/light-v10"
     mapStyle="mapbox://styles/mapbox/dark-v10"

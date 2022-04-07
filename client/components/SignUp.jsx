@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -27,27 +28,30 @@ export default function SignUp() {
     setInputs(values => ({ ...values, [name]: value }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    let data = new FormData(document.getElementById('signup'));
-    data = Object.fromEntries(data);
 
-    fetch('/api/register', {
+    const response = await fetch('/api/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(data),
-    })
-      .then(res => console.log(res));
-
-    setInputs({
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      chapter: '',
+      body: JSON.stringify(inputs),
     });
+
+    if (response.ok) {
+      setInputs({
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        chapter: '',
+      });
+      navigate('/login');
+    } else {
+      console.error(await response.json());
+    }
+
   };
 
   return (
