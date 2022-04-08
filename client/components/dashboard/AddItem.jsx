@@ -23,6 +23,26 @@ export default function AddItem (setTableData) {
     items: [],
   });
 
+    //doesn't yet work?!
+
+  // useEffect(() => {
+  //   const [names, setNames] = useState([]);
+
+  //   const addItemNames = async () => {
+  //     try {
+  //       const response = await fetch('/api/items/names', {
+  //         method: 'GET',
+  //         headers: {
+  //           'Content-Type': 'application/json'
+  //         }
+  //       });
+  //       console.log(response);
+  //     } catch (err) {
+  //       console.error(err);
+  //     }
+  //   };
+  // }, []);
+
   const handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
