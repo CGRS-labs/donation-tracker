@@ -20,9 +20,9 @@ const columns = [
   
   { field: 'id', headerName: 'ID', width: 50 },
   { field: 'name', headerName: 'Item', width: 200 },
-  { field: 'total_needed', headerName: 'Needed', width: 150 },
   { field: 'category', headerName: 'Category', width: 200 },
-  { field: 'total_needed', headerName: 'Quantity', width: 100 },
+  { field: 'total_needed', headerName: 'Needed', width: 150 },
+  { field: 'total_received', headerName: 'Received', width: 100 },
   { field: 'Increment', renderCell: (cellValues) => { 
     return (
       <div>
