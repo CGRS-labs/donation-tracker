@@ -23,26 +23,24 @@ export default function AddItem (setTableData) {
     total_needed: 0,
     items: [],
   });
+  const [selectItems, setSelectItems] = useState([]);
 
-  //doesn't yet work?!
+  useEffect( async () => {
+    try {
+      const response = await fetch('/api/items/names');
+      const menuItems = await response.json();
+      console.log('response', menuItems);
 
-  // useEffect(() => {
-  //   const [names, setNames] = useState([]);
-
-  //   const addItemNames = async () => {
-  //     try {
-  //       const response = await fetch('/api/items/names', {
-  //         method: 'GET',
-  //         headers: {
-  //           'Content-Type': 'application/json'
-  //         }
-  //       });
-  //       console.log(response);
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  //   };
-  // }, []);
+      if (response.ok) {
+        setSelectItems(menuItems);
+      } else {
+        console.error(menuItems.error);
+      }
+    
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -85,7 +83,26 @@ export default function AddItem (setTableData) {
       </Typography>
       <Box id="addItem" component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
         <FormControl sx={{ mx: 'auto', width: '100%' }}>
-          <TextField
+          <InputLabel id='outlined-category-label'>Category</InputLabel>
+          <Select
+            labelId='outlined-category-label'
+            id='category-select'
+            name='category'
+            value={inputs.category || ''}
+            input={<OutlinedInput label="Category" />}
+            onChange={handleChange}
+          >
+            {selectItems.map((row) => {
+              return (
+                <MenuItem
+                  key={row.id}
+                  value={row.name}
+                >
+                  {row.name}
+                </MenuItem>);
+            })}
+          </Select>
+          {/* <TextField
             margin="normal"
             required
             fullWidth
@@ -97,7 +114,7 @@ export default function AddItem (setTableData) {
             autoFocus
 
             onChange={handleChange}
-          />
+          /> */}
         </FormControl>
         <Grid item xs={12}>
           <FormControl sx={{ mt: 1, width: '100%' }}>

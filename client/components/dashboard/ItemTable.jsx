@@ -62,8 +62,8 @@ const columns = [
 
 export default function ItemTable(props) {
 
-  console.log(props.tableData);
-  console.log(columns);
+  // console.log(props.tableData);
+  // console.log(columns);
 
   return (
     <div style={{ height: 500, width: '100%' }}>
