@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 
 import useToken from '../hooks/useToken';
+import { UserContext } from '../hooks/userContext';
 
 export default function Login() {
   const [inputs, setInputs] = useState({
@@ -20,6 +21,7 @@ export default function Login() {
 
   const { setToken } = useToken();
   const navigate = useNavigate();
+  const { setUser } = useContext(UserContext);
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -48,6 +50,9 @@ export default function Login() {
       // store the token in session storage
       setToken(data.token);
       // TODO: Store the user in context
+      setUser({
+        ...data.user
+      });
       navigate(`/dashboard/${data.user.chapterId}`);
 
     }
