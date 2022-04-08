@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.use('/:chapterId/items', chapterItemsRouter);
 
-router.get('/all',
+router.get('/',
   chaptersController.getAllChapters,
   (req, res) => {
     return res.status(200).json({

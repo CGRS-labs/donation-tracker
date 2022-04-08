@@ -4,7 +4,7 @@ const utilConroller = require('../controllers/utilController');
 
 const router = express.Router();
 
-router.get('/all',
+router.get('/',
   itemsController.getAllItems,
   (req, res) => {
     return res.status(200).json({
