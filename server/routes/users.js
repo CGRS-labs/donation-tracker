@@ -6,6 +6,7 @@ const authController = require('../controllers/authController');
 const router = express.Router();
 
 router.post('/register',
+  authController.validateToken,
   usersController.validateRegistration,
   usersController.hashPassword,
   usersController.addUser,
