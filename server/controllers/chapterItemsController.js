@@ -131,11 +131,11 @@ chapterItemsController.getItem = async (req, res, next) => {
   const { chapterId, itemId } = req.params;
 
   const query = {
-    text: 'SELECT i.id as item_id, i.name as item_name, i.category, ci.total_received, i.total_needed, c.id as chapter_id, c.name as chapter_name \
-    FROM chapter_items ci \
-    LEFT JOIN items i ON ci.item_id = i.id \
-    LEFT JOIN chapters c ON c.id = ci.chapter_id \
-    WHERE ci.item_id = $1 and c.id = $2;',
+    text: `SELECT i.id as item_id, i.name as item_name, i.category, ci.total_received, i.total_needed, c.id as chapter_id, c.name as chapter_name 
+    FROM chapter_items ci 
+    LEFT JOIN items i ON ci.item_id = i.id 
+    LEFT JOIN chapters c ON c.id = ci.chapter_id 
+    WHERE ci.item_id = $1 and c.id = $2;`,
     values: [itemId, chapterId],
   };
 
@@ -165,11 +165,11 @@ chapterItemsController.getItem = async (req, res, next) => {
 chapterItemsController.getAllChapterItems = async (req, res, next) => {
   const { chapterId } = req.params;
   const query = {
-    text: 'SELECT i.id, i.name, i.category, ci.total_received, i.total_needed \
-    FROM chapter_items ci \
-    LEFT JOIN items i ON ci.item_id = i.id \
-    WHERE ci.chapter_id = $1',
-    values: [chapterId]
+    text: `SELECT i.id, i.name, i.category, ci.total_received, i.total_needed 
+    FROM chapter_items ci 
+    LEFT JOIN items i ON ci.item_id = i.id 
+    WHERE ci.chapter_id = $1`,
+    values: ['4'] // values: [chapterId]
   };
 
   try {
@@ -201,10 +201,10 @@ chapterItemsController.getAllChapterItems = async (req, res, next) => {
  */
 chapterItemsController.getAllByChapter = async (req, res, next) => {
   const query = {
-    text: 'SELECT i.id as item_id, i.name as item_name, i.category, ci.total_received, c.id as chapter_id, c.name as chapter_name \
-    FROM chapter_items ci \
-    LEFT JOIN items i ON ci.item_id = i.id \
-    LEFT JOIN chapters c ON c.id = ci.chapter_id;'
+    text: `SELECT i.id as item_id, i.name as item_name, i.category, ci.total_received, c.id as chapter_id, c.name as chapter_name 
+    FROM chapter_items ci 
+    LEFT JOIN items i ON i.id = ci.item_id  
+    LEFT JOIN chapters c ON c.id = ci.chapter_id;`
   };
 
   try {
@@ -248,7 +248,7 @@ chapterItemsController.getAllByItems = async (req, res, next) => {
     const promises = items.map((item) => {
       const getItemChaptersQuery = {
         text: 'SELECT c.id, c.name, ci.total_received FROM chapter_items ci LEFT JOIN chapters c WHERE ci.item_id = $1 ',
-        values: [item.id]
+        values: [item.id] 
       };
       return db.query(getItemChaptersQuery);
     });

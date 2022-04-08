@@ -14,11 +14,11 @@ function DashboardContent() {
   const [tableData, setTableData] = useState([]);
 
   useEffect(() => {
-    fetch('/api/items')
+    fetch('/api/chapterItems')
       .then((data) => data.json())
-      .then((rows) => {
-        console.log(rows);
-        setTableData(rows);
+      .then(({ chapterItems }) => {
+        console.log(chapterItems);
+        setTableData(chapterItems);
       });
   }, []);
 

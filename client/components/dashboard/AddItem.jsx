@@ -23,7 +23,7 @@ export default function AddItem (setTableData) {
     items: [],
   });
 
-    //doesn't yet work?!
+  //doesn't yet work?!
 
   // useEffect(() => {
   //   const [names, setNames] = useState([]);
