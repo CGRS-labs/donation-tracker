@@ -14,7 +14,7 @@ DROP TABLE IF EXISTS "chapter_items";
 CREATE TABLE "chapter_items" (
 	"_id" serial NOT NULL,
 	"chapter_id" integer NOT NULL,
-	"item_id" integer NOT NULL UNIQUE,
+	"item_id" integer NOT NULL,
 	"total_received" integer NOT NULL,
 	CONSTRAINT "chapter_items_pk" PRIMARY KEY ("_id")
 ) WITH (
@@ -53,7 +53,4 @@ CREATE TABLE "items" (
 ALTER TABLE "users" ADD CONSTRAINT "users_fk0" FOREIGN KEY ("chapter_id") REFERENCES "chapters"("id");
 ALTER TABLE "chapter_items" ADD CONSTRAINT "chapter_items_fk0" FOREIGN KEY ("chapter_id") REFERENCES "chapters"("id");
 ALTER TABLE "chapter_items" ADD CONSTRAINT "chapter_items_fk1" FOREIGN KEY ("item_id") REFERENCES "items"("id");
-
-
-
-
+ALTER TABLE "chapter_items" ADD CONSTRAINT "chapter_items_item_id_chapter_id_key" UNIQUE (item_id, chapter_id);
