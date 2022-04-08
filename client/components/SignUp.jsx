@@ -19,8 +19,29 @@ export default function SignUp() {
     lastName: '',
     email: '',
     password: '',
-    chapter: '',
+    chapterId: '',
   });
+  const [chapters, setChapters] = useState([]);
+
+  // Get list of chapter ids
+  useEffect(async () => {
+    try {
+      // TODO: Add authorization header
+      const response = await fetch('/api/chapters');
+      const data = await response.json();
+
+      // check for response status 200-299
+      if (response.ok) {
+        setChapters(data.chapters);
+      } else {
+        console.error(data);
+      }
+    } catch (err) {
+      console.error(err);
+    };
+  }, []);
+
+  const navigate = useNavigate();
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -127,7 +148,7 @@ export default function SignUp() {
               <Select
                 labelId='chapter-select-label'
                 id='menu'
-                name='chapter'
+                name='chapterId'
                 value={inputs.chapter || ''}
                 label='Chapter'
                 onChange={handleChange}
@@ -135,21 +156,9 @@ export default function SignUp() {
                   minWidth: '100%',
                 }}
               >
-                <MenuItem value={'albany'}>Albany</MenuItem>
-                <MenuItem value={'boston'}>Boston</MenuItem>
-                <MenuItem value={'buffalo'}>Buffalo</MenuItem>
-                <MenuItem value={'cleveland'}>Chicago</MenuItem>
-                <MenuItem value={'cleveland'}>Cleveland</MenuItem>
-                <MenuItem value={'detriot'}>Detriot</MenuItem>
-                <MenuItem value={'hartford'}>Hartford</MenuItem>
-                <MenuItem value={'newYork'}>New York</MenuItem>
-                <MenuItem value={'newark'}>Newark</MenuItem>
-                <MenuItem value={'passaic'}>Passaic</MenuItem>
-                <MenuItem value={'philadelphia'}>Philadephia</MenuItem>
-                <MenuItem value={'rochester'}>Rochester</MenuItem>
-                <MenuItem value={'seattle'}>Seattle</MenuItem>
-                <MenuItem value={'washingtonDC'}>Washington D.C.</MenuItem>
-                <MenuItem value={'yonkers'}>Yonkers</MenuItem>
+                {chapters.map((chapter) => {
+                  <MenuItem value={chapter.id}>{chapter.name}</MenuItem>
+                })}
               </Select>
             </Grid>
           </Grid>
