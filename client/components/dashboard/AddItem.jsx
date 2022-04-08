@@ -14,6 +14,7 @@ import FormControl from '@mui/material/FormControl';
 
 const categories = ['Childcare', 'Clothing', 'Education', 'Food', 'Healthcare', 'Homegoods', 'Personal hygiene', 'Other'];
 
+
 export default function AddItem (setTableData) {
   
   const [inputs, setInputs] = useState({
@@ -22,6 +23,27 @@ export default function AddItem (setTableData) {
     total_needed: 0,
     items: [],
   });
+
+  //doesn't yet work?!
+
+  // useEffect(() => {
+  //   const [names, setNames] = useState([]);
+
+  //   const addItemNames = async () => {
+  //     try {
+  //       const response = await fetch('/api/items/names', {
+  //         method: 'GET',
+  //         headers: {
+  //           'Content-Type': 'application/json'
+  //         }
+  //       });
+  //       console.log(response);
+  //     } catch (err) {
+  //       console.error(err);
+  //     }
+  //   };
+  // }, []);
+
 
   const handleChange = (event) => {
     const name = event.target.name;
