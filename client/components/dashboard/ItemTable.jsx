@@ -7,6 +7,8 @@ import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import SendIcon from '@mui/icons-material/Send';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 
 // const rows = [
 //   { id: 1, item: 'Hello', category: 'World', chapter: 'Boston', qty: '100' },
@@ -15,6 +17,30 @@ import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 // ];
 
 // json server  {"id" , "total_needed", "name"}
+
+const shipIt = async (event, cellValues) => {
+  event.preventDefault();
+  const itemId = cellValues.id;
+  try {
+    const response = await fetch(`/api/chapterItems/${itemId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ itemId }),
+    });
+
+    if (response.ok) {
+      <Alert severity="success">
+        <AlertTitle>Success</AlertTitle>
+        This item has been shipped — <strong>Thanks for your donation!</strong>
+      </Alert>;
+    }
+
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 const columns = [
   
@@ -47,13 +73,13 @@ const columns = [
       </div>
     );},
   },
-  { field: 'Distribute', renderCell: (cellValues) => { 
+  { field: 'Distribute', align: 'center', renderCell: (cellValues) => { 
     return (
       <IconButton
         variant="contained"
         color="warning"
         onClick={(event) => {
-          handleClick(event, cellValues);
+          shipIt(event, cellValues);
         }}
       >< RocketLaunchIcon /></IconButton>
     );},

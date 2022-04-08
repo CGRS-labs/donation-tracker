@@ -74,6 +74,8 @@ export default function AddItem (setTableData) {
         console.error(await response.json());
       }
 
+      // A NEW GET REQUEST IS NEEDED TO FETCH TABLE DATA ONCE THIS ITEM IS ADDED
+
     } catch (err) {
       console.error(err);
     }

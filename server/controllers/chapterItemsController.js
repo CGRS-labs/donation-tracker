@@ -114,8 +114,26 @@ chapterItemsController.updateItem = async (req, res, next) => {
  * @requires chapterId on request params
  */
 chapterItemsController.deleteItem = async (req, res, next) => {
-  const { chapterId, itemId } = req.params;
-  return next(new AppError('Not Implemented', 'chapterItemsController', 'deleteItem', 500));
+  // const { chapterId, itemId } = req.params; // commented out because we do not yet have chapterId on params and can't get id off params
+  const chapterId = 4;
+  // console.log(req.body);
+  const { itemId } = req.body;
+  console.log(itemId); 
+  const deleteQuery = {
+    text: 'DELETE FROM chapter_items WHERE chapter_id=$2 AND item_id=$1;',
+    values: [itemId, chapterId],
+  };
+  
+  try {
+    await db.query(deleteQuery);
+
+    // do we need a commit?
+    return next();
+
+  } catch (err) {
+    await db.query('ROLLBACK');
+    return next(new AppError('Not Implemented', 'chapterItemsController', 'deleteItem', 500));
+  }
 };
 
 /**
