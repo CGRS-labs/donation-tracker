@@ -13,8 +13,59 @@ import Link from '@mui/material/Link';
 import { Link as RouterLink } from 'react-router-dom';
 import Sunflower from './Sunflower';
 
-const pages = ['Sign In', 'Sign Up', 'Chapters', 'Map', 'Dashboard'];
-const links = ['/signin', '/signup', '/chapters', '/map', '/dashboard'];
+// FIXME: Don't show Sign In, Sign up if user is logged in
+// FIXME: Get the chapter Id from user context
+const chapterId = 1;
+const pages = [
+  {
+    text: 'Sign In',
+    link: '/signin',
+    showPublic: true,
+    showPrivate: false,
+  },
+  {
+    text: 'Sign Up',
+    link: '/signup',
+    showPublic: true,
+    showPrivate: false,
+  },
+  {
+    text: 'Chapters',
+    link: '/chapters',
+    showPublic: true,
+    showPrivate: true,
+  },
+  {
+    text: 'Map',
+    link: '/map',
+    showPublic: true,
+    showPrivate: true,
+  },
+  {
+    text: 'Global Dashboard',
+    link: '/dashboard',
+    showPublic: false,
+    showPrivate: true,
+  },
+  {
+    text: 'My Dashboard',
+    link: `/dashboard/${chapterId}`,
+    showPublic: false,
+    showPrivate: true,
+  },
+  {
+    text: 'Add Chapter',
+    link: '/chapter/add',
+    showPublic: false,
+    showPrivate: true,
+  },
+  // {
+  //   text: 'Logout',
+  //   link: '/logout',
+  //   showPublic: false,
+  //   showPrivate: true,
+  // },
+];
 
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -31,6 +82,7 @@ const ResponsiveAppBar = () => {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
+          {/* LOGO */}
           <Box
             component="div"
             sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
@@ -40,7 +92,7 @@ const ResponsiveAppBar = () => {
             </Link>
 
           </Box>
-
+          {/* Condensed nav menu for small screens */}
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
@@ -70,15 +122,18 @@ const ResponsiveAppBar = () => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
+              {/* TODO: Use showPrivate, showPublic to conditionally render based on if user is logged in */}
               {pages.map((page, i) => (
-                <Link key={page} to={links[i]} underline="none" component={RouterLink}>
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">{page}</Typography>
+                <Link key={page.text} to={page.link} underline="none" component={RouterLink}>
+                  <MenuItem key={page.text} onClick={handleCloseNavMenu}>
+                    <Typography textAlign="center">{page.text}</Typography>
                   </MenuItem>
                 </Link>
               ))}
             </Menu>
           </Box>
+
+          {/* CENTERED LOGO for small screens */}
           <Box
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
@@ -87,14 +142,17 @@ const ResponsiveAppBar = () => {
               <Sunflower width={48} height={48} />
             </Link>
           </Box>
+
+          {/* Nav Bar for larger screens */}
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            {/* TODO: Use showPrivate, showPublic to conditionally render based on if user is logged in */}
             {pages.map((page, i) => (
-              <Link key={page} to={links[i]} underline="none" component={RouterLink}>
+              <Link key={page.text} to={page.link} underline="none" component={RouterLink}>
                 <Button
                   onClick={handleCloseNavMenu}
                   sx={{ my: 2, color: 'white', display: 'block' }}
                 >
-                  {page}
+                  {page.text}
                 </Button>
               </Link>
             ))}

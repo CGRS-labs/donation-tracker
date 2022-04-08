@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import Map, {
   Marker,
   Popup,
@@ -11,6 +11,12 @@ import Map, {
 import Pin from './Pin';
 
 export default function MarkerMap({ lat = 40, long = -100, markerData, setSelected, popupInfo }) {
+  const [coords, setCoords] = useState([lat, long]);
+
+  useEffect(() => {
+    // get the user's current location on initial render
+    navigator.geolocation.getCurrentPosition((position) => setCoords([position.coords.latitude, position.coords.longitude]));
+  }, []);
 
   const markers = useMemo(() => markerData.map((marker, index) => (
     marker.latitude && marker.longitude && <Marker
@@ -29,8 +35,12 @@ export default function MarkerMap({ lat = 40, long = -100, markerData, setSelect
       bearing: 0,
       pitch: 0,
     }}
-    longitude={long}
-    latitude={lat}
+    // center={[long, lat]}
+    latitude={coords[0]}
+    longitude={coords[1]}
+    onDrag={(e) => {
+      setCoords([e.viewState.latitude, e.viewState.longitude]);
+    }}
     style={{ width: '100%', height: '100%' }}
     // mapStyle="mapbox://styles/mapbox/light-v10"
     mapStyle="mapbox://styles/mapbox/dark-v10"
