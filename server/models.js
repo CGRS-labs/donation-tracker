@@ -5,7 +5,6 @@
 // module.exports = {db};
 
 const { Pool } = require('pg');
-require('dotenv').config();
 
 const PG_URI = process.env.PG_URI;
 

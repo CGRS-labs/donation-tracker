@@ -1,11 +1,12 @@
-import * as React from 'react';
+import React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 
 import ResponsiveAppBar from './NavBar';
+import theme from '../../../client/styles/theme.js';
 
 function Copyright() {
   return (
@@ -39,8 +40,6 @@ function Footer() {
   );
 };
 
-const theme = createTheme();
-
 export default function Layout({ children }) {
   return (
     <ThemeProvider theme={theme}>
@@ -51,11 +50,10 @@ export default function Layout({ children }) {
         flexDirection: 'column',
       }}>
         <ResponsiveAppBar></ResponsiveAppBar>
-        {/* Hero unit */}
         <Box
           sx={{
             bgcolor: 'background.paper',
-            py: 2,
+            p: 2,
             flexGrow: 1,
           }}
           component='main'
