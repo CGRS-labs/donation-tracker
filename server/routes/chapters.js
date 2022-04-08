@@ -2,6 +2,7 @@ const express = require('express');
 
 const chaptersController = require('../controllers/chaptersController');
 const utilController = require('../controllers/utilController');
+const authController = require('../controllers/authController');
 const chapterItemsRouter = require('./chapterItems');
 
 const router = express.Router();
@@ -25,6 +26,11 @@ router.get('/:chapterId',
     });
   }
 );
+
+// Require authentication for all subsequent requests
+router.use(authController.validateToken, (req, res, next) => {
+  next('route');
+});
 
 router.put('/:chapterId',
   chaptersController.storeTableAndColumnNames,
