@@ -67,7 +67,7 @@ usersController.validateRegistration = async (req, res, next) => {
     if (result[0]) return next(new AppError(new Error('Username already exists'), 'usersController', 'validateRegistration', 400));
 
   } catch (err) {
-    return next(err);
+    return next(new AppError(err, 'usersController', 'validateRegistration', 500));
   }
 
   return next();
@@ -82,10 +82,28 @@ usersController.addUser = async (req, res, next) => {
     const result = await client.query(text, values);
 
   } catch (err) {
-    return next(err);
+    return next(new AppError(err, 'usersController', 'addUser', 500));
   }
 
   return next();
+};
+
+/**
+ * Get's a list of users for a given chapter.
+ * Stores first_name, last_name, email in an array on res.locals.users
+ *  @requires chapterId to exist on params
+ */
+usersController.getUsersByChapter = async (req, res, next) => {
+  const text = 'SELECT email, first_name, last_name FROM users WHERE chapter_id = ($1);';
+  const values = [req.params.chapterId];
+
+  try {
+    const { rows } = await client.query(text, values);
+    res.locals.users = rows;
+    return next();
+  } catch (err) {
+    return next(new AppError(err, 'usersController', 'getUsersByChapter', 500));
+  }
 };
 
 module.exports = usersController;
