@@ -36,31 +36,31 @@ export default function ChapterPage(props) {
   useEffect(async () => {
     // TODO: Cancel this request if compoent unmounts
     const response = await fetch(`/api/chapters/${id}`);
-
+    const data = await response.json();
     if (response.ok) {
-      setChapter(await response.json());
+      setChapter(data.chapter);
     }
   }, []);
 
   useEffect(async () => {
     // TODO: Cancel this request if compoent unmounts
-    // FIXME: Determin endpoint to get chapter admins only. 
+    // FIXME: Determine endpoint to get chapter admins only. 
     // Might include on get request to chapters
     const response = await fetch('/api/users/');
+    const data = await response.json();
 
     if (response.ok) {
-      setUsers(await response.json());
+      setUsers(data.users);
     }
   }, [chapter]);
 
   useEffect(async () => {
     // TODO: Cancel this request if compoent unmounts
-    // FIXME: Can probably have this sent on the get to chapters
-    if (chapter) {
-      const response = await fetch(`/api/chapter/${chapter.id}/items`);
-
+    if (chapter.id) {
+      const response = await fetch(`/api/chapters/${chapter.id}/items`);
+      const data = await response.json();
       if (response.ok) {
-        setItems(await response.json());
+        setItems(data.chapterItems);
       }
     }
   }, [chapter]);
