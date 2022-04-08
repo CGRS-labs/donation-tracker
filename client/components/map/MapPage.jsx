@@ -9,11 +9,6 @@ export default function MapPage() {
   const [chapter, setChapter] = useState();
   const [chapterItems, setChapterItems] = useState([]);
 
-  useEffect(() => {
-    // get the user's current location on initial render
-    navigator.geolocation.getCurrentPosition((position) => setCoords([position.coords.latitude, position.coords.longitude]));
-  }, []);
-
   // Mock data
   // import geojson from '../../../data/geojson';
   // import cities from '../../../data/cities.json';

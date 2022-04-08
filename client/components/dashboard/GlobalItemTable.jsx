@@ -1,26 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
+import { DataGrid } from '@mui/x-data-grid';
 
 const sortable = true;
-// const editable = true; // TODO: Determin what columsn to make editable
+// const editable = true;
 
 const columns = [
   { field: 'id', headerName: 'id', hide: true, },
   { field: 'name', headerName: 'Item', width: 300, flex: 3, sortable },
   { field: 'category', headerName: 'Category', width: 300, flex: 3, sortable },
   { field: 'total_needed', headerName: 'Total Needed', width: 150, flex: 1, align: 'center', headerAlign: 'center', sortable },
-  { field: 'tocal_received', headerName: 'Total Received', width: 150, flex: 1, align: 'center', headerAlign: 'center', sortable },
+  { field: 'total_received', headerName: 'Total Received', width: 150, flex: 1, align: 'center', headerAlign: 'center', sortable },
 ];
 
 export default function ItemTable() {
   const [tableData, setTableData] = useState([]);
+  const [pageSize, setPageSize] = React.useState(15);
 
   useEffect(() => {
     // TODO: Cancel this if component unmounts
     fetch('/api/items')
       .then((data) => data.json())
-      .then((rows) => {
-        setTableData(rows);
+      .then(({ items }) => {
+        setTableData(items);
       })
       .catch((err => console.error(err)));
   }, []);
@@ -30,7 +31,9 @@ export default function ItemTable() {
       <DataGrid
         rows={tableData}
         columns={columns}
-        pageSize={15}
+        pageSize={pageSize}
+        rowsPerPageOptions={[5, 15, 50]}
+        onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
       />
     </div>
   );
