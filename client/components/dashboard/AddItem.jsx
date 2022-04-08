@@ -78,7 +78,7 @@ export default function AddItem (setTableData) {
 
   return (
     <Container maxWidth="xs">
-      <Typography component="h1" variant="h5" sx={{ mt: 3 }}>
+      <Typography component="h1" variant="h5" sx={{ mt: 2 }}>
         New Donation
       </Typography>
       <Box id="addItem" component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
@@ -144,7 +144,7 @@ export default function AddItem (setTableData) {
           type="submit"
           fullWidth
           variant="contained"
-          sx={{ width: '100%', mt: 2, mb: 1 }}
+          sx={{ width: '100%', mt: 2, mb: 3 }}
         >
           Add Item
         </Button>
