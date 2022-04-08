@@ -82,45 +82,45 @@ export default function AddItem (setTableData) {
         New Donation
       </Typography>
       <Box id="addItem" component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-        <FormControl sx={{ mx: 'auto', width: '100%' }}>
-          <InputLabel id='item-category-label'>Item</InputLabel>
+        <FormControl sx={{ width: '100%' }}>
+          <InputLabel id='outlined-category-label'>Category</InputLabel>
           <Select
-            labelId='outlined-item-label'
-            id='item-select'
-            name='name'
-            value={inputs.name || ''}
+            labelId='outlined-category-label'
+            id='category-select'
+            name='category'
+            value={inputs.category || ''}
             input={<OutlinedInput label="Category" />}
             onChange={handleChange}
           >
-            {selectItems.map((row) => {
+            {categories.map((category) => {
               return (
                 <MenuItem
-                  key={row.id}
-                  value={row.name}
+                  key={category}
+                  value={category}
                 >
-                  {row.name}
+                  {category}
                 </MenuItem>);
             })}
           </Select>
         </FormControl>
         <Grid item xs={12}>
-          <FormControl sx={{ mt: 1, width: '100%' }}>
-            <InputLabel id='outlined-category-label'>Category</InputLabel>
+          <FormControl sx={{ mt: 2, mx: 'auto', width: '100%' }}>
+            <InputLabel id='item-category-label'>Item</InputLabel>
             <Select
-              labelId='outlined-category-label'
-              id='category-select'
-              name='category'
-              value={inputs.category || ''}
-              input={<OutlinedInput label="Category" />}
+              labelId='outlined-item-label'
+              id='item-select'
+              name='name'
+              value={inputs.name || ''}
+              input={<OutlinedInput label="Item" />}
               onChange={handleChange}
             >
-              {categories.map((category) => {
+              {selectItems.map((row) => {
                 return (
                   <MenuItem
-                    key={category}
-                    value={category}
+                    key={row.id}
+                    value={row.name}
                   >
-                    {category}
+                    {row.name}
                   </MenuItem>);
               })}
             </Select>
