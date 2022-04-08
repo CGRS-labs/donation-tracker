@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { InputLabel, Select } from '@mui/material';
 
+import useToken from '../hooks/useToken';
 
 export default function SignUp() {
   const [inputs, setInputs] = useState({
@@ -22,12 +23,16 @@ export default function SignUp() {
     chapterId: '',
   });
   const [chapters, setChapters] = useState([]);
+  const { token } = useToken();
 
   // Get list of chapter ids
   useEffect(async () => {
     try {
-      // TODO: Add authorization header
-      const response = await fetch('/api/chapters');
+      const response = await fetch('/api/chapters', {
+        headers: {
+          'authorization': token,
+        }
+      });
       const data = await response.json();
 
       // check for response status 200-299
@@ -41,8 +46,6 @@ export default function SignUp() {
     };
   }, []);
 
-  const navigate = useNavigate();
-
   const handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
@@ -55,7 +58,8 @@ export default function SignUp() {
     const response = await fetch('/api/register', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'authorization': token,
       },
       body: JSON.stringify(inputs),
     });
@@ -68,7 +72,6 @@ export default function SignUp() {
         password: '',
         chapter: '',
       });
-      navigate('/login');
     } else {
       console.error(await response.json());
     }
@@ -89,7 +92,7 @@ export default function SignUp() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          Add Administrator
         </Typography>
         <Box id='signup' component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
@@ -149,7 +152,7 @@ export default function SignUp() {
                 labelId='chapter-select-label'
                 id='menu'
                 name='chapterId'
-                value={inputs.chapter || ''}
+                value={inputs.chapterId}
                 label='Chapter'
                 onChange={handleChange}
                 style={{
@@ -157,7 +160,7 @@ export default function SignUp() {
                 }}
               >
                 {chapters.map((chapter) => {
-                  <MenuItem value={chapter.id}>{chapter.name}</MenuItem>
+                  return <MenuItem key={chapter} value={chapter.id}>{chapter.name}</MenuItem>;
                 })}
               </Select>
             </Grid>

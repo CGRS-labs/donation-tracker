@@ -26,15 +26,19 @@ usersController.getPassword = async (req, res, next) => {
   const values = [req.body.email];
 
   try {
-    const result = await client.query(text, values);
-    res.locals.password = result.rows[0];
+    const { rowCount, rows } = await client.query(text, values);
+    if (rowCount === 0) {
+      return res.status(401).send('User not found');
+    }
 
+    res.locals.password = rows[0].password;
+
+    return next();
   } catch (err) {
     // use AppError?
     return next(new AppError(err, 'usersController', 'comparePasswords', 500));
   }
 
-  return next();
 };
 
 usersController.comparePasswords = async (req, res, next) => {

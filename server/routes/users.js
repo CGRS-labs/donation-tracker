@@ -6,6 +6,7 @@ const authController = require('../controllers/authController');
 const router = express.Router();
 
 router.post('/register',
+  authController.validateToken,
   usersController.validateRegistration,
   usersController.hashPassword,
   usersController.addUser,
@@ -20,7 +21,7 @@ router.post('/login',
   usersController.comparePasswords,
   authController.createToken,
   (req, res) => {
-    return res.send(200).json({ token: res.locals.token });
+    return res.status(200).json({ ...res.locals });
   }
 );
 
