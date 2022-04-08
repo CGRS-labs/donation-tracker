@@ -11,6 +11,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import FormControl from '@mui/material/FormControl';
 
 import categories from './categories.js';
+import useToken from '../../hooks/useToken.js';
 
 export default function AddNeed() {
   const [inputs, setInputs] = useState({
@@ -18,6 +19,8 @@ export default function AddNeed() {
     category: '',
     quantity: 0,
   });
+
+  const { token } = useToken();
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -32,7 +35,8 @@ export default function AddNeed() {
       const response = await fetch('/api/items', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': token,
         },
         body: JSON.stringify({
           name: inputs.item,

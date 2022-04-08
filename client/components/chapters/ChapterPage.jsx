@@ -56,18 +56,15 @@ export default function ChapterPage(props) {
   // }, [chapter]);
 
   useEffect(async () => {
-    // TODO: Cancel this request if component unmounts
-    if (chapter.id) {
-      const response = await fetch('/api/items');
-      const data = await response.json();
-      if (response.ok) {
-        const items = data.items.filter((item) => {
-          return (item.total_needed - item.total_received) > 0;
-        });
-        setItems(items);
-      }
+    const response = await fetch('/api/items');
+    const data = await response.json();
+    if (response.ok) {
+      const items = data.items.filter((item) => {
+        return (item.total_needed - item.total_received) > 0;
+      });
+      setItems(items);
     }
-  }, [chapter]);
+  }, []);
 
   const infoCards = [
     {
