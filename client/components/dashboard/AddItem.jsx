@@ -83,12 +83,12 @@ export default function AddItem (setTableData) {
       </Typography>
       <Box id="addItem" component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
         <FormControl sx={{ mx: 'auto', width: '100%' }}>
-          <InputLabel id='outlined-category-label'>Category</InputLabel>
+          <InputLabel id='item-category-label'>Item</InputLabel>
           <Select
-            labelId='outlined-category-label'
-            id='category-select'
-            name='category'
-            value={inputs.category || ''}
+            labelId='outlined-item-label'
+            id='item-select'
+            name='name'
+            value={inputs.name || ''}
             input={<OutlinedInput label="Category" />}
             onChange={handleChange}
           >
@@ -102,19 +102,6 @@ export default function AddItem (setTableData) {
                 </MenuItem>);
             })}
           </Select>
-          {/* <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="item"
-            label="Item"
-            name="name"
-            value= { inputs.name || '' }
-            autoComplete="item"
-            autoFocus
-
-            onChange={handleChange}
-          /> */}
         </FormControl>
         <Grid item xs={12}>
           <FormControl sx={{ mt: 1, width: '100%' }}>
