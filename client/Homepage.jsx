@@ -13,7 +13,7 @@ export default function Homepage() {
         color="text.primary"
         gutterBottom
       >
-        Homepage
+        Do Right Donations
       </Typography>
       <Typography variant="h5" align="center" color="text.secondary" component="p">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.

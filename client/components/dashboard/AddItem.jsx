@@ -50,7 +50,7 @@ export default function AddItem (setTableData) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // const data = new FormData(document.getElementById('addItem'));
+    const data = new FormData(document.getElementById('addItem'));
     // console.log('item', data.get('item'), 'category', data.get('category'), 'quantity', data.get('quantity'));
     try {
 
@@ -59,7 +59,7 @@ export default function AddItem (setTableData) {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(inputs),
+        body: JSON.stringify(data),
       });
       if (response.ok) {
         setInputs({
