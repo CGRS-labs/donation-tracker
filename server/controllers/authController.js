@@ -2,23 +2,30 @@ const AppError = require('../utils/AppError');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const jwt = require('jsonwebtoken');
-//json web token package for jwts
-//secret key will live in .env file. Just make a random string with 30-40 characters.
-
-// process.env = {
-//   TOKEN_KEY: 'asd;laksdjf;askf',
-//   port: 3000,
-//   mapbox_token: 'alksdjf;alsdkjf'
-// };
-
 
 authController = {};
 
 authController.createToken = async (req, res, next) => {
   // synchronous
   try {
+    // create a jwt with the email as the payload
     const token = await jwt.sign({ email: req.body.email }, process.env.TOKEN_KEY, { expiresIn: '1h' });
-    res.locals.token = token;
+    // query the database for the user's email, chapterId, firstName, and lastName
+    const text = 'SELECT email, chapterId, firstName, lastName FROM users WHERE email=$1;';
+    const values = [req.body.email];
+    const result = await client.query(text, values);
+    // store the user info in an object
+    const user = {
+      email: result[0].email,
+      chapterId: result[0].chapterId,
+      firstName: result[0].firstName,
+      lastName: result[0].lastName
+    };
+    // store the token and user object on res.locals
+    res.locals = {
+      token,
+      user
+    };
     return next();
   } catch (err) {
     return next(new AppError(err, 'authController', 'createToken', 500));
