@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -9,11 +10,16 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 
+import useToken from '../hooks/useToken';
+
 export default function Login() {
   const [inputs, setInputs] = useState({
     email: '',
     password: '',
   });
+
+  const { setToken } = useToken();
+  const navigate = useNavigate();
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -21,26 +27,31 @@ export default function Login() {
     setInputs(values => ({ ...values, [name]: value }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(document.getElementById('login'));
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-    fetch('/api/login', {
+
+    const response = await fetch('/api/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(data),
-    })
-      .then(res => console.log(res));
-
-    setInputs({
-      email: '',
-      password: '',
+      body: JSON.stringify(inputs),
     });
+
+    const data = await response.json();
+    if (response.ok) {
+      setInputs({
+        email: '',
+        password: '',
+      });
+
+      // store the token in session storage
+      setToken(data.token);
+      navigate(`/dashboard/${data.user.chapterId}`);
+      // TODO: Store the user in context
+
+    }
+
   };
 
   return (
