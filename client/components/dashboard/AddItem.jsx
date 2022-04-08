@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -14,7 +14,7 @@ import FormControl from '@mui/material/FormControl';
 
 const categories = ['Childcare', 'Clothing', 'Education', 'Food', 'Healthcare', 'Homegoods', 'Personal hygiene', 'Other'];
 
-export default function Add() {
+export default function AddItem (setTableData) {
   
   const [inputs, setInputs] = useState({
     name: '',
@@ -22,16 +22,6 @@ export default function Add() {
     total_needed: 0,
     items: [],
   });
-
-  useEffect(() => {
-    fetch('/api/items')
-      .then((data) => data.json())
-      .then((rows) => {
-        console.log(rows);
-        setTableData(rows);
-      });
-  }, []);
-
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -51,7 +41,7 @@ export default function Add() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(inputs),
-      })
+      });
       if (response.ok) {
         setInputs({
           item: '',

@@ -169,12 +169,6 @@
       "total_needed": 0,
       "name": "Toothbrush",
       "category": "Hygeine"
-    },
-    {
-      "name": "Blankets",
-      "category": "Homegoods",
-      "total_needed": "100",
-      "id": 23
     }
   ],
   "users": [

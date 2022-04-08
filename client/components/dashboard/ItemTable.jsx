@@ -17,8 +17,11 @@ import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 // json server  {"id" , "total_needed", "name"}
 
 const columns = [
-  { field: 'name', headerName: 'Item', width: 300 },
-  { field: 'id', headerName: 'Chapter', width: 150 },
+  
+  { field: 'id', headerName: 'ID', width: 50 },
+  { field: 'name', headerName: 'Item', width: 200 },
+  { field: 'total_needed', headerName: 'Needed', width: 150 },
+  { field: 'category', headerName: 'Category', width: 200 },
   { field: 'total_needed', headerName: 'Quantity', width: 100 },
   { field: 'Increment', renderCell: (cellValues) => { 
     return (
@@ -57,13 +60,14 @@ const columns = [
   },
 ];
 
-export default function ItemTable() {
+export default function ItemTable(props) {
 
   // console.log(tableData);
+  // console.log(columns);
 
   return (
     <div style={{ height: 500, width: '100%' }}>
-      <DataGrid rows={tableData} columns={columns} pageSize={15} />
+      <DataGrid rows={props.tableData} columns={columns} pageSize={15} />
     </div>
   );
 }

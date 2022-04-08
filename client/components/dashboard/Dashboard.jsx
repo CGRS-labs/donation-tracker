@@ -1,11 +1,11 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 
-import Add from './AddItem';
+import AddItem from './AddItem';
 import ItemTable from './ItemTable';
 
 
@@ -14,7 +14,7 @@ function DashboardContent() {
   const [tableData, setTableData] = useState([]);
 
   useEffect(() => {
-    fetch('/chapterItems/all')
+    fetch('/api/items')
       .then((data) => data.json())
       .then((rows) => {
         console.log(rows);
@@ -46,7 +46,7 @@ function DashboardContent() {
                   height: 1,
                 }}
               >
-                <Add />
+                <AddItem setTableData={ setTableData } />
               </Paper>
             </Grid>
             {/* Donation summary stats */}
@@ -65,7 +65,7 @@ function DashboardContent() {
             {/* Items table */}
             <Grid item xs={12}>
               <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                <ItemTable />
+                <ItemTable tableData={ tableData }/>
               </Paper>
             </Grid>
           </Grid>
