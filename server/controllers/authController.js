@@ -1,7 +1,7 @@
 const AppError = require('../utils/AppError');
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
 const jwt = require('jsonwebtoken');
+
+const client = require('../models');
 
 authController = {};
 
@@ -11,15 +11,15 @@ authController.createToken = async (req, res, next) => {
     // create a jwt with the email as the payload
     const token = await jwt.sign({ email: req.body.email }, process.env.TOKEN_KEY, { expiresIn: '1h' });
     // query the database for the user's email, chapterId, firstName, and lastName
-    const text = 'SELECT email, chapterId, firstName, lastName FROM users WHERE email=$1;';
+    const text = 'SELECT email, chapter_id, first_name, last_name FROM users WHERE email=$1;';
     const values = [req.body.email];
-    const result = await client.query(text, values);
+    const { rows } = await client.query(text, values);
     // store the user info in an object
     const user = {
-      email: result[0].email,
-      chapterId: result[0].chapterId,
-      firstName: result[0].firstName,
-      lastName: result[0].lastName
+      email: rows[0].email,
+      chapterId: rows[0].chapterId,
+      firstName: rows[0].firstName,
+      lastName: rows[0].lastName
     };
     // store the token and user object on res.locals
     res.locals = {
