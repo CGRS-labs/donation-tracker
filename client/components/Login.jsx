@@ -47,8 +47,8 @@ export default function Login() {
 
       // store the token in session storage
       setToken(data.token);
-      navigate(`/dashboard/${data.user.chapterId}`);
       // TODO: Store the user in context
+      navigate(`/dashboard/${data.user.chapterId}`);
 
     }
 

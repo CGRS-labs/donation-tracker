@@ -24,12 +24,6 @@ const pages = [
     showPrivate: false,
   },
   {
-    text: 'Sign Up',
-    link: '/signup',
-    showPublic: true,
-    showPrivate: false,
-  },
-  {
     text: 'Chapters',
     link: '/chapters',
     showPublic: true,
@@ -56,6 +50,12 @@ const pages = [
   {
     text: 'Add Chapter',
     link: '/chapter/add',
+    showPublic: false,
+    showPrivate: true,
+  },
+  {
+    text: 'Add Admin',
+    link: '/signup',
     showPublic: false,
     showPrivate: true,
   },
