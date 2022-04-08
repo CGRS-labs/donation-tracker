@@ -20,7 +20,7 @@ export default function AddItem (setTableData) {
   const [inputs, setInputs] = useState({
     name: '',
     category: '',
-    total_needed: 0,
+    total_received: 0,
     items: [],
   });
   const [selectItems, setSelectItems] = useState([]);
@@ -50,30 +50,33 @@ export default function AddItem (setTableData) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(document.getElementById('addItem'));
+    let data = new FormData(document.getElementById('addItem'));
+    data = Object.fromEntries(data);
+    data['id'] = selectItems.filter((el) => el.name === data.name)[0].id;
+    console.log(data);
     // console.log('item', data.get('item'), 'category', data.get('category'), 'quantity', data.get('quantity'));
-    try {
+    // try {
 
-      const response = await fetch('/api/items', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data),
-      });
-      if (response.ok) {
-        setInputs({
-          item: '',
-          category: '',
-          quantity: 0,
-        });
-      } else {
-        console.error(await response.json());
-      }
+    //   const response = await fetch('/api/items', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify(data),
+    //   });
+    //   if (response.ok) {
+    //     setInputs({
+    //       item: '',
+    //       category: '',
+    //       quantity: 0,
+    //     });
+    //   } else {
+    //     console.error(await response.json());
+    //   }
 
-    } catch (err) {
-      console.error(err);
-    }
+    // } catch (err) {
+    //   console.error(err);
+    // }
   };
 
   return (
@@ -118,6 +121,7 @@ export default function AddItem (setTableData) {
                 return (
                   <MenuItem
                     key={row.id}
+                    item_id={row.id}
                     value={row.name}
                   >
                     {row.name}
@@ -131,8 +135,8 @@ export default function AddItem (setTableData) {
             margin="normal"
             required
             fullWidth
-            name="total_needed"
-            value = { inputs.total_needed || 0}
+            name="total_received"
+            value = { inputs.total_received || ''}
             label="Quantity"
             type="number"
             id="quantity"
