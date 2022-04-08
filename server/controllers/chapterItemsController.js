@@ -14,9 +14,9 @@ chapterItemsController = {};
  * @requires chapterId in request params
  */
 chapterItemsController.addItem = async (req, res, next) => {
-  const { item_id: itemId, total_received } = req.body;
+  const { itemId, total_received } = req.body;
 
-  const { chapterId } = req.params;
+  const chapterId = '4';    //{ chapterId } = req.params;
   //query that updates the totals based on the items table-- make separate controller for this and put in middleware
 
   try {

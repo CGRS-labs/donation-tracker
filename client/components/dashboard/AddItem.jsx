@@ -52,31 +52,31 @@ export default function AddItem (setTableData) {
     event.preventDefault();
     let data = new FormData(document.getElementById('addItem'));
     data = Object.fromEntries(data);
-    data['id'] = selectItems.filter((el) => el.name === data.name)[0].id;
+    data['itemId'] = selectItems.filter((el) => el.name === data.name)[0].id;
     console.log(data);
-    // console.log('item', data.get('item'), 'category', data.get('category'), 'quantity', data.get('quantity'));
-    // try {
 
-    //   const response = await fetch('/api/items', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify(data),
-    //   });
-    //   if (response.ok) {
-    //     setInputs({
-    //       item: '',
-    //       category: '',
-    //       quantity: 0,
-    //     });
-    //   } else {
-    //     console.error(await response.json());
-    //   }
+    try {
 
-    // } catch (err) {
-    //   console.error(err);
-    // }
+      const response = await fetch('/api/chapterItems/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data),
+      });
+      if (response.ok) {
+        setInputs({
+          item: '',
+          category: '',
+          quantity: 0,
+        });
+      } else {
+        console.error(await response.json());
+      }
+
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
