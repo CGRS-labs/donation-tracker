@@ -22,7 +22,7 @@ export default function Album() {
       const response = await fetch('/api/chapters');
       const data = await response.json();
       if (response.ok) {
-        setChapters(data);
+        setChapters(data.chapters);
       } else {
         console.error(data.error);
       };
