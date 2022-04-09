@@ -105,4 +105,26 @@ usersController.getUsersByChapter = async (req, res, next) => {
   }
 };
 
+/**
+ * Stores the fetched user on res.locals.user
+ * @requires email to exists on res.locals
+ */
+usersController.getUserByEmail = async (req, res, next) => {
+  const text = 'SELECT email, first_name, last_name, chapter_id FROM users WHERE email = ($1);';
+  const values = [res.locals.email];
+
+  try {
+    const { rows: [userInfo] } = await client.query(text, values);
+    res.locals.user = {
+      email: userInfo.email,
+      chapterId: userInfo.chapter_id,
+      firstName: userInfo.first_name,
+      lastName: userInfo.last_name
+    };
+    return next();
+  } catch (err) {
+    return next(new AppError(err, 'usersController', 'getUserByEmail', 500));
+  }
+};
+
 module.exports = usersController;
