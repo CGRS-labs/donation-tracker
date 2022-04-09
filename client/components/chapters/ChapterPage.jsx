@@ -73,7 +73,7 @@ export default function ChapterPage(props) {
   const infoCards = [
     {
       title: 'Donation Center',
-      subtitle: 'M: 9am-12pm, W: 6-9pm, Sa: 12-6pm',
+      subtitle: 'Hours: Monday-Friday, 6pm-9pm',
       content:
         `${chapter.street}, ${chapter.city} ${chapter.state}, ${chapter.zip}`,
       image: helpingHand,
