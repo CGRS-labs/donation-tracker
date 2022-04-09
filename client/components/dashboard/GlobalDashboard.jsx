@@ -31,8 +31,6 @@ function DashboardContent({ form, chart, table }) {
               ? theme.palette.grey[100]
               : theme.palette.grey[900],
           flexGrow: 1,
-          height: '100vh',
-          overflow: 'auto',
         }}
       >
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
@@ -51,7 +49,7 @@ function DashboardContent({ form, chart, table }) {
               </Paper>
             </Grid>
             {/* Donation summary stats */}
-            <Grid item xs={12} md={8} lg={7.5}>
+            <Grid item xs={12} md={8} lg={7.5} display={{ xs: 'none', sm: 'block' }}>
               <Paper
                 sx={{
                   p: 2,
