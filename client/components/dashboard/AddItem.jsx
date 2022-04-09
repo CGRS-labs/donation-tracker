@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -19,31 +18,36 @@ import { UserContext } from '../../hooks/userContext.js';
 
 export default function AddItem(props) {
 
-  // TODO: Use the category drop down to filter the drop-down of items 
   const [inputs, setInputs] = useState({
-    name: '',
+    itemId: '',
     category: '',
     total_received: 0,
-    items: [],
   });
   const [selectItems, setSelectItems] = useState([]);
   const { token } = useToken();
   const { user } = useContext(UserContext);
+  const mounted = useRef(true);
+
+  const canSave = inputs.category !== '' && inputs.itemId > -1 && inputs.total_received !== 0;
 
   useEffect(async () => {
     try {
-      const response = await fetch('/api/items/names');
-      const menuItems = await response.json();
+      const response = await fetch('/api/items/');
+      const data = await response.json();
 
       if (response.ok) {
-        setSelectItems(menuItems);
+        if (mounted.current) {
+          setSelectItems(data.items);
+        }
       } else {
-        console.error(menuItems.error);
+        console.error(data.error);
       }
-
     } catch (err) {
       console.error(err);
     }
+
+    // Track when cleanup runs to prevent state update in handleSubmit after component unmounts
+    return () => () => mounted.current = false;
   }, []);
 
   const handleChange = (event) => {
@@ -53,12 +57,8 @@ export default function AddItem(props) {
   };
 
   const handleSubmit = async (event) => {
+    if (!canSave) return;
     event.preventDefault();
-    let data = new FormData(document.getElementById('addItem'));
-    data = Object.fromEntries(data);
-    data['itemId'] = selectItems.filter((el) => el.name === data.name)[0].id;
-    console.log(data);
-
     try {
 
       const response = await fetch(`/api/chapters/${user.chapterId}/items/`, {
@@ -67,25 +67,38 @@ export default function AddItem(props) {
           'Content-Type': 'application/json',
           'Authorization': token
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(inputs),
       });
       if (response.ok) {
-        setInputs({
-          item: '',
-          category: '',
-          quantity: 0,
-        });
+        if (mounted.current) {
+          setInputs({
+            itemId: '',
+            category: '',
+            quantity: 0,
+          });
+        }
         // A NEW GET REQUEST IS NEEDED TO FETCH TABLE DATA ONCE THIS ITEM IS ADDED
         props.updateTable();
       } else {
         console.error(await response.json());
       }
-
-
     } catch (err) {
       console.error(err);
     }
   };
+
+  const menuItems = selectItems
+    .filter((item) => item.category === inputs.category)
+    .map((row) => {
+      return (
+        <MenuItem
+          key={row.id}
+          value={row.id}
+        >
+          {row.name}
+        </MenuItem>
+      );
+    });
 
   return (
     <Container maxWidth="xs">
@@ -120,21 +133,14 @@ export default function AddItem(props) {
             <Select
               labelId='outlined-item-label'
               id='item-select'
-              name='name'
-              value={inputs.name || ''}
+              name='itemId'
+              value={inputs.itemId || ''}
               input={<OutlinedInput label="Item" />}
               onChange={handleChange}
+            // disabled={menuItems.length === 0}
             >
-              {selectItems.map((row) => {
-                return (
-                  <MenuItem
-                    key={row.id}
-                    item_id={row.id}
-                    value={row.name}
-                  >
-                    {row.name}
-                  </MenuItem>);
-              })}
+              {menuItems.length === 0 && <MenuItem id={-1} value="None">No Items Available</MenuItem >}
+              {menuItems}
             </Select>
           </FormControl>
         </Grid>
@@ -157,6 +163,7 @@ export default function AddItem(props) {
           fullWidth
           variant="contained"
           sx={{ width: '100%', mt: 2, mb: 3 }}
+          disabled={!canSave}
         >
           Add Item
         </Button>

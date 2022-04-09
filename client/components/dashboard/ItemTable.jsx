@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
@@ -13,7 +13,7 @@ import useToken from '../../hooks/useToken';
 import { UserContext } from '../../hooks/userContext';
 
 export default function ItemTable(props) {
-
+  const [pageSize, setPageSize] = useState(15);
   const { token } = useToken();
   const { user } = useContext(UserContext);
 
@@ -146,7 +146,13 @@ export default function ItemTable(props) {
 
   return (
     <div style={{ height: 500, width: '100%' }}>
-      <DataGrid rows={props.tableData} columns={columns} pageSize={15} updateTable={props.updateTable} />
+      <DataGrid
+        rows={props.tableData}
+        columns={columns}
+        pageSize={pageSize}
+        rowsPerPageOptions={[5, 15, 50]}
+        onPageSizeChange={(newPageSize) => setPageSize()}
+        updateTable={props.updateTable} />
     </div>
   );
 }

@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect, useContext, useRef } from 'react';
+// import { useParams } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
@@ -8,6 +8,7 @@ import Paper from '@mui/material/Paper';
 
 import AddItem from './AddItem';
 import ItemTable from './ItemTable';
+import ChapterChart from './ChapterChart';
 import { UserContext } from '../../hooks/userContext';
 
 
@@ -16,23 +17,29 @@ function DashboardContent() {
   const [tableData, setTableData] = useState([]);
   // const { id: chapterId } = useParams();
   const { user } = useContext(UserContext);
-
-  const updateTable = () => {
-    try {
-      fetch(`/api/chapters/${user.chapterId}/items`)
-        .then((data) => data.json())
-        .then(({ chapterItems }) => {
-          // TODO: Prevent update to state if  component unmounts 
-          setTableData(chapterItems);
-        });
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const mounted = useRef(true);
 
   useEffect(() => {
     updateTable();
+    return () => () => mounted.current = false;
   }, []);
+
+  const updateTable = async () => {
+    if (!user) return;
+    try {
+      const response = await fetch(`/api/chapters/${user.chapterId}/items`);
+      const data = await response.json();
+      if (response.ok) {
+        if (mounted.current) {
+          setTableData(data.chapterItems);
+        }
+      } else {
+        console.error(data);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -71,7 +78,7 @@ function DashboardContent() {
                   height: 390,
                 }}
               >
-                <Typography>Donation stats go here.</Typography>
+                <ChapterChart />
               </Paper>
             </Grid>
             {/* Items table */}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
@@ -33,14 +33,18 @@ export default function ChapterPage(props) {
   const [users, setUsers] = useState([]);
   const [items, setItems] = useState([]);
 
+  const mounted = useRef(true);
+
   useEffect(async () => {
-    // TODO: Cancel this request if component unmounts
     const response = await fetch(`/api/chapters/${id}`);
     const data = await response.json();
     if (response.ok) {
-      setChapter(data.chapter);
-      setUsers(data.users);
+      if (mounted.current) {
+        setChapter(data.chapter);
+        setUsers(data.users);
+      }
     }
+    return () => () => mounted.current = false;
   }, []);
 
   // This is an old request that would get chapter specific needs. However, needs are now set globally

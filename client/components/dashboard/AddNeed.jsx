@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
@@ -13,13 +13,17 @@ import FormControl from '@mui/material/FormControl';
 import categories from './categories.js';
 import useToken from '../../hooks/useToken.js';
 
-export default function AddNeed() {
+export default function AddNeed({ onSubmit }) {
   const [inputs, setInputs] = useState({
     item: '',
     category: '',
     quantity: 0,
   });
 
+  const mounted = useRef(true);
+
+  // Track when cleanuup runs to prevent state update in handleSubmit after component unmounts
+  useEffect(() => () => mounted.current = false, []);
   const { token } = useToken();
 
   const handleChange = (event) => {
@@ -47,17 +51,19 @@ export default function AddNeed() {
       });
 
       if (response.ok) {
-        // TODO: Don't do this if component unmounts
-        setInputs({
-          item: '',
-          category: '',
-          quantity: 0,
-        });
+        if (mounted.current) {
+          setInputs({
+            item: '',
+            category: '',
+            quantity: 0,
+          });
+        }
+        onSubmit();
       } else {
         console.error(await response.json());
       }
     } catch (err) {
-      console.error(err);
+      console.error('Failed to submit', err);
     }
   };
 
