@@ -99,7 +99,7 @@ export default function ChapterPage(props) {
       <ContentBanner
         content={{
           title: `${chapter.name}`,
-          description: 'Welcome to our chapter! Please reach out to us if you have any questions or would like to make a donation.',
+          description: 'Welcome to our chapter! Please don\'t hesitate to reach out to us if you have any questions.',
           image: bannerImage,
           imageText: 'main image description',
           linkText: '',
