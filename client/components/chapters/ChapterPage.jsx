@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
@@ -21,7 +21,7 @@ const bannerImage = 'https://images.unsplash.com/photo-1529511582893-2d7e684dd12
 const sidebar = {
   title: 'About',
   description:
-    'Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.',
+    'Our Chapter has donated over 1500 items since we began our collection a month ago. Please help us continue to meet the needs of Ukrainian refugees!',
   listTitle: 'Meet Our Team'
 };
 
@@ -33,37 +33,42 @@ export default function ChapterPage(props) {
   const [users, setUsers] = useState([]);
   const [items, setItems] = useState([]);
 
+  const mounted = useRef(true);
+
   useEffect(async () => {
-    // TODO: Cancel this request if compoent unmounts
     const response = await fetch(`/api/chapters/${id}`);
     const data = await response.json();
     if (response.ok) {
-      setChapter(data.chapter);
-    }
-  }, []);
-
-  useEffect(async () => {
-    // TODO: Cancel this request if compoent unmounts
-    // FIXME: Determine endpoint to get chapter admins only. 
-    // Might include on get request to chapters
-    const response = await fetch('/api/users/');
-    const data = await response.json();
-
-    if (response.ok) {
-      setUsers(data.users);
-    }
-  }, [chapter]);
-
-  useEffect(async () => {
-    // TODO: Cancel this request if compoent unmounts
-    if (chapter.id) {
-      const response = await fetch(`/api/chapters/${chapter.id}/items`);
-      const data = await response.json();
-      if (response.ok) {
-        setItems(data.chapterItems);
+      if (mounted.current) {
+        setChapter(data.chapter);
+        setUsers(data.users);
       }
     }
-  }, [chapter]);
+    return () => () => mounted.current = false;
+  }, []);
+
+  // This is an old request that would get chapter specific needs. However, needs are now set globally
+  // so this is no longer needed.
+  // useEffect(async () => {
+  //   if (chapter.id) {
+  //     const response = await fetch(`/api/chapters/${chapter.id}/items`);
+  //     const data = await response.json();
+  //     if (response.ok) {
+  //       setItems(data.chapterItems);
+  //     }
+  //   }
+  // }, [chapter]);
+
+  useEffect(async () => {
+    const response = await fetch('/api/items');
+    const data = await response.json();
+    if (response.ok) {
+      const items = data.items.filter((item) => {
+        return (item.total_needed - item.total_received) > 0;
+      });
+      setItems(items);
+    }
+  }, []);
 
   const infoCards = [
     {

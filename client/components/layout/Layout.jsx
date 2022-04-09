@@ -24,16 +24,17 @@ function Copyright() {
 function Footer() {
   return (
     <Box sx={{ bgcolor: 'background.paper', pb: 2 }} component="footer">
-      <Typography variant="h6" align="center" gutterBottom>
-        Footer
+      <Typography variant="subtitle1" align="center" gutterBottom mt={2}>
+        It is the obligation of every person born in a safer room 
+        to open the door when someone in danger knocks.
       </Typography>
       <Typography
-        variant="subtitle1"
+        variant="body1"
         align="center"
         color="text.secondary"
         component="p"
       >
-        Something here to give the footer a purpose!
+        — Dina Nayeri
       </Typography>
       <Copyright />
     </Box>

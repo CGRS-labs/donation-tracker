@@ -15,19 +15,18 @@ export default function MapPage() {
   const [markerData, setMarkerData] = useState([]);
 
   useEffect(async () => {
-    // get marker data on initial load. 
+    // get marker data on initial load.
     const { chapters: markers } = await fetch('/api/chapters').then(res => res.json());
     setMarkerData(markers);
   }, []);
 
   useEffect(async () => {
-    // get marker data on initial load. 
-    if (chapter) {
-      const { chapterItems } = await fetch(`/api/chapters/${chapter.id}/items`).then(res => res.json());
-      const itemList = chapterItems.filter(item => item.total_needed > 0).map(item => item.name);
-      setChapterItems(itemList);
-    }
-  }, [chapter]);
+    // This used to be a customized list of items per chapter
+    const { items } = await fetch('/api/items').then(res => res.json());
+    const itemList = items.filter(item => item.total_needed < item.total_received).map(item => item.name);
+    setChapterItems(itemList);
+
+  }, []);
 
   return (
     <div id='map-container'>
@@ -41,7 +40,7 @@ export default function MapPage() {
         markerData={markerData}
         setSelected={(chapter) => {
           setChapter(chapter);
-          setChapterItems([]);
+          // setChapterItems([]);
         }}
         popupInfo={chapter}
       />

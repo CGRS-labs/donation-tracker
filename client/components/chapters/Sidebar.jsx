@@ -42,15 +42,15 @@ function Sidebar(props) {
             }}
           >
             <Avatar
-              alt={`${user.firstName} ${user.lastName}`}
+              alt={`${user.first_name} ${user.last_name}`}
               // src="../assets/images/broken-image.png"
-              src='https://source.unsplash.com/random' // get avatar from database? 
+              src='https://source.unsplash.com/random' // get avatar from database?
               sx={{ width: 50, height: 50, mb: 1 }}
             />
             <Typography variant="caption" sx={{ textAlign: 'center' }}>
-              {`${user.firstName} ${user.lastName}`}<br />
-              <Link href={`mailto:${user.email}`} underline='none'>{user.email}</Link><br />
-              {user.phone}
+              {`${user.first_name} ${user.last_name}`}<br />
+              <Link href={`mailto:${user.email}`} underline='none'>{user.email}</Link>
+              {/* <br /> {user.phone} */}
             </Typography>
           </Box>
 
@@ -65,10 +65,9 @@ Sidebar.propTypes = {
   listTitle: PropTypes.string.isRequired,
   users: PropTypes.arrayOf(
     PropTypes.shape({
-      firstName: PropTypes.string.isRequired,
-      lastName: PropTypes.string.isRequired,
+      first_name: PropTypes.string.isRequired,
+      last_name: PropTypes.string.isRequired,
       email: PropTypes.string.isRequired,
-      phone: PropTypes.string.isRequired,
     }),
   ).isRequired,
   description: PropTypes.string.isRequired,

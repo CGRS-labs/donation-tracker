@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
+// import { useParams } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
@@ -7,20 +8,38 @@ import Paper from '@mui/material/Paper';
 
 import AddItem from './AddItem';
 import ItemTable from './ItemTable';
+import ChapterChart from './ChapterChart';
+import { UserContext } from '../../hooks/userContext';
 
 
 function DashboardContent() {
 
   const [tableData, setTableData] = useState([]);
+  // const { id: chapterId } = useParams();
+  const { user } = useContext(UserContext);
+  const mounted = useRef(true);
 
   useEffect(() => {
-    fetch('/api/items')
-      .then((data) => data.json())
-      .then((rows) => {
-        console.log(rows);
-        setTableData(rows);
-      });
+    updateTable();
+    return () => () => mounted.current = false;
   }, []);
+
+  const updateTable = async () => {
+    if (!user) return;
+    try {
+      const response = await fetch(`/api/chapters/${user.chapterId}/items`);
+      const data = await response.json();
+      if (response.ok) {
+        if (mounted.current) {
+          setTableData(data.chapterItems);
+        }
+      } else {
+        console.error(data);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -46,7 +65,7 @@ function DashboardContent() {
                   height: 1,
                 }}
               >
-                <AddItem setTableData={ setTableData } />
+                <AddItem setTableData={setTableData} updateTable={updateTable} />
               </Paper>
             </Grid>
             {/* Donation summary stats */}
@@ -59,13 +78,13 @@ function DashboardContent() {
                   height: 390,
                 }}
               >
-                <Typography>Donation stats go here.</Typography>
+                <ChapterChart />
               </Paper>
             </Grid>
             {/* Items table */}
             <Grid item xs={12}>
               <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                <ItemTable tableData={ tableData }/>
+                <ItemTable tableData={tableData} updateTable={updateTable} />
               </Paper>
             </Grid>
           </Grid>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -8,6 +8,7 @@ import Box from '@mui/material/Box';
 import WarehouseIcon from '@mui/icons-material/Warehouse';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import useToken from '../../hooks/useToken.js';
 
 
 export default function AddChapterPages() {
@@ -22,6 +23,11 @@ export default function AddChapterPages() {
     email: '',
   });
 
+  const mounted = useRef(true);
+  // Track when cleanuup runs to prevent state update in handleSubmit after component unmounts
+  useEffect(() => () => mounted.current = false, []);
+  const { token } = useToken();
+
   const handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
@@ -34,27 +40,28 @@ export default function AddChapterPages() {
     const response = await fetch('/api/chapters', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': token
       },
       body: JSON.stringify(inputs),
     });
 
-    if (response.ok) {
-      setInputs({
-        name: '',
-        street: '',
-        city: '',
-        state: '',
-        zip: '',
-        phone: '',
-        email: '',
-      });
-      // redirect to the dashboard
-      navigate('/dashboard');
-    } else {
-      console.error(await response.json());
-    }
-
+    if (response.ok)
+      if (mounted.current) {
+        setInputs({
+          name: '',
+          street: '',
+          city: '',
+          state: '',
+          zip: '',
+          phone: '',
+          email: '',
+        });
+        // redirect to the dashboard
+        navigate('/dashboard');
+      } else {
+        console.error(await response.json());
+      }
   };
 
   return (
@@ -67,7 +74,7 @@ export default function AddChapterPages() {
           alignItems: 'center',
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+        <Avatar sx={{ m: 1, bgcolor: 'warning.main' }}>
           <WarehouseIcon />
         </Avatar>
         <Typography component="h1" variant="h5">

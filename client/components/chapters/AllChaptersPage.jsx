@@ -18,17 +18,22 @@ export default function Album() {
   const [chapters, setChapters] = React.useState([]);
 
   React.useEffect(async () => {
+    let mounted = true;
+
     try {
       const response = await fetch('/api/chapters');
       const data = await response.json();
-      if (response.ok) {
-        setChapters(data.chapters);
-      } else {
-        console.error(data.error);
-      };
+      if (response.ok)
+        if (mounted) {
+          setChapters(data.chapters);
+        } else {
+          console.error(data.error);
+        };
     } catch (err) {
       console.error(err);
     }
+
+    return () => mounted = false;
   }, []);
 
   return (
@@ -51,9 +56,7 @@ export default function Album() {
             Our Chapters
           </Typography>
           <Typography variant="h5" align="center" color="text.secondary" paragraph>
-            Something short and leading about the collection below—its contents,
-            the creator, etc. Make it short and sweet, but not too short so folks
-            don&apos;t simply skip over it entirely.
+            Do Right Donations has Chapters all across the United States. Please find the location closest to you for full donation details.
           </Typography>
           <Stack
             sx={{ pt: 4 }}
@@ -91,8 +94,7 @@ export default function Album() {
                     {chapter.name}
                   </Typography>
                   <Typography>
-                    This is a media card. You can use this section to describe the
-                    content.
+                    Please view our chapter page to find out what is being collected in our area.
                   </Typography>
                 </CardContent>
                 <CardActions>

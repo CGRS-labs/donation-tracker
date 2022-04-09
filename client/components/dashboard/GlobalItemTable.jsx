@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 
 const sortable = true;
@@ -12,24 +12,13 @@ const columns = [
   { field: 'total_received', headerName: 'Total Received', width: 150, flex: 1, align: 'center', headerAlign: 'center', sortable },
 ];
 
-export default function ItemTable() {
-  const [tableData, setTableData] = useState([]);
+export default function GlobalItemTable({ rows }) {
   const [pageSize, setPageSize] = React.useState(15);
-
-  useEffect(() => {
-    // TODO: Cancel this if component unmounts
-    fetch('/api/items')
-      .then((data) => data.json())
-      .then(({ items }) => {
-        setTableData(items);
-      })
-      .catch((err => console.error(err)));
-  }, []);
 
   return (
     <div style={{ height: 500, }}>
       <DataGrid
-        rows={tableData}
+        rows={rows}
         columns={columns}
         pageSize={pageSize}
         rowsPerPageOptions={[5, 15, 50]}
