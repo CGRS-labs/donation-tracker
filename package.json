@@ -1,0 +1,68 @@
+{
+  "name": "donation-tracker",
+  "version": "1.0.0",
+  "description": "Donation Management System",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server/server.js",
+    "dev": "concurrently 'webpack serve --open' 'nodemon server/server.js'",
+    "json-dev": "concurrently 'webpack serve --open' 'json-server --watch json-server/db.json --routes json-server/routes.json'",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CGRS-labs/donation-tracker.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/CGRS-labs/donation-tracker/issues"
+  },
+  "homepage": "https://github.com/CGRS-labs/donation-tracker#readme",
+  "dependencies": {
+    "@babel/polyfill": "^7.12.1",
+    "@emotion/react": "^11.8.2",
+    "@emotion/styled": "^11.8.1",
+    "@mui/icons-material": "^5.5.1",
+    "@mui/material": "^5.5.3",
+    "bcrypt": "^5.0.1",
+    "jsonwebtoken": "^8.5.1",
+    "@mui/x-data-grid": "^5.7.0",
+    "chart.js": "^3.7.1",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "pg": "^8.7.3",
+    "pg-promise": "^10.11.1",
+    "react": "^17.0.2",
+    "react-chartjs-2": "^4.0.1",
+    "react-dom": "^17.0.2",
+    "react-map-gl": "^7.0.10",
+    "react-router-dom": "^6.2.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.8",
+    "@babel/plugin-transform-runtime": "^7.17.0",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-react": "^7.16.7",
+    "@svgr/webpack": "^6.2.1",
+    "babel-loader": "^8.2.4",
+    "concurrently": "^7.0.0",
+    "css-loader": "^6.7.1",
+    "dotenv-webpack": "^7.1.0",
+    "eslint": "^7.32.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-react": "^7.29.4",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.5.0",
+    "json-server": "^0.17.0",
+    "node-fetch": "^3.2.3",
+    "nodemon": "^2.0.15",
+    "source-map-loader": "^3.0.1",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.70.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.7.4"
+  }
+}
