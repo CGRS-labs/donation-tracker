@@ -18,80 +18,131 @@ import AlertTitle from '@mui/material/AlertTitle';
 
 // json server  {"id" , "total_needed", "name"}
 
-const shipIt = async (event, cellValues) => {
-  event.preventDefault();
-  const itemId = cellValues.id;
-  try {
-    const response = await fetch(`/api/chapterItems/${itemId}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ itemId }),
-    });
 
-    if (response.ok) {
-      // <Alert severity="success"> //This isn't working?!
-      //   <AlertTitle>Success</AlertTitle>
-      //   This item has been shipped — <strong>Thanks for your donation!</strong>
-      // </Alert>;
-      props.updateTable();
-    }
-
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-const columns = [
-  
-  { field: 'id', headerName: 'ID', width: 50 },
-  { field: 'name', headerName: 'Item', width: 200 },
-  { field: 'category', headerName: 'Category', width: 200 },
-  { field: 'total_needed', headerName: 'Needed', width: 100 },
-  { field: 'total_received', headerName: 'Received', width: 100 },
-  { field: 'Increment', renderCell: (cellValues) => { 
-    return (
-      <div>
-        <span>
-          <IconButton
-            variant="contained"
-            color="primary"
-            onClick={(event) => {
-              handleClick(event, cellValues);
-            }}
-          >< AddCircleIcon /></IconButton>
-        </span>
-        <span>
-          <IconButton
-            variant="contained"
-            color="primary"
-            onClick={(event) => {
-              handleClick(event, cellValues);
-            }}
-          >< RemoveCircleIcon /></IconButton> 
-        </span>
-      </div>
-    );},
-  },
-  { field: 'Distribute', align: 'center', renderCell: (cellValues) => { 
-    return (
-      <IconButton
-        variant="contained"
-        color="warning"
-        onClick={(event) => {
-          shipIt(event, cellValues);
-          updateTable();
-        }}
-      >< RocketLaunchIcon /></IconButton>
-    );},
-  },
-];
 
 export default function ItemTable(props) {
 
   // console.log(props.tableData);
   // console.log(columns);
+  const increment = async(event, cellValues) => {
+    event.preventDefault();
+
+    const itemId = cellValues.id;
+    const total = cellValues.row.total_received + 1;
+    console.log(cellValues, 'total', cellValues.row.total_received);
+
+    try {
+      const response = await fetch(`/api/chapterItems/${itemId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ total_received: total }),
+      });
+
+      if (response.ok) {
+        props.updateTable();
+      }
+  
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  
+  const decrement = async(event, cellValues) => {
+    event.preventDefault();
+
+    const itemId = cellValues.id;
+    const total = cellValues.row.total_received - 1;
+    console.log(cellValues, 'total', cellValues.row.total_received);
+
+    try {
+      const response = await fetch(`/api/chapterItems/${itemId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ total_received: total }),
+      });
+
+      if (response.ok) {
+        props.updateTable();
+      }
+  
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const shipIt = async (event, cellValues) => {
+    event.preventDefault();
+    const itemId = cellValues.id;
+    try {
+      const response = await fetch(`/api/chapterItems/${itemId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ itemId }),
+      });
+  
+      if (response.ok) {
+        // <Alert severity="success"> //This isn't working?!
+        //   <AlertTitle>Success</AlertTitle>
+        //   This item has been shipped — <strong>Thanks for your donation!</strong>
+        // </Alert>;
+        props.updateTable();
+      }
+  
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  
+  const columns = [
+    
+    { field: 'id', headerName: 'ID', width: 50 },
+    { field: 'name', headerName: 'Item', width: 200 },
+    { field: 'category', headerName: 'Category', width: 200 },
+    { field: 'total_needed', headerName: 'Needed', width: 100 },
+    { field: 'total_received', headerName: 'Received', width: 100 },
+    { field: 'Increment', renderCell: (cellValues) => { 
+      return (
+        <div>
+          <span>
+            <IconButton
+              variant="contained"
+              color="primary"
+              onClick={(event) => {
+                increment(event, cellValues);
+              }}
+            >< AddCircleIcon /></IconButton>
+          </span>
+          <span>
+            <IconButton
+              variant="contained"
+              color="primary"
+              onClick={(event) => {
+                decrement(event, cellValues);
+              }}
+            >< RemoveCircleIcon /></IconButton> 
+          </span>
+        </div>
+      );},
+    },
+    { field: 'Distribute', align: 'center', renderCell: (cellValues) => { 
+      return (
+        <IconButton
+          variant="contained"
+          color="warning"
+          onClick={(event) => {
+            shipIt(event, cellValues);
+            props.updateTable();
+          }}
+        >< RocketLaunchIcon /></IconButton>
+      );},
+    },
+  ];
 
   return (
     <div style={{ height: 500, width: '100%' }}>

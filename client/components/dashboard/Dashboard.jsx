@@ -20,7 +20,7 @@ function DashboardContent() {
         console.log(chapterItems);
         setTableData(chapterItems);
       });
-  }
+  };
 
   useEffect(() => {
     updateTable();

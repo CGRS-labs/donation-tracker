@@ -74,8 +74,11 @@ chapterItemsController.addItem = async (req, res, next) => {
  * */
 chapterItemsController.updateItem = async (req, res, next) => {
   const { total_received } = req.body;
+  const chapterId = 4;
+  const { itemId } = req.params;
+  console.log(req.params);
+  // const { chapterId, itemId } = req.params;
 
-  const { chapterId, itemId } = req.params;
   try {
     // Start a transaction to maintain atomicity
     await db.query('BEGIN;');
