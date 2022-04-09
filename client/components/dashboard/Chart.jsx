@@ -79,6 +79,7 @@ export default function Chart() {
       if (response.ok) {
         const { chapters } = data;
         // Get Chapter item relationships whenever chapters changes
+        // TODO: Send a single request here
         const promises = chapters.map((chapter) => fetch(`/api/chapters/${chapter.id}/items`).then(res => res.json()));
         const results = await Promise.all(promises);
 

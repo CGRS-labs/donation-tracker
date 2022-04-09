@@ -7,6 +7,7 @@ import Paper from '@mui/material/Paper';
 
 import AddItem from './AddItem';
 import ItemTable from './ItemTable';
+import ChapterChart from './ChapterChart';
 
 
 function DashboardContent() {
@@ -50,7 +51,7 @@ function DashboardContent() {
                   height: 1,
                 }}
               >
-                <AddItem setTableData={ setTableData } updateTable={ updateTable } />
+                <AddItem setTableData={setTableData} updateTable={updateTable} />
               </Paper>
             </Grid>
             {/* Donation summary stats */}
@@ -63,13 +64,13 @@ function DashboardContent() {
                   height: 390,
                 }}
               >
-                <Typography>Donation stats go here.</Typography>
+                <ChapterChart />
               </Paper>
             </Grid>
             {/* Items table */}
             <Grid item xs={12}>
               <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                <ItemTable tableData={ tableData } updateTable={ updateTable }/>
+                <ItemTable tableData={tableData} updateTable={updateTable} />
               </Paper>
             </Grid>
           </Grid>
