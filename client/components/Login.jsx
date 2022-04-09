@@ -49,11 +49,10 @@ export default function Login() {
 
       // store the token in session storage
       setToken(data.token);
-      // TODO: Store the user in context
       setUser({
         ...data.user
       });
-      navigate(`/dashboard/${data.user.chapterId}`);
+      navigate('/chapter/dashboard');
 
     }
 

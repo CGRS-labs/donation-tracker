@@ -9,7 +9,6 @@ usersController = {};
 usersController.hashPassword = (req, res, next) => {
   // use bcrypt to hash the password
   bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
-    // FIXME: if (err) return next(AppError())
     if (err) return next(new AppError(err, 'usersController', 'hashPassword', 500));
     // store hashed pw on res.locals
     res.locals.hash = hash;

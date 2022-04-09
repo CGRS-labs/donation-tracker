@@ -65,7 +65,7 @@ const ResponsiveAppBar = () => {
     },
     {
       text: 'My Dashboard',
-      link: `/dashboard/${user && user.chapterId}`,
+      link: '/chapter/dashboard',
       showPublic: false,
       showPrivate: true,
     },

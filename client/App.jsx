@@ -33,11 +33,10 @@ const App = () => {
           <Route exact path="/signin" element={<Layout><Login /></Layout>} />
           <Route exact path="/signup" element={<Layout><SignUp /></Layout>} />
           <Route exact path="/map" element={<Layout><MapPage /></Layout>} />
-          <Route exact path="/chapter/:id" element={<Layout><ChapterPage /></Layout>} />
-          <Route exact path={'/dashboard/:id'} element={<Layout><Dashboard /></Layout>} />
-          <Route exact path="/dashboard" element={<Layout><GlobalDashboard /></Layout>} />
           <Route exact path="/chapter/add" element={<Layout><AddChapterPage /></Layout>} />
-          <Route exact path="/dashboard" element={<Layout><Dashboard /></Layout>} />
+          <Route exact path={'chapter/dashboard'} element={<Layout><Dashboard /></Layout>} />
+          <Route exact path="/chapter/:id" element={<Layout><ChapterPage /></Layout>} />
+          <Route exact path="/dashboard" element={<Layout><GlobalDashboard /></Layout>} />
         </Routes >
       </UserContext.Provider>
     </Router >

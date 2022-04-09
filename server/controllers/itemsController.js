@@ -18,6 +18,18 @@ itemsController.getAllItems = async (req, res, next) => {
   };
 };
 
+itemsController.getAllItemsNames = async (req, res, next) => {
+  try {
+    // eslint-disable-next-line semi
+    const text = 'SELECT name, id FROM public.items ORDER BY name ASC;'
+    const result = await db.query(text);
+    res.locals.itemsnames = result.rows;
+    return res.json(res.locals.itemsnames);
+  } catch (err) {
+    return next(new AppError(err, 'itemsController', 'getItemsNames', 500));
+  };
+};
+
 itemsController.getItem = async (req, res, next) => {
   const {
     itemId
