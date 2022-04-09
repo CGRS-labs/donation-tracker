@@ -120,7 +120,8 @@ chapterItemsController.deleteItem = async (req, res, next) => {
   // const { chapterId, itemId } = req.params; // commented out because we do not yet have chapterId on params and can't get id off params
   const chapterId = 4;
   // console.log(req.body);
-  const { itemId } = req.body;
+  // const { itemId } = req.body;
+  const { itemId } = req.params;
   console.log(itemId); 
   const deleteQuery = {
     text: 'DELETE FROM chapter_items WHERE chapter_id=$2 AND item_id=$1;',
@@ -189,7 +190,8 @@ chapterItemsController.getAllChapterItems = async (req, res, next) => {
     text: `SELECT i.id, i.name, i.category, ci.total_received, i.total_needed 
     FROM chapter_items ci 
     LEFT JOIN items i ON ci.item_id = i.id 
-    WHERE ci.chapter_id = $1`,
+    WHERE ci.chapter_id = $1
+    ORDER BY name ASC`,
     values: ['4'] // values: [chapterId]
   };
 
