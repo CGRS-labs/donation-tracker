@@ -19,12 +19,17 @@ export default function ItemTable() {
   const [tableData, setTableData] = useState([]);
 
   useEffect(() => {
+    let mounted = true;
+
     fetch('/api/items')
       .then((data) => data.json())
       .then((rows) => {
-        console.log(rows);
-        setTableData(rows);
+        // only update if component is still mounted
+        if (mounted) setTableData(rows);
       });
+
+    // This cleanup function runs just before the component unmounts and before every re-render. 
+    return () => mounted = false;
   }, []);
 
   // console.log(tableData);

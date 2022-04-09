@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
@@ -20,6 +20,31 @@ import Chart from './Chart';
 // 3. Decide with form to pass in
 
 function DashboardContent({ form, chart, table }) {
+  const [tableData, setTableData] = useState([]);
+  const mounted = useRef(true);
+
+  useEffect(() => {
+    getTableData();
+    return () => mounted.current = false;
+  }, []);
+
+  const getTableData = async () => {
+    try {
+      const response = await fetch('/api/items');
+      const data = await response.json();
+      if (response.ok) {
+        if (mounted.current) {
+          setTableData(data.items);
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const onSubmit = () => {
+    getTableData();
+  };
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -45,7 +70,7 @@ function DashboardContent({ form, chart, table }) {
                   height: 390,
                 }}
               >
-                <AddNeed />
+                <AddNeed onSubmit={onSubmit} />
               </Paper>
             </Grid>
             {/* Donation summary stats */}
@@ -64,7 +89,7 @@ function DashboardContent({ form, chart, table }) {
             {/* Items table */}
             <Grid item xs={12}>
               <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                <GlobalItemTable />
+                <GlobalItemTable rows={tableData} />
               </Paper>
             </Grid>
           </Grid>

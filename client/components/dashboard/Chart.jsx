@@ -73,6 +73,7 @@ export default function Chart() {
 
 
   useEffect(async () => {
+    let mounted = true;
     try {
       const response = await fetch('/api/chapters');
       const data = await response.json();
@@ -81,6 +82,7 @@ export default function Chart() {
         // Get Chapter item relationships whenever chapters changes
         const promises = chapters.map((chapter) => fetch(`/api/chapters/${chapter.id}/items`).then(res => res.json()));
         const results = await Promise.all(promises);
+        if (!mounted) return;
 
         // Process the data 
         // Get category counts by chapter
@@ -101,6 +103,8 @@ export default function Chart() {
     } catch (err) {
       console.error(err);
     }
+
+    return () => mounted = false;
   }, []);
 
   const labels = chapters.map(chapter => chapter.name);

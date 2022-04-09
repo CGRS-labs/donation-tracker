@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -22,6 +22,10 @@ export default function AddChapterPages() {
     email: '',
   });
 
+  const mounted = useRef(true);
+  // Track when cleanuup runs to prevent state update in handleSubmit after component unmounts
+  useEffect(() => () => mounted.current = false, []);
+
   const handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
@@ -39,22 +43,22 @@ export default function AddChapterPages() {
       body: JSON.stringify(inputs),
     });
 
-    if (response.ok) {
-      setInputs({
-        name: '',
-        street: '',
-        city: '',
-        state: '',
-        zip: '',
-        phone: '',
-        email: '',
-      });
-      // redirect to the dashboard
-      navigate('/dashboard');
-    } else {
-      console.error(await response.json());
-    }
-
+    if (response.ok)
+      if (mounted.current) {
+        setInputs({
+          name: '',
+          street: '',
+          city: '',
+          state: '',
+          zip: '',
+          phone: '',
+          email: '',
+        });
+        // redirect to the dashboard
+        navigate('/dashboard');
+      } else {
+        console.error(await response.json());
+      }
   };
 
   return (

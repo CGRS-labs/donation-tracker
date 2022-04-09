@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -21,6 +21,11 @@ export default function Add() {
     quantity: 0,
   });
 
+  const mounted = useRef(true);
+
+  // Track when cleanuup runs to prevent state update in handleSubmit after component unmounts
+  useEffect(() => () => mounted.current = false);
+
   const handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
@@ -29,8 +34,6 @@ export default function Add() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // const data = new FormData(document.getElementById('addItem'));
-    // console.log('item', data.get('item'), 'category', data.get('category'), 'quantity', data.get('quantity'));
     try {
 
       const response = await fetch('/api/items', {
@@ -39,15 +42,18 @@ export default function Add() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(inputs),
-      })
+      });
+
       if (response.ok) {
-        setInputs({
-          item: '',
-          category: '',
-          quantity: 0,
-        });
-      } else {
-        console.error(await response.json());
+        if (mounted.current) {
+          setInputs({
+            item: '',
+            category: '',
+            quantity: 0,
+          });
+        } else {
+          console.error(await response.json());
+        }
       }
 
     } catch (err) {

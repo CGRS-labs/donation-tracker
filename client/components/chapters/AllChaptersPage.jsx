@@ -18,17 +18,22 @@ export default function Album() {
   const [chapters, setChapters] = React.useState([]);
 
   React.useEffect(async () => {
+    let mounted = true;
+
     try {
       const response = await fetch('/api/chapters');
       const data = await response.json();
-      if (response.ok) {
-        setChapters(data.chapters);
-      } else {
-        console.error(data.error);
-      };
+      if (response.ok)
+        if (mounted) {
+          setChapters(data.chapters);
+        } else {
+          console.error(data.error);
+        };
     } catch (err) {
       console.error(err);
     }
+
+    return () => mounted = false;
   }, []);
 
   return (
