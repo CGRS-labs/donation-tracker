@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -22,6 +22,7 @@ export default function Login() {
   const { setToken } = useToken();
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
+  const location = useLocation();
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -52,7 +53,7 @@ export default function Login() {
       setUser({
         ...data.user
       });
-      navigate('/chapter/dashboard');
+      navigate(location.state?.path || '/chapter/dashboard');
 
     }
 
