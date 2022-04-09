@@ -34,36 +34,37 @@ export default function ChapterPage(props) {
   const [items, setItems] = useState([]);
 
   useEffect(async () => {
-    // TODO: Cancel this request if compoent unmounts
+    // TODO: Cancel this request if component unmounts
     const response = await fetch(`/api/chapters/${id}`);
     const data = await response.json();
     if (response.ok) {
       setChapter(data.chapter);
+      setUsers(data.users);
     }
   }, []);
 
+  // This is an old request that would get chapter specific needs. However, needs are now set globally
+  // so this is no longer needed.
+  // useEffect(async () => {
+  //   if (chapter.id) {
+  //     const response = await fetch(`/api/chapters/${chapter.id}/items`);
+  //     const data = await response.json();
+  //     if (response.ok) {
+  //       setItems(data.chapterItems);
+  //     }
+  //   }
+  // }, [chapter]);
+
   useEffect(async () => {
-    // TODO: Cancel this request if compoent unmounts
-    // FIXME: Determine endpoint to get chapter admins only. 
-    // Might include on get request to chapters
-    const response = await fetch('/api/users/');
+    const response = await fetch('/api/items');
     const data = await response.json();
-
     if (response.ok) {
-      setUsers(data.users);
+      const items = data.items.filter((item) => {
+        return (item.total_needed - item.total_received) > 0;
+      });
+      setItems(items);
     }
-  }, [chapter]);
-
-  useEffect(async () => {
-    // TODO: Cancel this request if compoent unmounts
-    if (chapter.id) {
-      const response = await fetch(`/api/chapters/${chapter.id}/items`);
-      const data = await response.json();
-      if (response.ok) {
-        setItems(data.chapterItems);
-      }
-    }
-  }, [chapter]);
+  }, []);
 
   const infoCards = [
     {

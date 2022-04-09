@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { useParams } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
@@ -8,19 +9,26 @@ import Paper from '@mui/material/Paper';
 import AddItem from './AddItem';
 import ItemTable from './ItemTable';
 import ChapterChart from './ChapterChart';
+import { UserContext } from '../../hooks/userContext';
 
 
 function DashboardContent() {
 
   const [tableData, setTableData] = useState([]);
+  // const { id: chapterId } = useParams();
+  const { user } = useContext(UserContext);
 
   const updateTable = () => {
-    fetch('/api/chapterItems')
-      .then((data) => data.json())
-      .then(({ chapterItems }) => {
-        console.log(chapterItems);
-        setTableData(chapterItems);
-      });
+    try {
+      fetch(`/api/chapters/${user.chapterId}/items`)
+        .then((data) => data.json())
+        .then(({ chapterItems }) => {
+          // TODO: Prevent update to state if  component unmounts 
+          setTableData(chapterItems);
+        });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
