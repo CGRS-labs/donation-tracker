@@ -21,7 +21,7 @@ const bannerImage = 'https://images.unsplash.com/photo-1529511582893-2d7e684dd12
 const sidebar = {
   title: 'About',
   description:
-    'Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.',
+    'Our Chapter has donated over 1500 items since we began our collection a month ago. Please help us continue to meet the needs of Ukrainian refugees!',
   listTitle: 'Meet Our Team'
 };
 
