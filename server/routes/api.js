@@ -1,6 +1,7 @@
 const express = require('express');
 const itemsRouter = require('./items');
 const chaptersRouter = require('./chapters');
+const chapterItemsRouter = require('./chapterItems');
 
 const router = express.Router();
 
@@ -11,5 +12,6 @@ const router = express.Router();
 
 router.use('/items', itemsRouter);
 router.use('/chapters', chaptersRouter);
+router.use('/chapterItems', chapterItemsRouter);
 
 module.exports = router;

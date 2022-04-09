@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
+import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
+import SendIcon from '@mui/icons-material/Send';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 
 // const rows = [
 //   { id: 1, item: 'Hello', category: 'World', chapter: 'Boston', qty: '100' },
@@ -9,29 +18,135 @@ import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
 
 // json server  {"id" , "total_needed", "name"}
 
-const columns = [
-  { field: 'name', headerName: 'Item', width: 300 },
-  { field: 'id', headerName: 'Chapter', width: 300 },
-  { field: 'total_needed', headerName: 'Quantity', width: 150 },
-];
 
-export default function ItemTable() {
-  const [tableData, setTableData] = useState([]);
 
-  useEffect(() => {
-    fetch('/api/items')
-      .then((data) => data.json())
-      .then((rows) => {
-        console.log(rows);
-        setTableData(rows);
+export default function ItemTable(props) {
+
+  // console.log(props.tableData);
+  // console.log(columns);
+  const increment = async(event, cellValues) => {
+    event.preventDefault();
+
+    const itemId = cellValues.id;
+    const total = cellValues.row.total_received + 1;
+    console.log(cellValues, 'total', cellValues.row.total_received);
+
+    try {
+      const response = await fetch(`/api/chapterItems/${itemId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ total_received: total }),
       });
-  }, []);
 
-  // console.log(tableData);
+      if (response.ok) {
+        props.updateTable();
+      }
+  
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  
+  const decrement = async(event, cellValues) => {
+    event.preventDefault();
+
+    const itemId = cellValues.id;
+    const total = cellValues.row.total_received - 1;
+    console.log(cellValues, 'total', cellValues.row.total_received);
+
+    try {
+      const response = await fetch(`/api/chapterItems/${itemId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ total_received: total }),
+      });
+
+      if (response.ok) {
+        props.updateTable();
+      }
+  
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const shipIt = async (event, cellValues) => {
+    event.preventDefault();
+    const itemId = cellValues.id;
+    try {
+      const response = await fetch(`/api/chapterItems/${itemId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ itemId }),
+      });
+  
+      if (response.ok) {
+        // <Alert severity="success"> //This isn't working?!
+        //   <AlertTitle>Success</AlertTitle>
+        //   This item has been shipped — <strong>Thanks for your donation!</strong>
+        // </Alert>;
+        props.updateTable();
+      }
+  
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  
+  const columns = [
+    
+    { field: 'id', headerName: 'ID', width: 50 },
+    { field: 'name', headerName: 'Item', width: 200 },
+    { field: 'category', headerName: 'Category', width: 200 },
+    { field: 'total_needed', headerName: 'Needed', width: 100 },
+    { field: 'total_received', headerName: 'Received', width: 100 },
+    { field: 'Increment', renderCell: (cellValues) => { 
+      return (
+        <div>
+          <span>
+            <IconButton
+              variant="contained"
+              color="primary"
+              onClick={(event) => {
+                increment(event, cellValues);
+              }}
+            >< AddCircleIcon /></IconButton>
+          </span>
+          <span>
+            <IconButton
+              variant="contained"
+              color="primary"
+              onClick={(event) => {
+                decrement(event, cellValues);
+              }}
+            >< RemoveCircleIcon /></IconButton> 
+          </span>
+        </div>
+      );},
+    },
+    { field: 'Distribute', align: 'center', renderCell: (cellValues) => { 
+      return (
+        <IconButton
+          variant="contained"
+          color="warning"
+          onClick={(event) => {
+            shipIt(event, cellValues);
+            props.updateTable();
+          }}
+        >< RocketLaunchIcon /></IconButton>
+      );},
+    },
+  ];
 
   return (
     <div style={{ height: 500, width: '100%' }}>
-      <DataGrid rows={tableData} columns={columns} pageSize={15} />
+      <DataGrid rows={props.tableData} columns={columns} pageSize={15} updateTable={props.updateTable} />
     </div>
   );
 }

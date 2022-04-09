@@ -13,6 +13,10 @@ router.get('/',
   }
 );
 
+router.get('/names',
+  itemsController.getAllItemsNames
+);
+
 router.get('/:itemId',
   itemsController.getItem,
   (req, res) => {
