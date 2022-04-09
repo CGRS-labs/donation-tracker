@@ -11,6 +11,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import FormControl from '@mui/material/FormControl';
 
 import categories from './categories.js';
+import useToken from '../../hooks/useToken.js';
 
 export default function AddNeed({ onSubmit }) {
   const [inputs, setInputs] = useState({
@@ -23,6 +24,7 @@ export default function AddNeed({ onSubmit }) {
 
   // Track when cleanuup runs to prevent state update in handleSubmit after component unmounts
   useEffect(() => () => mounted.current = false, []);
+  const { token } = useToken();
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -37,7 +39,8 @@ export default function AddNeed({ onSubmit }) {
       const response = await fetch('/api/items', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': token,
         },
         body: JSON.stringify({
           name: inputs.item,

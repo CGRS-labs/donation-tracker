@@ -14,7 +14,7 @@ chapterItemsController = {};
  * @requires chapterId in request params
  */
 chapterItemsController.addItem = async (req, res, next) => {
-  const { item_id: itemId, total_received } = req.body;
+  const { itemId, total_received } = req.body;
 
   const { chapterId } = req.params;
   //query that updates the totals based on the items table-- make separate controller for this and put in middleware
@@ -74,8 +74,8 @@ chapterItemsController.addItem = async (req, res, next) => {
  * */
 chapterItemsController.updateItem = async (req, res, next) => {
   const { total_received } = req.body;
-
   const { chapterId, itemId } = req.params;
+
   try {
     // Start a transaction to maintain atomicity
     await db.query('BEGIN;');
@@ -115,7 +115,21 @@ chapterItemsController.updateItem = async (req, res, next) => {
  */
 chapterItemsController.deleteItem = async (req, res, next) => {
   const { chapterId, itemId } = req.params;
-  return next(new AppError('Not Implemented', 'chapterItemsController', 'deleteItem', 500));
+  const deleteQuery = {
+    text: 'DELETE FROM chapter_items WHERE chapter_id=$2 AND item_id=$1;',
+    values: [itemId, chapterId],
+  };
+
+  try {
+    await db.query(deleteQuery);
+
+    // do we need a 'COMMIT'? and to start with 'BEGIN'
+    return next();
+
+  } catch (err) {
+    await db.query('ROLLBACK');
+    return next(new AppError('Not Implemented', 'chapterItemsController', 'deleteItem', 500));
+  }
 };
 
 /**
@@ -131,11 +145,11 @@ chapterItemsController.getItem = async (req, res, next) => {
   const { chapterId, itemId } = req.params;
 
   const query = {
-    text: 'SELECT i.id as item_id, i.name as item_name, i.category, ci.total_received, i.total_needed, c.id as chapter_id, c.name as chapter_name \
-    FROM chapter_items ci \
-    LEFT JOIN items i ON ci.item_id = i.id \
-    LEFT JOIN chapters c ON c.id = ci.chapter_id \
-    WHERE ci.item_id = $1 and c.id = $2;',
+    text: `SELECT i.id as item_id, i.name as item_name, i.category, ci.total_received, i.total_needed, c.id as chapter_id, c.name as chapter_name 
+    FROM chapter_items ci 
+    LEFT JOIN items i ON ci.item_id = i.id 
+    LEFT JOIN chapters c ON c.id = ci.chapter_id 
+    WHERE ci.item_id = $1 and c.id = $2;`,
     values: [itemId, chapterId],
   };
 
@@ -165,10 +179,11 @@ chapterItemsController.getItem = async (req, res, next) => {
 chapterItemsController.getAllChapterItems = async (req, res, next) => {
   const { chapterId } = req.params;
   const query = {
-    text: 'SELECT i.id, i.name, i.category, ci.total_received, i.total_needed \
-    FROM chapter_items ci \
-    LEFT JOIN items i ON ci.item_id = i.id \
-    WHERE ci.chapter_id = $1',
+    text: `SELECT i.id, i.name, i.category, ci.total_received, i.total_needed 
+    FROM chapter_items ci 
+    LEFT JOIN items i ON ci.item_id = i.id 
+    WHERE ci.chapter_id = $1
+    ORDER BY name ASC`,
     values: [chapterId]
   };
 
@@ -201,10 +216,10 @@ chapterItemsController.getAllChapterItems = async (req, res, next) => {
  */
 chapterItemsController.getAllByChapter = async (req, res, next) => {
   const query = {
-    text: 'SELECT i.id as item_id, i.name as item_name, i.category, ci.total_received, c.id as chapter_id, c.name as chapter_name \
-    FROM chapter_items ci \
-    LEFT JOIN items i ON ci.item_id = i.id \
-    LEFT JOIN chapters c ON c.id = ci.chapter_id;'
+    text: `SELECT i.id as item_id, i.name as item_name, i.category, ci.total_received, c.id as chapter_id, c.name as chapter_name 
+    FROM chapter_items ci 
+    LEFT JOIN items i ON i.id = ci.item_id  
+    LEFT JOIN chapters c ON c.id = ci.chapter_id;`
   };
 
   try {

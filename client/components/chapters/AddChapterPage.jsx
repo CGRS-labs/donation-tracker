@@ -8,6 +8,7 @@ import Box from '@mui/material/Box';
 import WarehouseIcon from '@mui/icons-material/Warehouse';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import useToken from '../../hooks/useToken.js';
 
 
 export default function AddChapterPages() {
@@ -25,6 +26,7 @@ export default function AddChapterPages() {
   const mounted = useRef(true);
   // Track when cleanuup runs to prevent state update in handleSubmit after component unmounts
   useEffect(() => () => mounted.current = false, []);
+  const { token } = useToken();
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -38,7 +40,8 @@ export default function AddChapterPages() {
     const response = await fetch('/api/chapters', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': token
       },
       body: JSON.stringify(inputs),
     });

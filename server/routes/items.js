@@ -1,6 +1,7 @@
 const express = require('express');
 const itemsController = require('../controllers/itemsController');
 const utilConroller = require('../controllers/utilController');
+const authController = require('../controllers/authController');
 
 const router = express.Router();
 
@@ -13,6 +14,10 @@ router.get('/',
   }
 );
 
+router.get('/names',
+  itemsController.getAllItemsNames
+);
+
 router.get('/:itemId',
   itemsController.getItem,
   (req, res) => {
@@ -21,6 +26,13 @@ router.get('/:itemId',
     });
   }
 );
+
+
+// Require authentication for all subsequent requests
+router.use(authController.validateToken, (req, res, next) => {
+  next('route');
+});
+
 
 router.put('/:itemId',
   itemsController.storeTableAndColumnNames,

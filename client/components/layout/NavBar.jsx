@@ -10,65 +10,19 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import Link from '@mui/material/Link';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+
+import { UserContext } from '../../hooks/userContext';
+import useToken from '../../hooks/useToken';
+
 import Sunflower from './Sunflower';
 
-// FIXME: Don't show Sign In, Sign up if user is logged in
-// FIXME: Get the chapter Id from user context
-const chapterId = 1;
-const pages = [
-  {
-    text: 'Sign In',
-    link: '/signin',
-    showPublic: true,
-    showPrivate: false,
-  },
-  {
-    text: 'Sign Up',
-    link: '/signup',
-    showPublic: true,
-    showPrivate: false,
-  },
-  {
-    text: 'Chapters',
-    link: '/chapters',
-    showPublic: true,
-    showPrivate: true,
-  },
-  {
-    text: 'Map',
-    link: '/map',
-    showPublic: true,
-    showPrivate: true,
-  },
-  {
-    text: 'Global Dashboard',
-    link: '/dashboard',
-    showPublic: false,
-    showPrivate: true,
-  },
-  {
-    text: 'My Dashboard',
-    link: `/dashboard/${chapterId}`,
-    showPublic: false,
-    showPrivate: true,
-  },
-  {
-    text: 'Add Chapter',
-    link: '/chapter/add',
-    showPublic: false,
-    showPrivate: true,
-  },
-  // {
-  //   text: 'Logout',
-  //   link: '/logout',
-  //   showPublic: false,
-  //   showPrivate: true,
-  // },
-];
 
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const { user, setUser } = React.useContext(UserContext);
+  const { setToken } = useToken();
+  const navigate = useNavigate();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -77,6 +31,57 @@ const ResponsiveAppBar = () => {
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
+
+  const handleLogout = () => {
+    setUser(null);
+    setToken(null);
+    navigate('/signin');
+  };
+
+  const pages = [
+    {
+      text: 'Sign In',
+      link: '/signin',
+      showPublic: true,
+      showPrivate: false,
+    },
+    {
+      text: 'Chapters',
+      link: '/chapters',
+      showPublic: true,
+      showPrivate: true,
+    },
+    {
+      text: 'Map',
+      link: '/map',
+      showPublic: true,
+      showPrivate: true,
+    },
+    {
+      text: 'Global Dashboard',
+      link: '/dashboard',
+      showPublic: false,
+      showPrivate: true,
+    },
+    {
+      text: 'My Dashboard',
+      link: '/chapter/dashboard',
+      showPublic: false,
+      showPrivate: true,
+    },
+    {
+      text: 'Add Chapter',
+      link: '/chapter/add',
+      showPublic: false,
+      showPrivate: true,
+    },
+    {
+      text: 'Add Admin',
+      link: '/signup',
+      showPublic: false,
+      showPrivate: true,
+    },
+  ];
 
   return (
     <AppBar position="static">
@@ -122,14 +127,18 @@ const ResponsiveAppBar = () => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {/* TODO: Use showPrivate, showPublic to conditionally render based on if user is logged in */}
               {pages.map((page, i) => (
-                <Link key={page.text} to={page.link} underline="none" component={RouterLink}>
+                (user && page.showPrivate || !user && page.showPublic) && <Link key={page.text} to={page.link} underline="none" component={RouterLink}>
                   <MenuItem key={page.text} onClick={handleCloseNavMenu}>
                     <Typography textAlign="center">{page.text}</Typography>
                   </MenuItem>
                 </Link>
               ))}
+              {user && <MenuItem sx={{ color: 'error.main' }}
+                onClick={handleLogout}
+              >
+                Logout
+              </MenuItem>}
             </Menu>
           </Box>
 
@@ -145,8 +154,8 @@ const ResponsiveAppBar = () => {
 
           {/* Nav Bar for larger screens */}
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {/* TODO: Use showPrivate, showPublic to conditionally render based on if user is logged in */}
             {pages.map((page, i) => (
+              (user && page.showPrivate || !user && page.showPublic) &&
               <Link key={page.text} to={page.link} underline="none" component={RouterLink}>
                 <Button
                   onClick={handleCloseNavMenu}
@@ -156,10 +165,16 @@ const ResponsiveAppBar = () => {
                 </Button>
               </Link>
             ))}
+            {user && <Button
+              onClick={handleLogout}
+              sx={{ my: 2, color: 'white', display: 'block' }}
+            >
+              Logout
+            </Button>}
           </Box>
         </Toolbar>
       </Container>
-    </AppBar>
+    </AppBar >
   );
 };
 export default ResponsiveAppBar;

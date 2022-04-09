@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router({ mergeParams: true });
 
 const chapterItemsController = require('../controllers/chapterItemsController');
+const authController = require('../controllers/authController');
 
 router.get('/',
   chapterItemsController.getAllChapterItems,
@@ -21,6 +22,12 @@ router.get('/:itemId',
     });
   }
 );
+
+
+// Require authentication for all subsequent requests
+router.use(authController.validateToken, (req, res, next) => {
+  next('route');
+});
 
 
 router.put('/:itemId',
