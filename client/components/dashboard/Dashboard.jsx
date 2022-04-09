@@ -19,6 +19,7 @@ function DashboardContent() {
   const { user } = useContext(UserContext);
 
   const updateTable = () => {
+    if (!user) return;
     try {
       fetch(`/api/chapters/${user.chapterId}/items`)
         .then((data) => data.json())

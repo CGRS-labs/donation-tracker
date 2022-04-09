@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+// import { useParams } from 'react-router-dom';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,6 +11,8 @@ import {
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import categories from './categories';
+
+import { UserContext } from '../../hooks/userContext';
 
 ChartJS.register(
   CategoryScale,
@@ -45,29 +47,34 @@ const backgroundColors = [
 
 export default function Chart() {
   const [categorizedItems, setCategorizedItems] = useState([]);
-  const { id: chapterId } = useParams();
+  const { user } = useContext(UserContext);
 
   useEffect(async () => {
-    try {
-      const response = await fetch(`/api/chapters/${chapterId}/items`);
-      const data = await response.json();
-      if (response.ok) {
-        // Process the data get category counts by chapter
-        const { chapterItems } = data;
+    let mounted = true;
+    if (user) {
+      try {
+        const response = await fetch(`/api/chapters/${user.chapterId}/items`);
+        const data = await response.json();
+        if (response.ok) {
+          // Process the data get category counts by chapter
+          const { chapterItems } = data;
 
-        // reduce items to count by category
-        const catCount = chapterItems.reduce((catCount, item) => {
-          catCount[item.category] = (catCount[item.category] || 0) + item.total_received;
-          return catCount;
-        }, {});
+          // reduce items to count by category
+          const catCount = chapterItems.reduce((catCount, item) => {
+            catCount[item.category] = (catCount[item.category] || 0) + item.total_received;
+            return catCount;
+          }, {});
 
-        setCategorizedItems(catCount);
-      } else {
-        console.error(data);
+          if (mounted) setCategorizedItems(catCount);
+        } else {
+          console.error(data);
+        }
+      } catch (err) {
+        console.error(err);
       }
-    } catch (err) {
-      console.error(err);
     }
+
+    return () => mounted = false;
   }, []);
 
   // const datasets = categories.map((cat, i) => ({
