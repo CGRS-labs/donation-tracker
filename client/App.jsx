@@ -11,7 +11,7 @@ import Homepage from './Homepage';
 import ChapterPage from './components/chapters/ChapterPage';
 import AllChaptersPage from './components/chapters/AllChaptersPage';
 import Login from './components/Login';
-import SignUp from './components/SignUp';
+import AddAdmin from './components/AddAdmin';
 import Dashboard from './components/dashboard/Dashboard';
 import GlobalDashboard from './components/dashboard/GlobalDashboard';
 import AddChapterPage from './components/chapters/AddChapterPage';
@@ -33,6 +33,7 @@ const App = () => {
             <Route exact path="/" element={<Homepage />} />
             <Route exact path={'/chapters'} element={<AllChaptersPage />} />
             <Route exact path="/signin" element={<Login />} />
+            <Route exact path="/signup" element={<PrivateRoute><AddAdmin /></PrivateRoute>} />
             <Route exact path="/map" element={<MapPage />} />
             <Route exact path="/chapter/:id" element={<ChapterPage />} />
             <Route exact path="/chapter/add" element={<PrivateRoute><AddChapterPage /></PrivateRoute>} />
