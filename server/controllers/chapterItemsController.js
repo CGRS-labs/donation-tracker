@@ -115,6 +115,9 @@ chapterItemsController.updateItem = async (req, res, next) => {
  */
 chapterItemsController.deleteItem = async (req, res, next) => {
   const { chapterId, itemId } = req.params;
+  // FIXME: This doesn't update total_received in the items table. 
+  // Instead itesm.total_received will get updated on the next POST or PUT request including this item id
+  // If we want to continue tracking the total received we should consider adding a total_shipped column to the items or chapter_items table
   const deleteQuery = {
     text: 'DELETE FROM chapter_items WHERE chapter_id=$2 AND item_id=$1;',
     values: [itemId, chapterId],
