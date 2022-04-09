@@ -8,6 +8,7 @@ import Paper from '@mui/material/Paper';
 
 import AddItem from './AddItem';
 import ItemTable from './ItemTable';
+import ChapterChart from './ChapterChart';
 import { UserContext } from '../../hooks/userContext';
 
 
@@ -24,20 +25,19 @@ function DashboardContent() {
   }, []);
 
   const updateTable = async () => {
-    if (user) {
-      try {
-        const response = await fetch(`/api/chapters/${user.chapterId}/items`);
-        const data = await response.json();
-        if (response.ok) {
-          if (mounted.current) {
-            setTableData(data.chapterItems);
-          }
-        } else {
-          console.error(data);
+    if (!user) return;
+    try {
+      const response = await fetch(`/api/chapters/${user.chapterId}/items`);
+      const data = await response.json();
+      if (response.ok) {
+        if (mounted.current) {
+          setTableData(data.chapterItems);
         }
-      } catch (err) {
-        console.error(err);
+      } else {
+        console.error(data);
       }
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -78,7 +78,7 @@ function DashboardContent() {
                   height: 390,
                 }}
               >
-                <Typography>Donation stats go here.</Typography>
+                <ChapterChart />
               </Paper>
             </Grid>
             {/* Items table */}
