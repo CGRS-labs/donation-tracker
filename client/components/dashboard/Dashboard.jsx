@@ -13,13 +13,17 @@ function DashboardContent() {
 
   const [tableData, setTableData] = useState([]);
 
-  useEffect(() => {
+  const updateTable = () => {
     fetch('/api/chapterItems')
       .then((data) => data.json())
       .then(({ chapterItems }) => {
         console.log(chapterItems);
         setTableData(chapterItems);
       });
+  }
+
+  useEffect(() => {
+    updateTable();
   }, []);
 
   return (
@@ -46,7 +50,7 @@ function DashboardContent() {
                   height: 1,
                 }}
               >
-                <AddItem setTableData={ setTableData } />
+                <AddItem setTableData={ setTableData } updateTable={ updateTable } />
               </Paper>
             </Grid>
             {/* Donation summary stats */}
@@ -65,7 +69,7 @@ function DashboardContent() {
             {/* Items table */}
             <Grid item xs={12}>
               <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                <ItemTable tableData={ tableData }/>
+                <ItemTable tableData={ tableData } updateTable={ updateTable }/>
               </Paper>
             </Grid>
           </Grid>

@@ -31,10 +31,11 @@ const shipIt = async (event, cellValues) => {
     });
 
     if (response.ok) {
-      <Alert severity="success">
-        <AlertTitle>Success</AlertTitle>
-        This item has been shipped — <strong>Thanks for your donation!</strong>
-      </Alert>;
+      // <Alert severity="success"> //This isn't working?!
+      //   <AlertTitle>Success</AlertTitle>
+      //   This item has been shipped — <strong>Thanks for your donation!</strong>
+      // </Alert>;
+      props.updateTable();
     }
 
   } catch (err) {
@@ -80,6 +81,7 @@ const columns = [
         color="warning"
         onClick={(event) => {
           shipIt(event, cellValues);
+          updateTable();
         }}
       >< RocketLaunchIcon /></IconButton>
     );},
@@ -93,7 +95,7 @@ export default function ItemTable(props) {
 
   return (
     <div style={{ height: 500, width: '100%' }}>
-      <DataGrid rows={props.tableData} columns={columns} pageSize={15} />
+      <DataGrid rows={props.tableData} columns={columns} pageSize={15} updateTable={props.updateTable} />
     </div>
   );
 }

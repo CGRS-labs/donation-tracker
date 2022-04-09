@@ -15,7 +15,7 @@ import FormControl from '@mui/material/FormControl';
 const categories = ['Childcare', 'Clothing', 'Education', 'Food', 'Healthcare', 'Homegoods', 'Personal hygiene', 'Other'];
 
 
-export default function AddItem (setTableData) {
+export default function AddItem (props) {
   
   const [inputs, setInputs] = useState({
     name: '',
@@ -70,6 +70,7 @@ export default function AddItem (setTableData) {
           category: '',
           quantity: 0,
         });
+        props.updateTable();
       } else {
         console.error(await response.json());
       }

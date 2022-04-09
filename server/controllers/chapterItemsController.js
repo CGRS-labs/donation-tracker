@@ -127,7 +127,7 @@ chapterItemsController.deleteItem = async (req, res, next) => {
   try {
     await db.query(deleteQuery);
 
-    // do we need a commit?
+    // do we need a 'COMMIT'? and to start with 'BEGIN'
     return next();
 
   } catch (err) {
