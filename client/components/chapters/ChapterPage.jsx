@@ -68,7 +68,7 @@ export default function ChapterPage(props) {
   const infoCards = [
     {
       title: 'Donation Center',
-      subtitle: 'hours',
+      subtitle: 'Hours: Monday-Friday, 6pm-9pm',
       content:
         `${chapter.street}, ${chapter.city} ${chapter.state}, ${chapter.zip}`,
       image: helpingHand,
@@ -94,7 +94,7 @@ export default function ChapterPage(props) {
       <ContentBanner
         content={{
           title: `${chapter.name}`,
-          description: 'Multiple lines of text that form the lede, informing new readers quickly and efficiently about what\'s most interesting in this post\'s contents.',
+          description: 'Welcome to our chapter! Please reach out to us if you have any questions or would like to make a donation.',
           image: bannerImage,
           imageText: 'main image description',
           linkText: '',
