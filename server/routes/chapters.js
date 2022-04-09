@@ -2,6 +2,8 @@ const express = require('express');
 
 const chaptersController = require('../controllers/chaptersController');
 const utilController = require('../controllers/utilController');
+const authController = require('../controllers/authController');
+const usersController = require('../controllers/usersController');
 const chapterItemsRouter = require('./chapterItems');
 
 const router = express.Router();
@@ -19,12 +21,19 @@ router.get('/',
 
 router.get('/:chapterId',
   chaptersController.getChapter,
+  usersController.getUsersByChapter,
   (req, res) => {
     return res.status(200).json({
       chapter: res.locals.chapter,
+      users: res.locals.users
     });
   }
 );
+
+// Require authentication for all subsequent requests
+router.use(authController.validateToken, (req, res, next) => {
+  next('route');
+});
 
 router.put('/:chapterId',
   chaptersController.storeTableAndColumnNames,

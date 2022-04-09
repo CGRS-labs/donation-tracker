@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { InputLabel, Select } from '@mui/material';
 
+import useToken from '../hooks/useToken';
 
 export default function SignUp() {
   const [inputs, setInputs] = useState({
@@ -19,8 +20,31 @@ export default function SignUp() {
     lastName: '',
     email: '',
     password: '',
-    chapter: '',
+    chapterId: '',
   });
+  const [chapters, setChapters] = useState([]);
+  const { token } = useToken();
+
+  // Get list of chapter ids
+  useEffect(async () => {
+    try {
+      const response = await fetch('/api/chapters', {
+        headers: {
+          'authorization': token,
+        }
+      });
+      const data = await response.json();
+
+      // check for response status 200-299
+      if (response.ok) {
+        setChapters(data.chapters);
+      } else {
+        console.error(data);
+      }
+    } catch (err) {
+      console.error(err);
+    };
+  }, []);
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -34,7 +58,8 @@ export default function SignUp() {
     const response = await fetch('/api/register', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'authorization': token,
       },
       body: JSON.stringify(inputs),
     });
@@ -47,7 +72,6 @@ export default function SignUp() {
         password: '',
         chapter: '',
       });
-      navigate('/login');
     } else {
       console.error(await response.json());
     }
@@ -68,7 +92,7 @@ export default function SignUp() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          Add Administrator
         </Typography>
         <Box id='signup' component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
@@ -127,29 +151,17 @@ export default function SignUp() {
               <Select
                 labelId='chapter-select-label'
                 id='menu'
-                name='chapter'
-                value={inputs.chapter || ''}
+                name='chapterId'
+                value={inputs.chapterId}
                 label='Chapter'
                 onChange={handleChange}
                 style={{
                   minWidth: '100%',
                 }}
               >
-                <MenuItem value={'albany'}>Albany</MenuItem>
-                <MenuItem value={'boston'}>Boston</MenuItem>
-                <MenuItem value={'buffalo'}>Buffalo</MenuItem>
-                <MenuItem value={'cleveland'}>Chicago</MenuItem>
-                <MenuItem value={'cleveland'}>Cleveland</MenuItem>
-                <MenuItem value={'detriot'}>Detriot</MenuItem>
-                <MenuItem value={'hartford'}>Hartford</MenuItem>
-                <MenuItem value={'newYork'}>New York</MenuItem>
-                <MenuItem value={'newark'}>Newark</MenuItem>
-                <MenuItem value={'passaic'}>Passaic</MenuItem>
-                <MenuItem value={'philadelphia'}>Philadephia</MenuItem>
-                <MenuItem value={'rochester'}>Rochester</MenuItem>
-                <MenuItem value={'seattle'}>Seattle</MenuItem>
-                <MenuItem value={'washingtonDC'}>Washington D.C.</MenuItem>
-                <MenuItem value={'yonkers'}>Yonkers</MenuItem>
+                {chapters.map((chapter) => {
+                  return <MenuItem key={chapter} value={chapter.id}>{chapter.name}</MenuItem>;
+                })}
               </Select>
             </Grid>
           </Grid>
@@ -159,15 +171,8 @@ export default function SignUp() {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Sign Up
+            Add Administrator
           </Button>
-          <Grid container justifyContent="flex-end">
-            <Grid item>
-              <Link href="/login" variant="body2">
-                Already have an account? Sign in
-              </Link>
-            </Grid>
-          </Grid>
         </Box>
       </Box>
     </Container>

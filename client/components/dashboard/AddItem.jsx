@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -11,12 +11,15 @@ import { InputLabel, Select } from '@mui/material';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import FormControl from '@mui/material/FormControl';
 
+import categories from './categories.js';
 
-const categories = ['Childcare', 'Clothing', 'Education', 'Food', 'Healthcare', 'Homegoods', 'Personal hygiene', 'Other'];
+import useToken from '../../hooks/useToken';
+import { UserContext } from '../../hooks/userContext.js';
 
 
-export default function AddItem (props) {
-  
+export default function AddItem(props) {
+
+  // TODO: Use the category drop down to filter the drop-down of items 
   const [inputs, setInputs] = useState({
     name: '',
     category: '',
@@ -24,19 +27,20 @@ export default function AddItem (props) {
     items: [],
   });
   const [selectItems, setSelectItems] = useState([]);
+  const { token } = useToken();
+  const { user } = useContext(UserContext);
 
-  useEffect( async () => {
+  useEffect(async () => {
     try {
       const response = await fetch('/api/items/names');
       const menuItems = await response.json();
-      console.log('response', menuItems);
 
       if (response.ok) {
         setSelectItems(menuItems);
       } else {
         console.error(menuItems.error);
       }
-    
+
     } catch (err) {
       console.error(err);
     }
@@ -57,10 +61,11 @@ export default function AddItem (props) {
 
     try {
 
-      const response = await fetch('/api/chapterItems/', {
+      const response = await fetch(`/api/chapters/${user.chapterId}/items/`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': token
         },
         body: JSON.stringify(data),
       });
@@ -70,12 +75,12 @@ export default function AddItem (props) {
           category: '',
           quantity: 0,
         });
+        // A NEW GET REQUEST IS NEEDED TO FETCH TABLE DATA ONCE THIS ITEM IS ADDED
         props.updateTable();
       } else {
         console.error(await response.json());
       }
 
-      // A NEW GET REQUEST IS NEEDED TO FETCH TABLE DATA ONCE THIS ITEM IS ADDED
 
     } catch (err) {
       console.error(err);
@@ -139,7 +144,7 @@ export default function AddItem (props) {
             required
             fullWidth
             name="total_received"
-            value = { inputs.total_received || ''}
+            value={inputs.total_received || ''}
             label="Quantity"
             type="number"
             id="quantity"

@@ -16,7 +16,7 @@ chapterItemsController = {};
 chapterItemsController.addItem = async (req, res, next) => {
   const { itemId, total_received } = req.body;
 
-  const chapterId = '4';    //{ chapterId } = req.params;
+  const { chapterId } = req.params;
   //query that updates the totals based on the items table-- make separate controller for this and put in middleware
 
   try {
@@ -74,10 +74,7 @@ chapterItemsController.addItem = async (req, res, next) => {
  * */
 chapterItemsController.updateItem = async (req, res, next) => {
   const { total_received } = req.body;
-  const chapterId = 4;
-  const { itemId } = req.params;
-  console.log(req.params);
-  // const { chapterId, itemId } = req.params;
+  const { chapterId, itemId } = req.params;
 
   try {
     // Start a transaction to maintain atomicity
@@ -117,17 +114,12 @@ chapterItemsController.updateItem = async (req, res, next) => {
  * @requires chapterId on request params
  */
 chapterItemsController.deleteItem = async (req, res, next) => {
-  // const { chapterId, itemId } = req.params; // commented out because we do not yet have chapterId on params and can't get id off params
-  const chapterId = 4;
-  // console.log(req.body);
-  // const { itemId } = req.body;
-  const { itemId } = req.params;
-  console.log(itemId); 
+  const { chapterId, itemId } = req.params;
   const deleteQuery = {
     text: 'DELETE FROM chapter_items WHERE chapter_id=$2 AND item_id=$1;',
     values: [itemId, chapterId],
   };
-  
+
   try {
     await db.query(deleteQuery);
 
@@ -192,7 +184,7 @@ chapterItemsController.getAllChapterItems = async (req, res, next) => {
     LEFT JOIN items i ON ci.item_id = i.id 
     WHERE ci.chapter_id = $1
     ORDER BY name ASC`,
-    values: ['4'] // values: [chapterId]
+    values: [chapterId]
   };
 
   try {
@@ -271,7 +263,7 @@ chapterItemsController.getAllByItems = async (req, res, next) => {
     const promises = items.map((item) => {
       const getItemChaptersQuery = {
         text: 'SELECT c.id, c.name, ci.total_received FROM chapter_items ci LEFT JOIN chapters c WHERE ci.item_id = $1 ',
-        values: [item.id] 
+        values: [item.id]
       };
       return db.query(getItemChaptersQuery);
     });
