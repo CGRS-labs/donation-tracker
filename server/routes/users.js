@@ -25,6 +25,14 @@ router.post('/login',
   }
 );
 
+router.get('/user',
+  authController.validateToken,
+  usersController.getUserByEmail,
+  (req, res) => {
+    return res.status(200).json({ user: res.locals.user });
+  }
+);
+
 module.exports = router;
 
 

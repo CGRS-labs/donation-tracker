@@ -21,7 +21,7 @@ const bannerImage = 'https://images.unsplash.com/photo-1529511582893-2d7e684dd12
 const sidebar = {
   title: 'About',
   description:
-    'Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.',
+    'Our Chapter has donated over 1500 items since we began our collection a month ago. Please help us continue to meet the needs of Ukrainian refugees!',
   listTitle: 'Meet Our Team'
 };
 
@@ -73,7 +73,7 @@ export default function ChapterPage(props) {
   const infoCards = [
     {
       title: 'Donation Center',
-      subtitle: 'hours',
+      subtitle: 'Hours: Monday-Friday, 6pm-9pm',
       content:
         `${chapter.street}, ${chapter.city} ${chapter.state}, ${chapter.zip}`,
       image: helpingHand,
@@ -99,7 +99,7 @@ export default function ChapterPage(props) {
       <ContentBanner
         content={{
           title: `${chapter.name}`,
-          description: 'Multiple lines of text that form the lede, informing new readers quickly and efficiently about what\'s most interesting in this post\'s contents.',
+          description: 'Welcome to our chapter! Please don\'t hesitate to reach out to us if you have any questions.',
           image: bannerImage,
           imageText: 'main image description',
           linkText: '',

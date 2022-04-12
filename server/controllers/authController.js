@@ -54,6 +54,7 @@ authController.validateToken = (req, res, next) => {
         //if it doesn't exist, send 403
         return res.status(403).send('Invalid Credentials');
       }
+      res.locals.email = decoded.email;
       return next();
     } catch (err) {
       return next(new AppError(err, 'authController', 'validateToken', 403));
