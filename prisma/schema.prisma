@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("PG_URI")
+}
+
+model chapter_items {
+  id             Int      @id(map: "chapter_items_pk") @default(autoincrement()) @map("_id")
+  chapter_id     Int
+  item_id        Int
+  total_received Int
+  chapters       chapters @relation(fields: [chapter_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "chapter_items_fk0")
+  items          items    @relation(fields: [item_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "chapter_items_fk1")
+
+  @@unique([chapter_id, item_id], map: "chapter_items_item_id_chapter_id_key")
+}
+
+model chapters {
+  id            Int             @id(map: "chapters_pk") @default(autoincrement())
+  name          String          @db.VarChar(255)
+  street        String          @db.VarChar(255)
+  city          String          @db.VarChar(255)
+  state         String          @db.VarChar(255)
+  zip           Int
+  phone         String          @db.VarChar(255)
+  email         String          @db.VarChar(255)
+  longitude     Decimal         @default(0) @db.Decimal
+  latitude      Decimal         @default(0) @db.Decimal
+  chapter_items chapter_items[]
+  users         users[]
+}
+
+model items {
+  id             Int             @id(map: "Items_pk") @default(autoincrement())
+  name           String          @db.VarChar(255)
+  total_needed   Int?
+  total_received Int
+  category       String          @db.VarChar(255)
+  chapter_items  chapter_items[]
+}
+
+model users {
+  password   String   @db.VarChar(255)
+  email      String   @id(map: "users_pk") @db.VarChar(255)
+  chapter_id Int
+  first_name String   @db.VarChar(255)
+  last_name  String   @db.VarChar(255)
+  chapters   chapters @relation(fields: [chapter_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "users_fk0")
+}
