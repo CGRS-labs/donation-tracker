@@ -22,27 +22,67 @@ import PrivateRoute from './components/layout/PrivateRoute';
 import './styles/styles.css';
 
 const App = () => {
+  /*
+    user is an obj with these key {email,
+      chapterId,
+      firstName,
+      lastName,
+    }
+    setUser is a useState of user
+    isLoading will
+  */
   const { user, setUser, isLoading } = useAuth();
 
   return (
-
     <Router>
       <UserContext.Provider value={{ user, setUser, isLoading }}>
         <Layout>
           <Routes>
             <Route exact path="/" element={<Homepage />} />
-            <Route exact path={'/chapters'} element={<AllChaptersPage />} />
+            <Route exact path={"/chapters"} element={<AllChaptersPage />} />
             <Route exact path="/signin" element={<Login />} />
-            <Route exact path="/signup" element={<PrivateRoute><AddAdmin /></PrivateRoute>} />
+            <Route
+              exact
+              path="/signup"
+              element={
+                <PrivateRoute>
+                  <AddAdmin />
+                </PrivateRoute>
+              }
+            />
             <Route exact path="/map" element={<MapPage />} />
             <Route exact path="/chapter/:id" element={<ChapterPage />} />
-            <Route exact path="/chapter/add" element={<PrivateRoute><AddChapterPage /></PrivateRoute>} />
-            <Route exact path='/chapter/dashboard' element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-            <Route exact path="/dashboard" element={<PrivateRoute><GlobalDashboard /></PrivateRoute>} />
-          </Routes >
+            <Route
+              exact
+              path="/chapter/add"
+              element={
+                <PrivateRoute>
+                  <AddChapterPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              exact
+              path="/chapter/dashboard"
+              element={
+                <PrivateRoute>
+                  <Dashboard />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              exact
+              path="/dashboard"
+              element={
+                <PrivateRoute>
+                  <GlobalDashboard />
+                </PrivateRoute>
+              }
+            />
+          </Routes>
         </Layout>
       </UserContext.Provider>
-    </Router >
+    </Router>
   );
 };
 

@@ -27,7 +27,7 @@ app.use((req, res) => {
 // Global error handler
 app.use((err, req, res, next) => {
   if (!(err instanceof AppError)) return next(err);
-
+ 
   const defaultErr = {
     serverLog: 'Express err handler caught an unknown middleware error',
     status: 500,

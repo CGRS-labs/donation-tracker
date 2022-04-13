@@ -10,9 +10,15 @@ const {
   GraphQLNonNull
 } = graphql;
 
+// const 
+
+
+
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
-  fields: {},
+  fields: {
+
+  },
 });
 
 const Mutation = new GraphQLObjectType({
