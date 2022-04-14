@@ -7,7 +7,7 @@
     "start": "nodemon server/server.js",
     "dev": "concurrently 'webpack serve --open' 'nodemon server/server.js'",
     "json-dev": "concurrently 'webpack serve --open' 'json-server --watch json-server/db.json --routes json-server/routes.json'",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --coverage"
   },
   "repository": {
     "type": "git",
@@ -66,6 +66,7 @@
     "prisma": "^3.12.0",
     "source-map-loader": "^3.0.1",
     "style-loader": "^3.3.1",
+    "supertest": "^6.2.2",
     "webpack": "^5.70.0",
     "webpack-cli": "^4.9.2",
     "webpack-dev-server": "^4.7.4"
