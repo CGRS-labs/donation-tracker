@@ -4,6 +4,11 @@
 
 // module.exports = {db};
 
+const dotenv = require('dotenv');
+const path = require('path');
+
+dotenv.config({path: path.resolve(__dirname, '../.env')});
+
 const { Pool } = require('pg');
 
 // const PG_URI = process.env.PG_URI;
