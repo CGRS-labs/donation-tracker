@@ -6,6 +6,7 @@ const req = require("supertest");
 const server = "http://localhost:3000";
 
 describe("Route integration", () => {
+
   describe("GET /", () => {
     test("responds with status 200 and text/html content type", () => {
       return req(server)

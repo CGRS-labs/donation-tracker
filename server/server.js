@@ -27,7 +27,7 @@ app.use((req, res) => {
 // Global error handler
 app.use((err, req, res, next) => {
   if (!(err instanceof AppError)) return next(err);
- 
+
   const defaultErr = {
     serverLog: 'Express err handler caught an unknown middleware error',
     status: 500,
@@ -44,9 +44,8 @@ app.use((err, req, res, next) => {
 
 const port = process.env.PORT;
 
-
-app.listen(port, () => {
+//Need to import app.listen because Jest global teardown need the return value of app.listen()
+// to close serer after all test is completed.
+module.exports = app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
-
-module.exports = app;
