@@ -7,7 +7,7 @@
     "start": "nodemon server/server.js",
     "dev": "concurrently 'webpack serve --open' 'nodemon server/server.js'",
     "json-dev": "concurrently 'webpack serve --open' 'json-server --watch json-server/db.json --routes json-server/routes.json'",
-    "test": "jest --coverage"
+    "test": "jest --detectOpenHandles"
   },
   "repository": {
     "type": "git",
@@ -17,6 +17,10 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/CGRS-labs/donation-tracker/issues"
+  },
+  "jest": {
+    "globalSetup": "./jest-setup.js",
+    "globalTeardown": "./jest-teardown.js"
   },
   "homepage": "https://github.com/CGRS-labs/donation-tracker#readme",
   "dependencies": {
@@ -60,10 +64,12 @@
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.5.0",
     "jest": "^27.5.1",
+    "jest-environment-jsdom": "^27.5.1",
     "json-server": "^0.17.0",
     "node-fetch": "^3.2.3",
     "nodemon": "^2.0.15",
     "prisma": "^3.12.0",
+    "regenerator-runtime": "^0.13.9",
     "source-map-loader": "^3.0.1",
     "style-loader": "^3.3.1",
     "supertest": "^6.2.2",
