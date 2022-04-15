@@ -20,7 +20,6 @@ const {
 const UserType = new GraphQLObjectType({
   name: 'User',
   fields: ( ) => ({
-    id: { type: GraphQLInt },
     first_name: { type: GraphQLString },
     last_name: { type: GraphQLString },
     email: { type: GraphQLString },
@@ -56,9 +55,9 @@ const ChapterType = new GraphQLObjectType({
       type: new GraphQLList(ItemType),
       resolve(chapter, args){
         return db.query(`SELECT i.id as item_id, i.name as name, i.category, ci.total_received, i.total_needed
-        FROM chapter_items ci 
-        LEFT JOIN items i ON ci.item_id = i.id 
-        LEFT JOIN chapters c ON c.id = ci.chapter_id 
+        FROM chapter_items ci
+        LEFT JOIN items i ON ci.item_id = i.id
+        LEFT JOIN chapters c ON c.id = ci.chapter_id
         WHERE c.id = $1;`, [chapter.id])
           .then(res => res.rows);
       }
@@ -97,7 +96,7 @@ const RootQuery = new GraphQLObjectType({
       },
       resolve(parent, args) {
         return db.query('SELECT * FROM items WHRE id = ', args.id)
-          .then(res => res.rows[0])
+          .then(res => res.rows[0]);
       }
     },
     chapter:{
@@ -107,16 +106,16 @@ const RootQuery = new GraphQLObjectType({
       },
       resolve(parent, args) {
         return db.query('SELECT * FROM chapters WHERE id = $1', [args.id])
-          .then(res => res.rows[0])
+          .then(res => res.rows[0]);
       }
     },
     user: {
       type: UserType,
       args: {
-        id: { type: GraphQLInt }
+        email: { type: GraphQLString }
       },
       resolve(parent, args) {
-        return db.query('SELECT * FROM users WHERE id = $1;', [args.id])
+        return db.query('SELECT * FROM users WHERE email = $1;', [args.email])
           .then(res => {
             return res.rows[0];
           });
@@ -169,7 +168,7 @@ const Mutation = new GraphQLObjectType({
         latitude: { type: GraphQLFloat}
       },
       resolve(parent, args){
-        return db.query('INSERT INTO chapters (name, zip, street, city, state, phone, email, latitude, longitude) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *;', 
+        return db.query('INSERT INTO chapters (name, zip, street, city, state, phone, email, latitude, longitude) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *;',
           [args.name, args.zip, args.street, args.city, args.state, args.phone, args.email, args.latitude, args.longitude])
           .then(res => {
             return res.rows[0];
@@ -185,10 +184,10 @@ const Mutation = new GraphQLObjectType({
         category: { type: GraphQLString },
       },
       resolve(parent, args){
-        return db.query('INSERT INTO items (name, total_received, total_needed, category) VALUES ($1, $2, $3, $4) RETURNING *;', 
+        return db.query('INSERT INTO items (name, total_received, total_needed, category) VALUES ($1, $2, $3, $4) RETURNING *;',
           [args.name, args.total_needed, args.total_received, args.category])
           .then(res => {
-            return res.rows[0]
+            return res.rows[0];
           });
       }
     },
@@ -204,7 +203,11 @@ const Mutation = new GraphQLObjectType({
       resolve(parent, args) {
         return db.query('INSERT INTO users (first_name, last_name, email, password, chapter_id) VALUES ($1, $2, $3, $4, $5) RETURNING first_name, last_name, email, chapter_id', [args.first_name, args.last_name, args.email, args.password, args.chapter_id])
           .then(res => res.rows[0])
+<<<<<<< HEAD
           .catch(err => console.log(err))
+=======
+          .catch(err => console.log(err));
+>>>>>>> dev
       }
     }
   }

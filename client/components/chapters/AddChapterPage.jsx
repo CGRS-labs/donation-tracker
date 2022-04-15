@@ -24,7 +24,7 @@ export default function AddChapterPages() {
   });
 
   const mounted = useRef(true);
-  // Track when cleanuup runs to prevent state update in handleSubmit after component unmounts
+  // Track when clean up runs to prevent state update in handleSubmit after component unmounts
   useEffect(() => () => mounted.current = false, []);
   const { token } = useToken();
 
