@@ -49,7 +49,7 @@ function DashboardContent() {
     };
 
     const options = {
-      method: "POST",
+      method: 'POST',
       headers: headers,
       body: JSON.stringify(graphqlQuery),
       // Add Authorization
@@ -60,7 +60,6 @@ function DashboardContent() {
       const data = await response.json();
       if (response.ok) {
         if (mounted.current) {
-          console.log(data.data);
           setTableData(data.data.chapter.items);
         }
       } else {
@@ -108,7 +107,7 @@ function DashboardContent() {
                   height: 390,
                 }}
               >
-                <ChapterChart />
+                <ChapterChart itemData={tableData}/>
               </Paper>
             </Grid>
             {/* Items table */}

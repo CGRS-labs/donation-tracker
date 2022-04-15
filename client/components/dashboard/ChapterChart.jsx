@@ -45,7 +45,7 @@ const backgroundColors = [
   'rgba(255, 99, 132, 0.5)',
 ];
 
-export default function Chart() {
+export default function Chart({ itemData }) {
   const [categorizedItems, setCategorizedItems] = useState([]);
   const { user } = useContext(UserContext);
 
@@ -53,29 +53,28 @@ export default function Chart() {
     let mounted = true;
     if (user) {
       try {
-        const response = await fetch(`/api/chapters/${user.chapterId}/items`);
-        const data = await response.json();
-        if (response.ok) {
-          // Process the data get category counts by chapter
-          const { chapterItems } = data;
+        // const response = await fetch(`/api/chapters/${user.chapterId}/items`);
+        // const data = await response.json();
+        // if (response.ok) {
+        // Process the data get category counts by chapter
+        const chapterItems = itemData;
+        // reduce items to count by category
+        const catCount = chapterItems.reduce((catCount, item) => {
+          catCount[item.category] = (catCount[item.category] || 0) + item.total_received;
+          return catCount;
+        }, {});
 
-          // reduce items to count by category
-          const catCount = chapterItems.reduce((catCount, item) => {
-            catCount[item.category] = (catCount[item.category] || 0) + item.total_received;
-            return catCount;
-          }, {});
-
-          if (mounted) setCategorizedItems(catCount);
-        } else {
-          console.error(data);
-        }
+        if (mounted) setCategorizedItems(catCount);
+        // } else {
+        //   console.error(data);
+        // }
       } catch (err) {
         console.error(err);
       }
     }
 
     return () => mounted = false;
-  }, []);
+  }, [itemData]);
 
   // const datasets = categories.map((cat, i) => ({
   //   label: cat,
@@ -85,7 +84,7 @@ export default function Chart() {
 
   const datasets = [{
     label: 'All Categories',
-    data: categories.map((cat, i) => categorizedItems[cat]),
+    data: categorizedItems,
     backgroundColor: backgroundColors[0],
   }];
 

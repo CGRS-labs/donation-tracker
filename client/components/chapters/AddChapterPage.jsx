@@ -1,25 +1,25 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import WarehouseIcon from "@mui/icons-material/Warehouse";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import useToken from "../../hooks/useToken.js";
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import WarehouseIcon from '@mui/icons-material/Warehouse';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import useToken from '../../hooks/useToken.js';
 
 export default function AddChapterPages() {
   const navigate = useNavigate();
   const [inputs, setInputs] = useState({
-    name: "",
-    street: "",
-    city: "",
-    state: "",
-    zip: "",
-    phone: "",
-    email: "",
+    name: '',
+    street: '',
+    city: '',
+    state: '',
+    zip: '',
+    phone: '',
+    email: '',
   });
 
   const mounted = useRef(true);
@@ -37,7 +37,7 @@ export default function AddChapterPages() {
     event.preventDefault();
 
     const headers = {
-      "content-type": "application/json",
+      'content-type': 'application/json',
     };
 
     const graphqlQuery = {
@@ -60,17 +60,17 @@ export default function AddChapterPages() {
     };
 
     const options = {
-      method: "POST",
+      method: 'POST',
       headers: headers,
       body: JSON.stringify(graphqlQuery),
     };
 
-    fetch("http://localhost:4000/graphql", options)
+    fetch('http://localhost:4000/graphql', options)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
         // redirect to the dashboard
-        navigate("/dashboard");
+        navigate('/dashboard');
       })
       .catch((error) => console.log(error));
 
@@ -109,12 +109,12 @@ export default function AddChapterPages() {
       <Box
         sx={{
           marginTop: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: "warning.main" }}>
+        <Avatar sx={{ m: 1, bgcolor: 'warning.main' }}>
           <WarehouseIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
