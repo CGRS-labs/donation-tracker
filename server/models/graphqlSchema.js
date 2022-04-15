@@ -20,7 +20,7 @@ const {
 const UserType = new GraphQLObjectType({
   name: 'User',
   fields: ( ) => ({
-    first_name: { type: GraphQLString },
+    first_name: { type: GraphQLString},
     last_name: { type: GraphQLString },
     email: { type: GraphQLString },
     password: { type: GraphQLString },
@@ -157,15 +157,15 @@ const Mutation = new GraphQLObjectType({
     addChapter: {
       type: ChapterType,
       args: {
-        name: { type: GraphQLString },
-        street: { type: GraphQLString },
-        city: { type: GraphQLString },
-        state: { type: GraphQLString },
-        zip: { type: GraphQLInt },
-        phone: { type: GraphQLString },
-        email: { type: GraphQLString },
-        longitude: { type: GraphQLFloat },
-        latitude: { type: GraphQLFloat}
+        name: { type: new GraphQLNonNull(GraphQLString) },
+        street: { type: new GraphQLNonNull(GraphQLString) },
+        city: { type: new GraphQLNonNull(GraphQLString) },
+        state: { type: new GraphQLNonNull(GraphQLString) },
+        zip: { type: new GraphQLNonNull(GraphQLInt) },
+        phone: { type: new GraphQLNonNull(GraphQLString) },
+        email: { type: new GraphQLNonNull(GraphQLString) },
+        longitude: { type: new GraphQLNonNull(GraphQLFloat) },
+        latitude: { type: new GraphQLNonNull(GraphQLFloat) }
       },
       resolve(parent, args){
         return db.query('INSERT INTO chapters (name, zip, street, city, state, phone, email, latitude, longitude) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *;',
@@ -178,10 +178,10 @@ const Mutation = new GraphQLObjectType({
     addItem: {
       type: ItemType,
       args: {
-        name: { type: GraphQLString },
-        total_needed: { type: GraphQLInt },
-        total_received: { type: GraphQLInt},
-        category: { type: GraphQLString },
+        name: { type: new GraphQLNonNull(GraphQLString) },
+        total_needed: { type: new GraphQLNonNull(GraphQLInt) },
+        total_received: { type: new GraphQLNonNull(GraphQLInt) },
+        category: { type: new GraphQLNonNull(GraphQLString) },
       },
       resolve(parent, args){
         return db.query('INSERT INTO items (name, total_received, total_needed, category) VALUES ($1, $2, $3, $4) RETURNING *;',
@@ -194,11 +194,11 @@ const Mutation = new GraphQLObjectType({
     addUser: {
       type: UserType,
       args: {
-        first_name: { type: GraphQLString },
-        last_name: { type: GraphQLString },
-        email: { type: GraphQLString },
-        password: { type: GraphQLString },
-        chapter_id: { type: GraphQLInt },
+        first_name: { type: new GraphQLNonNull(GraphQLString) },
+        last_name: { type: new GraphQLNonNull(GraphQLString) },
+        email: { type: new GraphQLNonNull(GraphQLString) },
+        password: { type: new GraphQLNonNull(GraphQLString) },
+        chapter_id: { type: new GraphQLNonNull(GraphQLInt) },
       },
       resolve(parent, args) {
         return db.query('INSERT INTO users (first_name, last_name, email, password, chapter_id) VALUES ($1, $2, $3, $4, $5) RETURNING first_name, last_name, email, chapter_id', [args.first_name, args.last_name, args.email, args.password, args.chapter_id])
