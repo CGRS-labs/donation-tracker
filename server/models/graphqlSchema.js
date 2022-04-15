@@ -300,7 +300,7 @@ const Mutation = new GraphQLObjectType({
           };
         }
         catch (error){
-          consle.log(new AppError(error));
+          throw new AppError(error);
         }
       }
     },
