@@ -20,18 +20,44 @@ export default function Album() {
   React.useEffect(async () => {
     let mounted = true;
 
-    try {
-      const response = await fetch('/api/chapters');
-      const data = await response.json();
-      if (response.ok)
-        if (mounted) {
-          setChapters(data.chapters);
-        } else {
-          console.error(data.error);
-        };
-    } catch (err) {
-      console.error(err);
-    }
+    // try {
+    //   const response = await fetch('/api/chapters');
+    //   const data = await response.json();
+    //   if (response.ok)
+    //     if (mounted) {
+    //       setChapters(data.chapters);
+    //     } else {
+    //       console.error(data.error);
+    //     };
+    // } catch (err) {
+    //   console.error(err);
+    // }
+
+
+    const headers = {
+      'content-type': 'application/json',
+    };
+
+    const graphqlQuery = {
+      'query': `{
+        chapters{
+          name
+          id
+        }
+      }`,
+    };
+
+    const options = {
+      'method': 'POST',
+      'headers': headers,
+      'body': JSON.stringify(graphqlQuery)
+    };
+
+    fetch('http://localhost:4000/graphql', options)
+      .then(res => res.json())
+      .then(data => setChapters(data.data.chapters))
+      .catch(error => console.log(error));
+
 
     return () => mounted = false;
   }, []);

@@ -62,6 +62,14 @@ const ChapterType = new GraphQLObjectType({
         WHERE c.id = $1;`, [chapter.id])
           .then(res => res.rows);
       }
+    },
+    users: {
+      type: new GraphQLList(UserType),
+      resolve(chapter, args) {
+        return db.query(`SELECT email, first_name, last_name FROM users WHERE chapter_id = ($1);`, [chapter.id])
+          .then(res => res.rows)
+          .catch(error => console.log(error));
+      }
     }
   })
 });
@@ -193,11 +201,11 @@ const Mutation = new GraphQLObjectType({
         password: { type: GraphQLString },
         chapter_id: { type: GraphQLInt },
       },
-        resolve(parent, args) {
-          return db.query('INSERT INTO users (first_name, last_name, email, password, chapter_id) VALUES ($1, $2, $3, $4, $5) RETURNING first_name, last_name, email, chapter_id', [args.first_name, args.last_name, args.email, args.password, args.chapter_id])
-            .then(res => res.rows[0])
-            .catch(err => console.log(err))
-        }
+      resolve(parent, args) {
+        return db.query('INSERT INTO users (first_name, last_name, email, password, chapter_id) VALUES ($1, $2, $3, $4, $5) RETURNING first_name, last_name, email, chapter_id', [args.first_name, args.last_name, args.email, args.password, args.chapter_id])
+          .then(res => res.rows[0])
+          .catch(err => console.log(err))
+      }
     }
   }
 });

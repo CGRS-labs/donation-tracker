@@ -36,14 +36,53 @@ export default function ChapterPage(props) {
   const mounted = useRef(true);
 
   useEffect(async () => {
-    const response = await fetch(`/api/chapters/${id}`);
-    const data = await response.json();
-    if (response.ok) {
-      if (mounted.current) {
-        setChapter(data.chapter);
-        setUsers(data.users);
-      }
-    }
+
+    const headers = {
+      'content-type': 'application/json',
+    };
+
+    const graphqlQuery = {
+      'query': `{
+        chapter (id: ${id}) {
+          name
+          street
+          city
+          state
+          zip
+          email
+          phone
+          id
+          users {
+            email
+            first_name
+            last_name
+          }
+        }
+      }`,
+    };
+
+    const options = {
+      'method': 'POST',
+      'headers': headers,
+      'body': JSON.stringify(graphqlQuery)
+    };
+
+    fetch('http://localhost:4000/graphql', options)
+      .then(res => res.json())
+      .then(data => {
+        setChapter(data.data.chapter);
+        setUsers(data.data.chapter.users);
+      })
+      .catch(error => console.log(error));
+
+    // const response = await fetch(`/api/chapters/${id}`);
+    // const data = await response.json();
+    // if (response.ok) {
+    //   if (mounted.current) {
+    //     // setChapter(data.chapter);
+    //     setUsers(data.users);
+    //   }
+    // }
     return () => () => mounted.current = false;
   }, []);
 
@@ -60,14 +99,46 @@ export default function ChapterPage(props) {
   // }, [chapter]);
 
   useEffect(async () => {
-    const response = await fetch('/api/items');
-    const data = await response.json();
-    if (response.ok) {
-      const items = data.items.filter((item) => {
-        return (item.total_needed - item.total_received) > 0;
-      });
-      setItems(items);
-    }
+    const headers = {
+      'content-type': 'application/json',
+    };
+
+    const graphqlQuery = {
+      'query': `{
+        items {
+          id
+          name
+          total_needed
+          total_received
+          category
+        }
+      }`,
+    };
+
+    const options = {
+      'method': 'POST',
+      'headers': headers,
+      'body': JSON.stringify(graphqlQuery)
+    };
+
+    fetch('http://localhost:4000/graphql', options)
+      .then(res => res.json())
+      .then(data => {
+        const filteredItems = data.data.items.filter((item) => {
+          return (item.total_needed - item.total_received) > 0;
+        });
+        setItems(filteredItems);
+      })
+      .catch(error => console.log(error));
+
+    // const response = await fetch('/api/items');
+    // const data = await response.json();
+    // if (response.ok) {
+    //   const items = data.items.filter((item) => {
+    //     return (item.total_needed - item.total_received) > 0;
+    //   });
+    //   setItems(items);
+    // }
   }, []);
 
   const infoCards = [
