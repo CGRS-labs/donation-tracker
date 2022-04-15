@@ -37,7 +37,6 @@ const UserType = new GraphQLObjectType({
     first_name: { type: GraphQLString },
     last_name: { type: GraphQLString },
     email: { type: GraphQLString },
-    password: { type: GraphQLString },
     chapter_id: { type: GraphQLInt },
     chapter: {
       type: ChapterType,
@@ -166,7 +165,7 @@ const RootQuery = new GraphQLObjectType({
 });
 
 const Mutation = new GraphQLObjectType({
-  name: 'Mutation',
+  name: "Mutation",
   fields: {
     addChapter: {
       type: ChapterType,
@@ -179,31 +178,47 @@ const Mutation = new GraphQLObjectType({
         phone: { type: GraphQLString },
         email: { type: GraphQLString },
         longitude: { type: GraphQLFloat },
-        latitude: { type: GraphQLFloat}
+        latitude: { type: GraphQLFloat },
       },
-      resolve(parent, args){
-        return db.query('INSERT INTO chapters (name, zip, street, city, state, phone, email, latitude, longitude) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *;',
-          [args.name, args.zip, args.street, args.city, args.state, args.phone, args.email, args.latitude, args.longitude])
-          .then(res => {
+      resolve(parent, args) {
+        return db
+          .query(
+            "INSERT INTO chapters (name, zip, street, city, state, phone, email, latitude, longitude) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *;",
+            [
+              args.name,
+              args.zip,
+              args.street,
+              args.city,
+              args.state,
+              args.phone,
+              args.email,
+              args.latitude,
+              args.longitude,
+            ]
+          )
+          .then((res) => {
             return res.rows[0];
           });
-      }
+      },
     },
     addItem: {
       type: ItemType,
       args: {
         name: { type: GraphQLString },
         total_needed: { type: GraphQLInt },
-        total_received: { type: GraphQLInt},
+        total_received: { type: GraphQLInt },
         category: { type: GraphQLString },
       },
-      resolve(parent, args){
-        return db.query('INSERT INTO items (name, total_received, total_needed, category) VALUES ($1, $2, $3, $4) RETURNING *;',
-          [args.name, args.total_needed, args.total_received, args.category])
-          .then(res => {
+      resolve(parent, args) {
+        return db
+          .query(
+            "INSERT INTO items (name, total_received, total_needed, category) VALUES ($1, $2, $3, $4) RETURNING *;",
+            [args.name, args.total_needed, args.total_received, args.category]
+          )
+          .then((res) => {
             return res.rows[0];
           });
-      }
+      },
     },
     signUp: {
       type: AuthPayload,
@@ -218,19 +233,21 @@ const Mutation = new GraphQLObjectType({
         try {
           const password = await bcrypt.hash(args.password, saltRounds);
           const user = await context.prisma.users.create({
-            data:{ ...args, password},
+            data: { ...args, password },
           });
 
-          const token = jwt.sign({ email: args.email }, process.env.TOKEN_KEY, { expiresIn: '1h' });
+          const token = jwt.sign({ email: args.email }, process.env.TOKEN_KEY, {
+            expiresIn: "1h",
+          });
 
-          return{
+          return {
             token,
-            user
+            user,
           };
         } catch (error) {
           throw new AppError(error);
         }
-      }
+      },
     },
     addUser: {
       type: UserType,
@@ -245,16 +262,49 @@ const Mutation = new GraphQLObjectType({
         try {
           const password = await bcrypt.hash(args.password, saltRounds);
           const user = await context.prisma.users.create({
-            data:{ ...args, password},
+            data: { ...args, password },
           });
 
           return user;
         } catch (error) {
           throw new AppError(error);
         }
+      },
+    },
+    login: {
+      type: AuthPayload,
+      args: {
+        email: { type: GraphQLString },
+        password: { type: GraphQLString },
+      },
+      async resolve(parent, args, context) {
+        try {
+          //find email from database with prisma
+          const user = await context.prisma.users.findUnique({
+            where: {
+              email: args.email,
+            },
+          });
+          //compare password
+          const result = await bcrypt.compare(args.password, user.password);
+          if (!result) {
+            throw new Error("Username or password don't match");
+          }
+          //create Token
+          const token = jwt.sign({ email: args.email }, process.env.TOKEN_KEY, {
+            expiresIn: "1h",
+          });
+          return {
+            token,
+            user,
+          };
+        }
+        catch (error){
+          consle.log(new AppError(error));
+        }
       }
-    }
-  }
+    },
+  },
 });
 
 module.exports = new GraphQLSchema({
