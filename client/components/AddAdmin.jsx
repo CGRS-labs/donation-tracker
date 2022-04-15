@@ -27,23 +27,50 @@ export default function SignUp() {
 
   // Get list of chapter ids
   useEffect(async () => {
-    try {
-      const response = await fetch('/api/chapters', {
-        headers: {
-          'authorization': token,
-        }
-      });
-      const data = await response.json();
 
-      // check for response status 200-299
-      if (response.ok) {
-        setChapters(data.chapters);
-      } else {
-        console.error(data);
-      }
-    } catch (err) {
-      console.error(err);
+    const headers = {
+      'content-type': 'application/json',
     };
+
+    const graphqlQuery = {
+      'query': `{
+        chapters{
+          name
+          id
+        }
+      }`,
+    };
+
+    const options = {
+      'method': 'POST',
+      'headers': headers,
+      'body': JSON.stringify(graphqlQuery)
+    };
+
+    fetch('http://localhost:4000/graphql', options)
+      .then(res => res.json())
+      .then(data => setChapters(data.data.chapters))
+      .catch(error => console.log(error));
+
+
+    // --------Old Request to Express Server-----------
+    // try {
+    //   const response = await fetch('/api/chapters', {
+    //     headers: {
+    //       'authorization': token,
+    //     }
+    //   });
+    //   const data = await response.json();
+
+    //   // check for response status 200-299
+    //   if (response.ok) {
+    //     setChapters(data.chapters);
+    //   } else {
+    //     console.error(data);
+    //   }
+    // } catch (err) {
+    //   console.error(err);
+    // };
   }, []);
 
   const handleChange = (event) => {
@@ -55,26 +82,65 @@ export default function SignUp() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const response = await fetch('/api/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'authorization': token,
+    const headers = {
+      "content-type": "application/json",
+    };
+    const graphqlQuery = {
+      query: `mutation addUser ($first_name: String!, $last_name: String!, $email: String!, $password: String!, $chapter_id: Int!) {
+  addUser (first_name: $first_name, last_name: $last_name, email: $email, password: $password, chapter_id: $chapter_id) {
+    first_name
+        }
+      }`,
+      variables: {
+        first_name: inputs.firstName,
+        last_name: inputs.lastName,
+        email: inputs.email,
+        password: inputs.password,
+        chapter_id: inputs.chapterId
       },
-      body: JSON.stringify(inputs),
-    });
+    };
 
-    if (response.ok) {
-      setInputs({
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: '',
-        chapter: '',
-      });
-    } else {
-      console.error(await response.json());
-    }
+    const options = {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify(graphqlQuery),
+    };
+
+    fetch("http://localhost:4000/graphql", options)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        // redirect to the dashboard
+        navigate("/dashboard");
+      })
+      .catch((error) => console.log(error));
+
+    // firstName: '',
+    // lastName: '',
+    // email: '',
+    // password: '',
+    // chapterId: '',
+
+    // const response = await fetch('/api/register', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'authorization': token,
+    //   },
+    //   body: JSON.stringify(inputs),
+    // });
+
+    // if (response.ok) {
+    //   setInputs({
+    //     firstName: '',
+    //     lastName: '',
+    //     email: '',
+    //     password: '',
+    //     chapter: '',
+    //   });
+    // } else {
+    //   console.error(await response.json());
+    // }
 
   };
 
@@ -159,8 +225,8 @@ export default function SignUp() {
                   minWidth: '100%',
                 }}
               >
-                {chapters.map((chapter) => {
-                  return <MenuItem key={chapter} value={chapter.id}>{chapter.name}</MenuItem>;
+                {chapters?.map((chapter, index) => {
+                  return <MenuItem key={index} value={chapter.id}>{chapter.name}</MenuItem>;
                 })}
               </Select>
             </Grid>
