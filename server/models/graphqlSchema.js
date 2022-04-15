@@ -34,7 +34,7 @@ const AuthPayload = new GraphQLObjectType({
 const UserType = new GraphQLObjectType({
   name: 'User',
   fields: ( ) => ({
-    first_name: { type: GraphQLString },
+    first_name: { type: GraphQLString},
     last_name: { type: GraphQLString },
     email: { type: GraphQLString },
     chapter_id: { type: GraphQLInt },
@@ -170,15 +170,15 @@ const Mutation = new GraphQLObjectType({
     addChapter: {
       type: ChapterType,
       args: {
-        name: { type: GraphQLString },
-        street: { type: GraphQLString },
-        city: { type: GraphQLString },
-        state: { type: GraphQLString },
-        zip: { type: GraphQLInt },
-        phone: { type: GraphQLString },
-        email: { type: GraphQLString },
-        longitude: { type: GraphQLFloat },
-        latitude: { type: GraphQLFloat },
+        name: { type: new GraphQLNonNull(GraphQLString) },
+        street: { type: new GraphQLNonNull(GraphQLString) },
+        city: { type: new GraphQLNonNull(GraphQLString) },
+        state: { type: new GraphQLNonNull(GraphQLString) },
+        zip: { type: new GraphQLNonNull(GraphQLString) },
+        phone: { type: new GraphQLNonNull(GraphQLString) },
+        email: { type: new GraphQLNonNull(GraphQLString) },
+        longitude: { type: new GraphQLNonNull(GraphQLFloat) },
+        latitude: { type: new GraphQLNonNull(GraphQLFloat) }
       },
       resolve(parent, args) {
         return db
@@ -204,10 +204,10 @@ const Mutation = new GraphQLObjectType({
     addItem: {
       type: ItemType,
       args: {
-        name: { type: GraphQLString },
-        total_needed: { type: GraphQLInt },
-        total_received: { type: GraphQLInt },
-        category: { type: GraphQLString },
+        name: { type: new GraphQLNonNull(GraphQLString) },
+        total_needed: { type: new GraphQLNonNull(GraphQLInt) },
+        total_received: { type: new GraphQLNonNull(GraphQLInt) },
+        category: { type: new GraphQLNonNull(GraphQLString) },
       },
       resolve(parent, args) {
         return db
@@ -252,11 +252,11 @@ const Mutation = new GraphQLObjectType({
     addUser: {
       type: UserType,
       args: {
-        first_name: { type: GraphQLString },
-        last_name: { type: GraphQLString },
-        email: { type: GraphQLString },
-        password: { type: GraphQLString },
-        chapter_id: { type: GraphQLInt },
+        first_name: { type: new GraphQLNonNull(GraphQLString) },
+        last_name: { type: new GraphQLNonNull(GraphQLString) },
+        email: { type: new GraphQLNonNull(GraphQLString) },
+        password: { type: new GraphQLNonNull(GraphQLString) },
+        chapter_id: { type: new GraphQLNonNull(GraphQLInt) },
       },
       async resolve(parent, args, context) {
         try {
