@@ -7,7 +7,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 
-app = express();
+const app = express();
 app.use(cors());
 
 app.use('/graphql', graphqlHTTP(async (request, response) => ({
@@ -20,4 +20,4 @@ app.use('/graphql', graphqlHTTP(async (request, response) => ({
 }))
 );
 
-app.listen(4000);
+module.exports = app.listen(4000);
