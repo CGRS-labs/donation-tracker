@@ -16,7 +16,7 @@ import useToken from '../../hooks/useToken';
 import { UserContext } from '../../hooks/userContext.js';
 
 
-export default function AddItem(props) {
+export default function AddItem({ updateTable }) {
 
   const [inputs, setInputs] = useState({
     itemId: '',
@@ -40,6 +40,7 @@ export default function AddItem(props) {
     const graphqlQuery = {
       'query': `{
         items{
+          id
           name
           total_needed
           total_received
@@ -90,25 +91,49 @@ export default function AddItem(props) {
     event.preventDefault();
 
     const headers = {
-      "content-type": "application/json",
+      'content-type': 'application/json',
     };
     const graphqlQuery = {
-      query: `mutation addItem ($first_name: String!, $last_name: String!, $email: String!, $password: String!, $chapter_id: Int!) {
-  addItem (first_name: $first_name, last_name: $last_name, email: $email, password: $password, chapter_id: $chapter_id) {
-    first_name
+      query: `mutation updateItem ($item_id: Int!, $total_received: Int!, $chapter_id: Int!) {
+            updateItem (item_id: $item_id, total_received: $total_received, chapter_id: $chapter_id) {
+          items {
+            name
+            total_received
+          }
         }
       }`,
       variables: {
-        name: inputs.firstName,
-
+        item_id: inputs.itemId,
+        chapter_id: user.chapterId,
+        total_received: parseInt(inputs.total_received)
       },
     };
 
     const options = {
-      method: "POST",
+      method: 'POST',
       headers: headers,
       body: JSON.stringify(graphqlQuery),
     };
+
+
+    fetch('http://localhost:4000/graphql', options)
+      .then(res => res.json())
+      .then(data => {
+        setInputs({
+          itemId: '',
+          category: '',
+          quantity: 0,
+        });
+        return updateTable();
+      })
+      .catch(error => console.log(error));
+
+
+    try {
+      const response = await fetch();
+    } catch (error) {
+      
+    }
 
     // try {
 
