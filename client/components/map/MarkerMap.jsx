@@ -18,7 +18,7 @@ export default function MarkerMap({ lat = 40, long = -100, markerData, setSelect
     navigator.geolocation.getCurrentPosition((position) => setCoords([position.coords.latitude, position.coords.longitude]));
   }, []);
 
-  const markers = useMemo(() => markerData.map((marker, index) => (
+  const markers = useMemo(() => markerData?.map((marker, index) => (
     marker.latitude && marker.longitude && <Marker
       key={index}
       longitude={marker.longitude}
