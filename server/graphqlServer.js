@@ -3,11 +3,11 @@ const { graphqlHTTP } = require('express-graphql');
 const schema = require('./models/graphqlSchema');
 const { context } = require('./models/context');
 
-app = express();
+const app = express();
 app.use('/graphql', graphqlHTTP({
   schema: schema,
   graphiql: true,
   context: context,
 }));
 
-app.listen(4000);
+module.exports = app.listen(4000);

@@ -8,7 +8,7 @@
     "dev": "concurrently 'webpack serve --open' 'nodemon server/server.js'",
     "win-dev": "cross-env webpack serve --open",
     "json-dev": "concurrently 'webpack serve --open' 'json-server --watch json-server/db.json --routes json-server/routes.json'",
-    "test": "jest"
+    "test": "jest --detectOpenHandles"
   },
   "repository": {
     "type": "git",
