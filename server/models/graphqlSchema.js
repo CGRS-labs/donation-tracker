@@ -203,11 +203,7 @@ const Mutation = new GraphQLObjectType({
       resolve(parent, args) {
         return db.query('INSERT INTO users (first_name, last_name, email, password, chapter_id) VALUES ($1, $2, $3, $4, $5) RETURNING first_name, last_name, email, chapter_id', [args.first_name, args.last_name, args.email, args.password, args.chapter_id])
           .then(res => res.rows[0])
-<<<<<<< HEAD
-          .catch(err => console.log(err))
-=======
           .catch(err => console.log(err));
->>>>>>> dev
       }
     }
   }
