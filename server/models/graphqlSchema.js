@@ -61,6 +61,14 @@ const ChapterType = new GraphQLObjectType({
         WHERE c.id = $1;`, [chapter.id])
           .then(res => res.rows);
       }
+    },
+    users: {
+      type: new GraphQLList(UserType),
+      resolve(chapter, args) {
+        return db.query(`SELECT email, first_name, last_name FROM users WHERE chapter_id = ($1);`, [chapter.id])
+          .then(res => res.rows)
+          .catch(error => console.log(error));
+      }
     }
   })
 });
