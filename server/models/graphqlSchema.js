@@ -55,9 +55,9 @@ const ChapterType = new GraphQLObjectType({
       type: new GraphQLList(ItemType),
       resolve(chapter, args){
         return db.query(`SELECT i.id as item_id, i.name as name, i.category, ci.total_received, i.total_needed
-        FROM chapter_items ci 
-        LEFT JOIN items i ON ci.item_id = i.id 
-        LEFT JOIN chapters c ON c.id = ci.chapter_id 
+        FROM chapter_items ci
+        LEFT JOIN items i ON ci.item_id = i.id
+        LEFT JOIN chapters c ON c.id = ci.chapter_id
         WHERE c.id = $1;`, [chapter.id])
           .then(res => res.rows);
       }
@@ -160,7 +160,7 @@ const Mutation = new GraphQLObjectType({
         latitude: { type: GraphQLFloat}
       },
       resolve(parent, args){
-        return db.query('INSERT INTO chapters (name, zip, street, city, state, phone, email, latitude, longitude) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *;', 
+        return db.query('INSERT INTO chapters (name, zip, street, city, state, phone, email, latitude, longitude) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *;',
           [args.name, args.zip, args.street, args.city, args.state, args.phone, args.email, args.latitude, args.longitude])
           .then(res => {
             return res.rows[0];
@@ -176,7 +176,7 @@ const Mutation = new GraphQLObjectType({
         category: { type: GraphQLString },
       },
       resolve(parent, args){
-        return db.query('INSERT INTO items (name, total_received, total_needed, category) VALUES ($1, $2, $3, $4) RETURNING *;', 
+        return db.query('INSERT INTO items (name, total_received, total_needed, category) VALUES ($1, $2, $3, $4) RETURNING *;',
           [args.name, args.total_needed, args.total_received, args.category])
           .then(res => {
             return res.rows[0];

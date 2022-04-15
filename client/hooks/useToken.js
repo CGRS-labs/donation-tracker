@@ -1,8 +1,11 @@
 import { useState } from 'react';
-
+//useToken return an obj with setToken which requires an argument, it will set a token string and store it inside sessionStorage
 export default function useToken() {
+  //getToken will get the token string from sessionStorage and return the token
   const getToken = () => {
-    const tokenString = sessionStorage.getItem('token');
+    //sessionStorage stores data inside the brwser similarly to localStorage but sessionStorage will expired once the page session end
+    const tokenString = sessionStorage.getItem("token");
+    //values that store inside sessionStorage is stringify so he parse the data
     const userToken = JSON.parse(tokenString);
     return userToken;
   };
