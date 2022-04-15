@@ -1,83 +1,81 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import WarehouseIcon from '@mui/icons-material/Warehouse';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import useToken from '../../hooks/useToken.js';
-
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import WarehouseIcon from "@mui/icons-material/Warehouse";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import useToken from "../../hooks/useToken.js";
 
 export default function AddChapterPages() {
   const navigate = useNavigate();
   const [inputs, setInputs] = useState({
-    name: '',
-    street: '',
-    city: '',
-    state: '',
-    zip: '',
-    phone: '',
-    email: '',
+    name: "",
+    street: "",
+    city: "",
+    state: "",
+    zip: "",
+    phone: "",
+    email: "",
   });
 
   const mounted = useRef(true);
   // Track when clean up runs to prevent state update in handleSubmit after component unmounts
-  useEffect(() => () => mounted.current = false, []);
+  useEffect(() => () => (mounted.current = false), []);
   const { token } = useToken();
 
   const handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-    setInputs(values => ({ ...values, [name]: value }));
+    setInputs((values) => ({ ...values, [name]: value }));
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const headers = {
-      'content-type': 'application/json',
+      "content-type": "application/json",
     };
 
     const graphqlQuery = {
-      'query': `mutation addChapter ($name: String!, $street: String!, $city: String!, $state: String!, $zip: String!, $phone: String!, $email: String!, $longitude: Float!, $latitude: Float!) {
+      query: `mutation addChapter ($name: String!, $street: String!, $city: String!, $state: String!, $zip: String!, $phone: String!, $email: String!, $longitude: Float!, $latitude: Float!) {
   addChapter (name: $name, street: $street, city: $city, state: $state, zip: $zip, phone: $phone, email: $email, longitude: $longitude, latitude: $latitude) {
     name
         }
       }`,
-      'variables': {
-        "name": inputs.name,
-        "street": inputs.street,
-        "city": inputs.city,
-        "state": inputs.state,
-        "zip": inputs.zip,
-        "phone": inputs.phone,
-        "email": inputs.email,
-        "longitude": -82,
-        "latitude": 42
-      }
+      variables: {
+        name: inputs.name,
+        street: inputs.street,
+        city: inputs.city,
+        state: inputs.state,
+        zip: inputs.zip,
+        phone: inputs.phone,
+        email: inputs.email,
+        longitude: -82,
+        latitude: 42,
+      },
     };
-    
 
     const options = {
-      'method': 'POST',
-      'headers': headers,
-      'body': JSON.stringify(graphqlQuery)
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify(graphqlQuery),
     };
 
-    fetch('http://localhost:4000/graphql', options)
-      .then(res => res.json())
-      .then(data => {
+    fetch("http://localhost:4000/graphql", options)
+      .then((res) => res.json())
+      .then((data) => {
         console.log(data);
         // redirect to the dashboard
-        navigate('/dashboard');
+        navigate("/dashboard");
       })
-      .catch(error => console.log(error));
+      .catch((error) => console.log(error));
 
-      //-----Old Request to Express Server-------
-      /*
+    //-----Old Request to Express Server-------
+    /*
     const response = await fetch('/api/chapters', {
       method: 'POST',
       headers: {
@@ -111,18 +109,24 @@ export default function AddChapterPages() {
       <Box
         sx={{
           marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'warning.main' }}>
+        <Avatar sx={{ m: 1, bgcolor: "warning.main" }}>
           <WarehouseIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
           Add a New Chapter
         </Typography>
-        <Box id='chapter-form' component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+        <Box
+          id="chapter-form"
+          component="form"
+          noValidate
+          onSubmit={handleSubmit}
+          sx={{ mt: 3 }}
+        >
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
