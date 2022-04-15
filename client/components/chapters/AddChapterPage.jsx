@@ -34,62 +34,34 @@ export default function AddChapterPages() {
     setInputs(values => ({ ...values, [name]: value }));
   };
 
-  
   const handleSubmit = async (event) => {
     event.preventDefault();
-/*
-    const headers = {
-      'content-type': 'application/json',
-    };
 
-    const graphqlQuery = {
-      'mutation': `{
-        addChapter()
-      }`,
-    };
+    const response = await fetch('/api/chapters', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token
+      },
+      body: JSON.stringify(inputs),
+    });
 
-    const options = {
-      'method': 'POST',
-      'headers': headers,
-      'body': JSON.stringify(graphqlQuery)
-    };
-
-    fetch('http://localhost:4000/graphql', options)
-      .then(res => res.json())
-      .then(data => {
-        const filteredItems = data.data.items.filter((item) => {
-          return (item.total_needed - item.total_received) > 0;
+    if (response.ok)
+      if (mounted.current) {
+        setInputs({
+          name: '',
+          street: '',
+          city: '',
+          state: '',
+          zip: '',
+          phone: '',
+          email: '',
         });
-        setItems(filteredItems);
-      })
-      .catch(error => console.log(error));
-*/
-    // const response = await fetch('/api/chapters', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'Authorization': token
-    //   },
-    //   body: JSON.stringify(inputs),
-    // });
-
-    // if (response.ok)
-    //   if (mounted.current) {
-    //     setInputs({
-    //       name: '',
-    //       street: '',
-    //       city: '',
-    //       state: '',
-    //       zip: '',
-    //       phone: '',
-    //       email: '',
-    //     });
         // redirect to the dashboard
-        // ------------------------------------UNCOMMENT THIS LINE!-----------------------------------
-        // navigate('/dashboard');
-      // } else {
-      //   console.error(await response.json());
-      // }
+        navigate('/dashboard');
+      } else {
+        console.error(await response.json());
+      }
   };
 
   return (
