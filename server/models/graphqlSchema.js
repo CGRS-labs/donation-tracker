@@ -170,7 +170,6 @@ const Mutation = new GraphQLObjectType({
     addChapter: {
       type: ChapterType,
       args: {
-<<<<<<< HEAD
         name: { type: new GraphQLNonNull(GraphQLString) },
         street: { type: new GraphQLNonNull(GraphQLString) },
         city: { type: new GraphQLNonNull(GraphQLString) },
@@ -180,17 +179,6 @@ const Mutation = new GraphQLObjectType({
         email: { type: new GraphQLNonNull(GraphQLString) },
         longitude: { type: new GraphQLNonNull(GraphQLFloat) },
         latitude: { type: new GraphQLNonNull(GraphQLFloat) }
-=======
-        name: { type: GraphQLString },
-        street: { type: GraphQLString },
-        city: { type: GraphQLString },
-        state: { type: GraphQLString },
-        zip: { type: GraphQLInt },
-        phone: { type: GraphQLString },
-        email: { type: GraphQLString },
-        longitude: { type: GraphQLFloat },
-        latitude: { type: GraphQLFloat },
->>>>>>> dev
       },
       resolve(parent, args) {
         return db
@@ -216,17 +204,10 @@ const Mutation = new GraphQLObjectType({
     addItem: {
       type: ItemType,
       args: {
-<<<<<<< HEAD
         name: { type: new GraphQLNonNull(GraphQLString) },
         total_needed: { type: new GraphQLNonNull(GraphQLInt) },
         total_received: { type: new GraphQLNonNull(GraphQLInt) },
         category: { type: new GraphQLNonNull(GraphQLString) },
-=======
-        name: { type: GraphQLString },
-        total_needed: { type: GraphQLInt },
-        total_received: { type: GraphQLInt },
-        category: { type: GraphQLString },
->>>>>>> dev
       },
       resolve(parent, args) {
         return db
