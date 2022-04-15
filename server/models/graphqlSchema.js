@@ -1,5 +1,11 @@
 const graphql = require('graphql');
 const db = require('../models.js');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+const jwt = require("jsonwebtoken");
+const AppError = require('../utils/AppError');
+require('dotenv').config();
+
 
 const {
   GraphQLObjectType,
@@ -11,6 +17,14 @@ const {
   GraphQLList,
   GraphQLNonNull
 } = graphql;
+
+const AuthPayload = new GraphQLObjectType({
+  name: "AuthPayload",
+  fields: () => ({
+    token: { type: GraphQLString },
+    user: { type: UserType }
+  }),
+});
 
 // "password" varchar(255) NOT NULL,
 // "email" varchar(255) NOT NULL UNIQUE,
@@ -65,7 +79,7 @@ const ChapterType = new GraphQLObjectType({
     users: {
       type: new GraphQLList(UserType),
       resolve(chapter, args) {
-        return db.query(`SELECT email, first_name, last_name FROM users WHERE chapter_id = ($1);`, [chapter.id])
+        return db.query('SELECT email, first_name, last_name FROM users WHERE chapter_id = ($1);', [chapter.id])
           .then(res => res.rows)
           .catch(error => console.log(error));
       }
@@ -191,6 +205,33 @@ const Mutation = new GraphQLObjectType({
           });
       }
     },
+    signUp: {
+      type: AuthPayload,
+      args: {
+        first_name: { type: GraphQLString },
+        last_name: { type: GraphQLString },
+        email: { type: GraphQLString },
+        password: { type: GraphQLString },
+        chapter_id: { type: GraphQLInt },
+      },
+      async resolve(parent, args, context) {
+        try {
+          const password = await bcrypt.hash(args.password, saltRounds);
+          const user = await context.prisma.users.create({
+            data:{ ...args, password},
+          });
+
+          const token = jwt.sign({ email: args.email }, process.env.TOKEN_KEY, { expiresIn: '1h' });
+
+          return{
+            token,
+            user
+          };
+        } catch (error) {
+          throw new AppError(error);
+        }
+      }
+    },
     addUser: {
       type: UserType,
       args: {
@@ -200,10 +241,17 @@ const Mutation = new GraphQLObjectType({
         password: { type: GraphQLString },
         chapter_id: { type: GraphQLInt },
       },
-      resolve(parent, args) {
-        return db.query('INSERT INTO users (first_name, last_name, email, password, chapter_id) VALUES ($1, $2, $3, $4, $5) RETURNING first_name, last_name, email, chapter_id', [args.first_name, args.last_name, args.email, args.password, args.chapter_id])
-          .then(res => res.rows[0])
-          .catch(err => console.log(err));
+      async resolve(parent, args, context) {
+        try {
+          const password = await bcrypt.hash(args.password, saltRounds);
+          const user = await context.prisma.users.create({
+            data:{ ...args, password},
+          });
+
+          return user;
+        } catch (error) {
+          throw new AppError(error);
+        }
       }
     }
   }

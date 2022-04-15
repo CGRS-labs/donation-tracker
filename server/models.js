@@ -2,9 +2,6 @@
 // const pgp = require('pg-promise')();
 // const db = pgp(connectionString);
 
-// module.exports = {db};
-
-const dotenv = require('dotenv');
 require('dotenv').config();
 
 

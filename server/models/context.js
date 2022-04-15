@@ -6,6 +6,4 @@ const context = {
   prisma: prisma,
 };
 
-module.exports = {
-  context: context,
-};
+module.exports = prisma;
