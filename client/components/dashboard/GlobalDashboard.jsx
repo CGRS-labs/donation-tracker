@@ -29,8 +29,31 @@ function DashboardContent({ form, chart, table }) {
   }, []);
 
   const getTableData = async () => {
+    const headers = {
+      'content-type': 'application/json'
+    };
+
+    const graphqlQuery = {
+      query: `query {
+        items {
+              id,
+              name,
+              total_needed,
+              total_received,
+              category
+        }
+      }`,
+    };
+
+    const options = {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify(graphqlQuery),
+      // Add Authorization
+    };
+
     try {
-      const response = await fetch('/api/items');
+      const response = await fetch('http://localhost:4000/graphql', options);
       const data = await response.json();
       if (response.ok) {
         if (mounted.current) {
