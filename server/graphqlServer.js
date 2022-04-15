@@ -1,17 +1,23 @@
 const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
 const schema = require('./models/graphqlSchema');
-const { context } = require('./models/context');
 const cors = require('cors');
+const { PrismaClient } = require('@prisma/client');
+
+const prisma = new PrismaClient();
 
 
-app = express();
+const app = express();
 app.use(cors());
 
-app.use('/graphql', graphqlHTTP({
+app.use('/graphql', graphqlHTTP(async (request, response) => ({
   schema: schema,
   graphiql: true,
-  context: context,
-}));
+  context: {
+    prisma,
+    request
+  },
+}))
+);
 
-app.listen(4000);
+module.exports = app.listen(4000);
