@@ -5,7 +5,7 @@ const { context } = require('./models/context');
 const cors = require('cors');
 
 
-app = express();
+const app = express();
 app.use(cors());
 
 app.use('/graphql', graphqlHTTP({
@@ -14,4 +14,4 @@ app.use('/graphql', graphqlHTTP({
   context: context,
 }));
 
-app.listen(4000);
+module.exports = app.listen(4000);
