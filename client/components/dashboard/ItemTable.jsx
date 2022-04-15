@@ -12,7 +12,7 @@ import AlertTitle from '@mui/material/AlertTitle';
 import useToken from '../../hooks/useToken';
 import { UserContext } from '../../hooks/userContext';
 
-export default function ItemTable(props) {
+export default function ItemTable({ tableData, updateTable }) {
   const [pageSize, setPageSize] = useState(15);
   const { token } = useToken();
   const { user } = useContext(UserContext);
@@ -35,7 +35,7 @@ export default function ItemTable(props) {
       });
 
       if (response.ok) {
-        props.updateTable();
+        updateTable();
       }
 
     } catch (err) {
@@ -61,7 +61,7 @@ export default function ItemTable(props) {
       });
 
       if (response.ok) {
-        props.updateTable();
+        updateTable();
       }
 
     } catch (err) {
@@ -87,7 +87,7 @@ export default function ItemTable(props) {
         //   <AlertTitle>Success</AlertTitle>
         //   This item has been shipped — <strong>Thanks for your donation!</strong>
         // </Alert>;
-        props.updateTable();
+        updateTable();
       }
 
     } catch (err) {
@@ -136,7 +136,7 @@ export default function ItemTable(props) {
             color="warning"
             onClick={(event) => {
               shipIt(event, cellValues);
-              props.updateTable();
+              updateTable();
             }}
           >< RocketLaunchIcon /></IconButton>
         );
@@ -147,12 +147,12 @@ export default function ItemTable(props) {
   return (
     <div style={{ height: 500, width: '100%' }}>
       <DataGrid
-        rows={props.tableData}
+        rows={tableData}
         columns={columns}
         pageSize={pageSize}
         rowsPerPageOptions={[5, 15, 50]}
         onPageSizeChange={(newPageSize) => setPageSize()}
-        updateTable={props.updateTable} />
+        updateTable={updateTable} />
     </div>
   );
 }
