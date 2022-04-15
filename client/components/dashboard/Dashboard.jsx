@@ -26,12 +26,42 @@ function DashboardContent() {
 
   const updateTable = async () => {
     if (!user) return;
+
+    const headers = {
+      'content-type': 'application/json'
+    };
+
+    const graphqlQuery = {
+      query: `query chapter ($id: Int!) {
+          chapter (id: $id) {
+            items {
+              item_id: id,
+              name,
+              total_needed,
+              total_received,
+              category
+            }
+          }
+        }`,
+      variables: {
+        id: user.chapterId
+      },
+    };
+
+    const options = {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify(graphqlQuery),
+      // Add Authorization
+    };
+
     try {
-      const response = await fetch(`/api/chapters/${user.chapterId}/items`);
+      const response = await fetch('http://localhost:4000/graphql', options);
       const data = await response.json();
       if (response.ok) {
         if (mounted.current) {
-          setTableData(data.chapterItems);
+          console.log(data.data);
+          setTableData(data.data.chapter.items);
         }
       } else {
         console.error(data);
