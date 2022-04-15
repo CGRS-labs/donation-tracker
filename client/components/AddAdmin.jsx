@@ -15,6 +15,9 @@ import { InputLabel, Select } from '@mui/material';
 import useToken from '../hooks/useToken';
 
 export default function SignUp() {
+
+  const navigate = useNavigate();
+
   const [inputs, setInputs] = useState({
     firstName: '',
     lastName: '',

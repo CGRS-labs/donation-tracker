@@ -31,20 +31,49 @@ export default function AddItem(props) {
   const canSave = inputs.category !== '' && inputs.itemId > -1 && inputs.total_received !== 0;
 
   useEffect(async () => {
-    try {
-      const response = await fetch('/api/items/');
-      const data = await response.json();
 
-      if (response.ok) {
-        if (mounted.current) {
-          setSelectItems(data.items);
+    
+    const headers = {
+      'content-type': 'application/json',
+    };
+
+    const graphqlQuery = {
+      'query': `{
+        items{
+          name
+          total_needed
+          total_received
+          category
         }
-      } else {
-        console.error(data.error);
-      }
-    } catch (err) {
-      console.error(err);
-    }
+      }`,
+    };
+
+    const options = {
+      'method': 'POST',
+      'headers': headers,
+      'body': JSON.stringify(graphqlQuery)
+    };
+
+    fetch('http://localhost:4000/graphql', options)
+      .then(res => res.json())
+      .then(data => setSelectItems(data.data.items))
+      .catch(error => console.log(error));
+
+
+    // try {
+    //   const response = await fetch('/api/items/');
+    //   const data = await response.json();
+
+    //   if (response.ok) {
+    //     if (mounted.current) {
+    //       setSelectItems(data.items);
+    //     }
+    //   } else {
+    //     console.error(data.error);
+    //   }
+    // } catch (err) {
+    //   console.error(err);
+    // }
 
     // Track when cleanup runs to prevent state update in handleSubmit after component unmounts
     return () => () => mounted.current = false;
@@ -59,32 +88,54 @@ export default function AddItem(props) {
   const handleSubmit = async (event) => {
     if (!canSave) return;
     event.preventDefault();
-    try {
 
-      const response = await fetch(`/api/chapters/${user.chapterId}/items/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': token
-        },
-        body: JSON.stringify(inputs),
-      });
-      if (response.ok) {
-        if (mounted.current) {
-          setInputs({
-            itemId: '',
-            category: '',
-            quantity: 0,
-          });
+    const headers = {
+      "content-type": "application/json",
+    };
+    const graphqlQuery = {
+      query: `mutation addItem ($first_name: String!, $last_name: String!, $email: String!, $password: String!, $chapter_id: Int!) {
+  addItem (first_name: $first_name, last_name: $last_name, email: $email, password: $password, chapter_id: $chapter_id) {
+    first_name
         }
-        // A NEW GET REQUEST IS NEEDED TO FETCH TABLE DATA ONCE THIS ITEM IS ADDED
-        props.updateTable();
-      } else {
-        console.error(await response.json());
-      }
-    } catch (err) {
-      console.error(err);
-    }
+      }`,
+      variables: {
+        name: inputs.firstName,
+
+      },
+    };
+
+    const options = {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify(graphqlQuery),
+    };
+
+    // try {
+
+    //   const response = await fetch(`/api/chapters/${user.chapterId}/items/`, {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       'Authorization': token
+    //     },
+    //     body: JSON.stringify(inputs),
+    //   });
+    //   if (response.ok) {
+    //     if (mounted.current) {
+    //       setInputs({
+    //         itemId: '',
+    //         category: '',
+    //         quantity: 0,
+    //       });
+    //     }
+    //     // A NEW GET REQUEST IS NEEDED TO FETCH TABLE DATA ONCE THIS ITEM IS ADDED
+    //     props.updateTable();
+    //   } else {
+    //     console.error(await response.json());
+    //   }
+    // } catch (err) {
+    //   console.error(err);
+    // }
   };
 
   const menuItems = selectItems
