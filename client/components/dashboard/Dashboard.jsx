@@ -35,7 +35,7 @@ function DashboardContent() {
       query: `query chapter ($id: Int!) {
           chapter (id: $id) {
             items {
-              item_id: id,
+              id,
               name,
               total_needed,
               total_received,
