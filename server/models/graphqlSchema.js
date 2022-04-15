@@ -20,7 +20,6 @@ const {
 const UserType = new GraphQLObjectType({
   name: 'User',
   fields: ( ) => ({
-    id: { type: GraphQLInt },
     first_name: { type: GraphQLString },
     last_name: { type: GraphQLString },
     email: { type: GraphQLString },
@@ -89,7 +88,7 @@ const RootQuery = new GraphQLObjectType({
       },
       resolve(parent, args) {
         return db.query('SELECT * FROM items WHRE id = ', args.id)
-          .then(res => res.rows[0])
+          .then(res => res.rows[0]);
       }
     },
     chapter:{
@@ -99,16 +98,16 @@ const RootQuery = new GraphQLObjectType({
       },
       resolve(parent, args) {
         return db.query('SELECT * FROM chapters WHERE id = $1', [args.id])
-          .then(res => res.rows[0])
+          .then(res => res.rows[0]);
       }
     },
     user: {
       type: UserType,
       args: {
-        id: { type: GraphQLInt }
+        email: { type: GraphQLString }
       },
       resolve(parent, args) {
-        return db.query('SELECT * FROM users WHERE id = $1;', [args.id])
+        return db.query('SELECT * FROM users WHERE email = $1;', [args.email])
           .then(res => {
             return res.rows[0];
           });
@@ -180,7 +179,7 @@ const Mutation = new GraphQLObjectType({
         return db.query('INSERT INTO items (name, total_received, total_needed, category) VALUES ($1, $2, $3, $4) RETURNING *;', 
           [args.name, args.total_needed, args.total_received, args.category])
           .then(res => {
-            return res.rows[0]
+            return res.rows[0];
           });
       }
     },
@@ -193,11 +192,11 @@ const Mutation = new GraphQLObjectType({
         password: { type: GraphQLString },
         chapter_id: { type: GraphQLInt },
       },
-        resolve(parent, args) {
-          return db.query('INSERT INTO users (first_name, last_name, email, password, chapter_id) VALUES ($1, $2, $3, $4, $5) RETURNING first_name, last_name, email, chapter_id', [args.first_name, args.last_name, args.email, args.password, args.chapter_id])
-            .then(res => res.rows[0])
-            .catch(err => console.log(err))
-        }
+      resolve(parent, args) {
+        return db.query('INSERT INTO users (first_name, last_name, email, password, chapter_id) VALUES ($1, $2, $3, $4, $5) RETURNING first_name, last_name, email, chapter_id', [args.first_name, args.last_name, args.email, args.password, args.chapter_id])
+          .then(res => res.rows[0])
+          .catch(err => console.log(err));
+      }
     }
   }
 });
