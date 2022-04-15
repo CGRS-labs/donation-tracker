@@ -161,7 +161,7 @@ const Mutation = new GraphQLObjectType({
         street: { type: new GraphQLNonNull(GraphQLString) },
         city: { type: new GraphQLNonNull(GraphQLString) },
         state: { type: new GraphQLNonNull(GraphQLString) },
-        zip: { type: new GraphQLNonNull(GraphQLInt) },
+        zip: { type: new GraphQLNonNull(GraphQLString) },
         phone: { type: new GraphQLNonNull(GraphQLString) },
         email: { type: new GraphQLNonNull(GraphQLString) },
         longitude: { type: new GraphQLNonNull(GraphQLFloat) },
