@@ -61,7 +61,7 @@ export default function Login() {
     fetch('http://localhost:4000/graphql', options)
       .then(res => res.json())
       .then(res => {
-        console.log(res.data.login);
+        // console.log(res.data.login);
         setInputs({
           email: '',
           password: '',
