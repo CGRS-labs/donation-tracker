@@ -65,43 +65,13 @@ export default function AddChapterPages() {
       body: JSON.stringify(graphqlQuery),
     };
 
-    fetch('http://localhost:4000/graphql', options)
+    fetch('/graphql', options)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         // redirect to the dashboard
         navigate('/dashboard');
       })
       .catch((error) => console.log(error));
-
-    //-----Old Request to Express Server-------
-    /*
-    const response = await fetch('/api/chapters', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': token
-      },
-      body: JSON.stringify(inputs),
-    });
-
-    if (response.ok)
-      if (mounted.current) {
-        setInputs({
-          name: '',
-          street: '',
-          city: '',
-          state: '',
-          zip: '',
-          phone: '',
-          email: '',
-        });
-        // redirect to the dashboard
-        navigate('/dashboard');
-      } else {
-        console.error(await response.json());
-      }
-      */
   };
 
   return (

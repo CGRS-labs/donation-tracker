@@ -29,8 +29,6 @@ export default function Login() {
     const value = event.target.value;
     setInputs(values => ({ ...values, [name]: value }));
   };
-  //change this to graphQl
-    //
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -58,10 +56,9 @@ export default function Login() {
       body: JSON.stringify(graphqlQuery),
     };
 
-    fetch('http://localhost:4000/graphql', options)
+    fetch('/graphql', options)
       .then(res => res.json())
       .then(res => {
-        // console.log(res.data.login);
         setInputs({
           email: '',
           password: '',
