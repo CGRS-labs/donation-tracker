@@ -29,10 +29,10 @@ export default function Login() {
     const value = event.target.value;
     setInputs(values => ({ ...values, [name]: value }));
   };
-
+  //change this to graphQl
+    //
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     const response = await fetch('/api/login', {
       method: 'POST',
       headers: {
