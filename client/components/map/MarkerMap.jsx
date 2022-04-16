@@ -18,6 +18,10 @@ export default function MarkerMap({ lat = 40, long = -100, markerData, setSelect
     navigator.geolocation.getCurrentPosition((position) => setCoords([position.coords.latitude, position.coords.longitude]));
   }, []);
 
+  useEffect(() => {
+    console.log(markerData)
+  }, [markerData]);
+
   const markers = useMemo(() => markerData?.map((marker, index) => (
     marker.latitude && marker.longitude && <Marker
       key={index}

@@ -10,19 +10,25 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
+// statically serve everything in the build folder on the route '/build' when using production build
+app.use('/build/bundle.js', express.static(path.join(__dirname, '../build/bundle.js')));
+
+// send requests to appropriate router
+app.use('/api', apiRouter);
+
 // serve index.html file
-app.get('/', (req, res, next) => {
+app.get('/*', (req, res, next) => {
   // TODO: Is this necessary with webpack dev server
   return res.status(200).sendFile(path.resolve(__dirname, '../client/index.html'));
 });
-
-app.use('/api', apiRouter);
 
 // 404 handler
 app.use((req, res) => {
   console.log(`ERROR: 404 Bad request ${req.method} ${req.url}`);
   return res.status(404).send(`Error 404: ${req.url} not found`);
 });
+
 
 // Global error handler
 app.use((err, req, res, next) => {
