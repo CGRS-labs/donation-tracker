@@ -54,8 +54,8 @@ export default function AddChapterPages() {
         zip: inputs.zip,
         phone: inputs.phone,
         email: inputs.email,
-        longitude: -82,
-        latitude: 42,
+        // longitude: -82,
+        // latitude: 42,
       },
     };
 

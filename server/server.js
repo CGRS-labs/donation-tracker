@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require('express');
+const { graphQLServer, graphQLGeoMiddleWare } = require('./graphqlServer');
 require('dotenv').config();
 
 const apiRouter = require('./routes/api');
@@ -17,6 +18,9 @@ app.get('/', (req, res, next) => {
 });
 
 app.use('/api', apiRouter);
+
+// GraphQL Server and Middleware
+app.use('/graphql', graphQLGeoMiddleWare ,graphQLServer);
 
 // 404 handler
 app.use((req, res) => {
