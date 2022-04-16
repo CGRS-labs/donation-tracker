@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use(async (req, res, next) => {
-  if (req.body.query.split(' ')[1] === 'addChapter') {
+  if (req.body.query && req.body.query.split(' ')[1] === 'addChapter') {
     await chapterMiddleware.getGeocode(req, res, next);
     return next();
   } 

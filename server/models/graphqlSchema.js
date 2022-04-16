@@ -67,7 +67,7 @@ const ChapterType = new GraphQLObjectType({
     items: {
       type: new GraphQLList(ItemType),
       resolve(chapter, args){
-        return db.query(`SELECT i.id as item_id, i.name as name, i.category, ci.total_received, i.total_needed
+        return db.query(`SELECT i.id as id, i.name as name, i.category, ci.total_received, i.total_needed
         FROM chapter_items ci
         LEFT JOIN items i ON ci.item_id = i.id
         LEFT JOIN chapters c ON c.id = ci.chapter_id
