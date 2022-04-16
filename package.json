@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon server/server.js",
-    "dev": "concurrently 'webpack serve --open' 'nodemon server/server.js'",
+    "dev": "concurrently 'webpack serve --open' 'nodemon server/server.js' 'nodemon server/graphqlServer.js'",
     "win-dev": "cross-env webpack serve --open",
     "json-dev": "concurrently 'webpack serve --open' 'json-server --watch json-server/db.json --routes json-server/routes.json'",
    "test": "jest --detectOpenHandles",
