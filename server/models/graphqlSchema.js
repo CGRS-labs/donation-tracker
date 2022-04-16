@@ -27,11 +27,6 @@ const AuthPayload = new GraphQLObjectType({
   }),
 });
 
-// "password" varchar(255) NOT NULL,
-// "email" varchar(255) NOT NULL UNIQUE,
-// "chapter_id" integer NOT NULL,
-// "first_name" varchar(255) NOT NULL,
-// "last_name" varchar(255) NOT NULL,
 const UserType = new GraphQLObjectType({
   name: 'User',
   fields: ( ) => ({
@@ -207,14 +202,15 @@ const Mutation = new GraphQLObjectType({
       type: ItemType,
       args: {
         name: { type: new GraphQLNonNull(GraphQLString) },
-        total_needed: { type: new GraphQLNonNull(GraphQLInt) },
         category: { type: new GraphQLNonNull(GraphQLString) },
+        total_needed: { type: new GraphQLNonNull(GraphQLInt) },
+        total_received: { type: new GraphQLNonNull(GraphQLInt) }
       },
       resolve(parent, args) {
         return db
           .query(
-            'INSERT INTO items (name, total_needed, category) VALUES ($1, $2, $3) RETURNING *;',
-            [args.name, args.total_needed, args.category]
+            'INSERT INTO items (name, category, total_needed, total_received) VALUES ($1, $2, $3, $4) RETURNING *;',
+            [args.name, args.category, args.total_needed, args.total_received]
           )
           .then((res) => {
             return res.rows[0];
