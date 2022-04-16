@@ -60,7 +60,8 @@ function DashboardContent() {
       const data = await response.json();
       if (response.ok) {
         if (mounted.current) {
-          setTableData(data.data.chapter.items);
+          const sortedData = data.data.chapter.items.sort((a,b) => a.id - b.id);
+          setTableData(sortedData);
         }
       } else {
         console.error(data);

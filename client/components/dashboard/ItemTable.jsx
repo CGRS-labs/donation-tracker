@@ -12,62 +12,78 @@ import AlertTitle from '@mui/material/AlertTitle';
 import useToken from '../../hooks/useToken';
 import { UserContext } from '../../hooks/userContext';
 
-export default function ItemTable(props) {
+export default function ItemTable({ updateTable, tableData }) {
   const [pageSize, setPageSize] = useState(15);
   const { token } = useToken();
   const { user } = useContext(UserContext);
 
-  const increment = async (event, cellValues) => {
+  const modify = async (event, cellValues, method) => {
     event.preventDefault();
 
     const itemId = cellValues.id;
-    const total = cellValues.row.total_received + 1;
+    const total = method === 'increment' ? 1 : -1;
     console.log(cellValues, 'total', cellValues.row.total_received);
 
-    try {
-      const response = await fetch(`/api/chapters/${user.chapterId}/items/${itemId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': token,
-        },
-        body: JSON.stringify({ total_received: total }),
-      });
+    const headers = {
+      'content-type': 'application/json',
+    };
+    const graphqlQuery = {
+      query: `mutation updateItem ($item_id: Int!, $total_received: Int!, $chapter_id: Int!) {
+            updateItem (item_id: $item_id, total_received: $total_received, chapter_id: $chapter_id) {
+          items {
+            name
+            total_received
+          }
+        }
+      }`,
+      variables: {
+        item_id: itemId,
+        chapter_id: user.chapterId,
+        total_received: total
+      },
+    };
 
-      if (response.ok) {
-        props.updateTable();
-      }
+    const options = {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify(graphqlQuery),
+    };
 
-    } catch (err) {
-      console.log(err);
-    }
+
+    fetch('http://localhost:4000/graphql', options)
+      .then(res => res.json())
+      .then(() => {
+        
+        return updateTable();
+      })
+      .catch(error => console.log(error));
   };
 
-  const decrement = async (event, cellValues) => {
-    event.preventDefault();
+  // const decrement = async (event, cellValues) => {
+  //   event.preventDefault();
 
-    const itemId = cellValues.id;
-    const total = cellValues.row.total_received - 1;
-    console.log(cellValues, 'total', cellValues.row.total_received);
+  //   const itemId = cellValues.id;
+  //   const total = cellValues.row.total_received - 1;
+  //   console.log(cellValues, 'total', cellValues.row.total_received);
 
-    try {
-      const response = await fetch(`/api/chapters/${user.chapterId}/items/${itemId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': token,
-        },
-        body: JSON.stringify({ total_received: total }),
-      });
+  //   try {
+  //     const response = await fetch(`/api/chapters/${user.chapterId}/items/${itemId}`, {
+  //       method: 'PUT',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'Authorization': token,
+  //       },
+  //       body: JSON.stringify({ total_received: total }),
+  //     });
 
-      if (response.ok) {
-        props.updateTable();
-      }
+  //     if (response.ok) {
+  //       updateTable();
+  //     }
 
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   const shipIt = async (event, cellValues) => {
     event.preventDefault();
@@ -87,7 +103,7 @@ export default function ItemTable(props) {
         //   <AlertTitle>Success</AlertTitle>
         //   This item has been shipped — <strong>Thanks for your donation!</strong>
         // </Alert>;
-        props.updateTable();
+        updateTable();
       }
 
     } catch (err) {
@@ -111,7 +127,7 @@ export default function ItemTable(props) {
                 variant="contained"
                 color="primary"
                 onClick={(event) => {
-                  increment(event, cellValues);
+                  modify(event, cellValues, 'increment');
                 }}
               >< AddCircleIcon /></IconButton>
             </span>
@@ -120,7 +136,7 @@ export default function ItemTable(props) {
                 variant="contained"
                 color="primary"
                 onClick={(event) => {
-                  decrement(event, cellValues);
+                  modify(event, cellValues, 'decrement');
                 }}
               >< RemoveCircleIcon /></IconButton>
             </span>
@@ -136,7 +152,7 @@ export default function ItemTable(props) {
             color="warning"
             onClick={(event) => {
               shipIt(event, cellValues);
-              props.updateTable();
+              updateTable();
             }}
           >< RocketLaunchIcon /></IconButton>
         );
@@ -147,12 +163,12 @@ export default function ItemTable(props) {
   return (
     <div style={{ height: 500, width: '100%' }}>
       <DataGrid
-        rows={props.tableData}
+        rows={tableData}
         columns={columns}
         pageSize={pageSize}
         rowsPerPageOptions={[5, 15, 50]}
         onPageSizeChange={(newPageSize) => setPageSize()}
-        updateTable={props.updateTable} />
+        updateTable={updateTable} />
     </div>
   );
 }
