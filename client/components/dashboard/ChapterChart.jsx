@@ -65,9 +65,7 @@ export default function Chart({ itemData }) {
         }, {});
 
         if (mounted) setCategorizedItems(catCount);
-        // } else {
-        //   console.error(data);
-        // }
+        
       } catch (err) {
         console.error(err);
       }
@@ -75,12 +73,6 @@ export default function Chart({ itemData }) {
 
     return () => mounted = false;
   }, [itemData]);
-
-  // const datasets = categories.map((cat, i) => ({
-  //   label: cat,
-  //   data: chapters.map((chapter) => chapter.catCount[cat]),
-  //   backgroundColor: backgroundColors[i % backgroundColors.length],
-  // }));
 
   const datasets = [{
     label: 'All Categories',
