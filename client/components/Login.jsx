@@ -29,34 +29,48 @@ export default function Login() {
     const value = event.target.value;
     setInputs(values => ({ ...values, [name]: value }));
   };
-
+  //change this to graphQl
+    //
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const response = await fetch('/api/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
+    const graphqlQuery = {
+      query: `mutation login ($email: String!, $password: String!) {
+      login (email: $email, password: $password) {
+        user {
+          first_name
+          last_name
+          email
+          chapter_id
+        }
+        token
+      }
+    }`,
+      variables: {
+        email: inputs.email,
+        password: inputs.password,
       },
-      body: JSON.stringify(inputs),
-    });
+    };
 
-    const data = await response.json();
-    if (response.ok) {
-      setInputs({
-        email: '',
-        password: '',
-      });
+    const options = {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(graphqlQuery),
+    };
 
-      // store the token in session storage
-      setToken(data.token);
-      setUser({
-        ...data.user
-      });
-      navigate(location.state?.path || '/chapter/dashboard');
-
-    }
-
+    fetch('http://localhost:4000/graphql', options)
+      .then(res => res.json())
+      .then(res => {
+        console.log(res.data.login);
+        setInputs({
+          email: '',
+          password: '',
+        });
+        setToken(res.data.login.token);
+        setUser({...res.data.login.user});
+        navigate(location.state?.path || '/chapter/dashboard');
+      })
+      .catch(err => console.log(err));
   };
 
   return (

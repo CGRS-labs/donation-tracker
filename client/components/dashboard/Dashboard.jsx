@@ -44,7 +44,7 @@ function DashboardContent() {
           }
         }`,
       variables: {
-        id: user.chapterId
+        id: user.chapter_id || user.chapterId
       },
     };
 
