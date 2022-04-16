@@ -17,11 +17,11 @@ export default function ItemTable({ updateTable, tableData }) {
   const { token } = useToken();
   const { user } = useContext(UserContext);
 
-  const increment = async (event, cellValues) => {
+  const modify = async (event, cellValues, method) => {
     event.preventDefault();
 
     const itemId = cellValues.id;
-    const total = cellValues.row.total_received + 1;
+    const total = method === 'increment' ? 1 : -1;
     console.log(cellValues, 'total', cellValues.row.total_received);
 
     const headers = {
@@ -59,31 +59,31 @@ export default function ItemTable({ updateTable, tableData }) {
       .catch(error => console.log(error));
   };
 
-  const decrement = async (event, cellValues) => {
-    event.preventDefault();
+  // const decrement = async (event, cellValues) => {
+  //   event.preventDefault();
 
-    const itemId = cellValues.id;
-    const total = cellValues.row.total_received - 1;
-    console.log(cellValues, 'total', cellValues.row.total_received);
+  //   const itemId = cellValues.id;
+  //   const total = cellValues.row.total_received - 1;
+  //   console.log(cellValues, 'total', cellValues.row.total_received);
 
-    try {
-      const response = await fetch(`/api/chapters/${user.chapterId}/items/${itemId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': token,
-        },
-        body: JSON.stringify({ total_received: total }),
-      });
+  //   try {
+  //     const response = await fetch(`/api/chapters/${user.chapterId}/items/${itemId}`, {
+  //       method: 'PUT',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'Authorization': token,
+  //       },
+  //       body: JSON.stringify({ total_received: total }),
+  //     });
 
-      if (response.ok) {
-        updateTable();
-      }
+  //     if (response.ok) {
+  //       updateTable();
+  //     }
 
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   const shipIt = async (event, cellValues) => {
     event.preventDefault();
@@ -127,7 +127,7 @@ export default function ItemTable({ updateTable, tableData }) {
                 variant="contained"
                 color="primary"
                 onClick={(event) => {
-                  increment(event, cellValues);
+                  modify(event, cellValues, 'increment');
                 }}
               >< AddCircleIcon /></IconButton>
             </span>
@@ -136,7 +136,7 @@ export default function ItemTable({ updateTable, tableData }) {
                 variant="contained"
                 color="primary"
                 onClick={(event) => {
-                  decrement(event, cellValues);
+                  modify(event, cellValues, 'decrement');
                 }}
               >< RemoveCircleIcon /></IconButton>
             </span>
