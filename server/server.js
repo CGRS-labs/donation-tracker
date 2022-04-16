@@ -19,7 +19,7 @@ app.get('/', (req, res, next) => {
 });
 
 // GraphQL Server and Middleware
-app.use('/graphql', graphQLServer);
+app.use('/graphql', graphQLGeoMiddleWare, graphQLServer);
 app.use('/api/graphql', authController.validateToken, graphQLGeoMiddleWare, graphQLServer);
 
 app.use('/api', apiRouter);
