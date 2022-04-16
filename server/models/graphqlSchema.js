@@ -201,24 +201,73 @@ const Mutation = new GraphQLObjectType({
           });
       },
     },
-    addItem: {
+    addNeed: {
       type: ItemType,
       args: {
         name: { type: new GraphQLNonNull(GraphQLString) },
         total_needed: { type: new GraphQLNonNull(GraphQLInt) },
-        total_received: { type: new GraphQLNonNull(GraphQLInt) },
         category: { type: new GraphQLNonNull(GraphQLString) },
       },
       resolve(parent, args) {
         return db
           .query(
-            'INSERT INTO items (name, total_received, total_needed, category) VALUES ($1, $2, $3, $4) RETURNING *;',
-            [args.name, args.total_needed, args.total_received, args.category]
+            'INSERT INTO items (name, total_needed, category) VALUES ($1, $2, $3) RETURNING *;',
+            [args.name, args.total_needed, args.category]
           )
           .then((res) => {
             return res.rows[0];
           });
       },
+    },
+    updateItem: {
+      type: ChapterType,
+      args: {
+        item_id: { type: new GraphQLNonNull(GraphQLInt) },
+        total_received: { type: new GraphQLNonNull(GraphQLInt) },
+        chapter_id: { type: GraphQLInt }
+      },
+      async resolve(parent, args, context) {
+        try {
+          const chapterItem = await context.prisma.chapter_items.upsert({
+            create: {
+              chapter_id: args.chapter_id,
+              item_id: args.item_id,
+              total_received: args.total_received,
+            },
+            update: {
+              total_received: {
+                increment: args.total_received,
+              },
+            },
+            where: {
+              'chapter_id_item_id': {
+                chapter_id: args.chapter_id,
+                item_id: args.item_id
+              }
+            },
+            include: {
+              chapters: true
+            }
+          });
+
+          const item = await context.prisma.items.update({
+            data: {
+              total_received: {
+                increment: args.total_received,
+              }
+            },
+            where: {
+              id: args.item_id,
+            }
+          });
+
+          return chapterItem.chapters;
+        }
+        catch (err) {
+          console.log(err);
+          throw new AppError(err);
+        }
+      }
     },
     signUp: {
       type: AuthPayload,
