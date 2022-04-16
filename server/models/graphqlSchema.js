@@ -68,30 +68,13 @@ const ChapterType = new GraphQLObjectType({
     items: {
       type: new GraphQLList(ItemType),
       async resolve(chapter, args, context ){
-        return context.prisma.chapter_items.findMany({
-          select: {
-            total_received: true,
-            items: {
-              select: {
-                id: true,
-                name: true,
-                total_needed: true,
-                category: true
-              }},
-          },
-          where: {
-            chapter_id: chapter.id
-          }
-        }).then(res=> {
-          console.log(res)
-          return res
-        })
-        // return db.query(`SELECT i.id as id, i.name as name, i.category, ci.total_received, i.total_needed
-        // FROM chapter_items ci
-        // LEFT JOIN items i ON ci.item_id = i.id
-        // LEFT JOIN chapters c ON c.id = ci.chapter_id
-        // WHERE c.id = $1;`, [chapter.id])
-        //   .then(res => res.rows);
+        
+        return db.query(`SELECT i.id as id, i.name as name, i.category, ci.total_received, i.total_needed
+        FROM chapter_items ci
+        LEFT JOIN items i ON ci.item_id = i.id
+        LEFT JOIN chapters c ON c.id = ci.chapter_id
+        WHERE c.id = $1;`, [chapter.id])
+          .then(res => res.rows);
       }
     },
     users: {

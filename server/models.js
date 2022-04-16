@@ -11,7 +11,11 @@ const PG_URI = process.env.PG_URI;
 
 const pool = new Pool({
   connectionString: PG_URI,
-  max: 5
+  max: 10,
+  ssl: {
+    rejectUnauthorized: false,
+  }
+
 });
 
 module.exports = {
