@@ -1,10 +1,12 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["dataProxy"]
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("PG_URI")
+  // url      = env("PG_URI")
+  url      = env("DATABASE_URL")
 }
 
 model chapter_items {

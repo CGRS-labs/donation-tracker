@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const jwt = require('jsonwebtoken');
 const AppError = require('../utils/AppError');
+const { ConstructionOutlined } = require('@mui/icons-material');
 require('dotenv').config();
 
 
@@ -66,7 +67,8 @@ const ChapterType = new GraphQLObjectType({
     latitude: { type: GraphQLFloat},
     items: {
       type: new GraphQLList(ItemType),
-      resolve(chapter, args){
+      async resolve(chapter, args, context ){
+        
         return db.query(`SELECT i.id as id, i.name as name, i.category, ci.total_received, i.total_needed
         FROM chapter_items ci
         LEFT JOIN items i ON ci.item_id = i.id
