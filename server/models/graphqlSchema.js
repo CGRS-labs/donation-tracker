@@ -2,7 +2,7 @@ const graphql = require('graphql');
 const db = require('../models.js');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 const AppError = require('../utils/AppError');
 require('dotenv').config();
 
@@ -19,7 +19,7 @@ const {
 } = graphql;
 
 const AuthPayload = new GraphQLObjectType({
-  name: "AuthPayload",
+  name: 'AuthPayload',
   fields: () => ({
     token: { type: GraphQLString },
     user: { type: UserType }
@@ -165,7 +165,7 @@ const RootQuery = new GraphQLObjectType({
 });
 
 const Mutation = new GraphQLObjectType({
-  name: "Mutation",
+  name: 'Mutation',
   fields: {
     addChapter: {
       type: ChapterType,
@@ -183,7 +183,7 @@ const Mutation = new GraphQLObjectType({
       resolve(parent, args) {
         return db
           .query(
-            "INSERT INTO chapters (name, zip, street, city, state, phone, email, latitude, longitude) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *;",
+            'INSERT INTO chapters (name, zip, street, city, state, phone, email, latitude, longitude) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *;',
             [
               args.name,
               args.zip,
@@ -201,24 +201,73 @@ const Mutation = new GraphQLObjectType({
           });
       },
     },
-    addItem: {
+    addNeed: {
       type: ItemType,
       args: {
         name: { type: new GraphQLNonNull(GraphQLString) },
         total_needed: { type: new GraphQLNonNull(GraphQLInt) },
-        total_received: { type: new GraphQLNonNull(GraphQLInt) },
         category: { type: new GraphQLNonNull(GraphQLString) },
       },
       resolve(parent, args) {
         return db
           .query(
-            "INSERT INTO items (name, total_received, total_needed, category) VALUES ($1, $2, $3, $4) RETURNING *;",
-            [args.name, args.total_needed, args.total_received, args.category]
+            'INSERT INTO items (name, total_needed, category) VALUES ($1, $2, $3) RETURNING *;',
+            [args.name, args.total_needed, args.category]
           )
           .then((res) => {
             return res.rows[0];
           });
       },
+    },
+    updateItem: {
+      type: ChapterType,
+      args: {
+        item_id: { type: new GraphQLNonNull(GraphQLInt) },
+        total_received: { type: new GraphQLNonNull(GraphQLInt) },
+        chapter_id: { type: GraphQLInt }
+      },
+      async resolve(parent, args, context) {
+        try {
+          const chapterItem = await context.prisma.chapter_items.upsert({
+            create: {
+              chapter_id: args.chapter_id,
+              item_id: args.item_id,
+              total_received: args.total_received,
+            },
+            update: {
+              total_received: {
+                increment: args.total_received,
+              },
+            },
+            where: {
+              'chapter_id_item_id': {
+                chapter_id: args.chapter_id,
+                item_id: args.item_id
+              }
+            },
+            include: {
+              chapters: true
+            }
+          });
+
+          const item = await context.prisma.items.update({
+            data: {
+              total_received: {
+                increment: args.total_received,
+              }
+            },
+            where: {
+              id: args.item_id,
+            }
+          });
+
+          return chapterItem.chapters;
+        }
+        catch (err) {
+          console.log(err);
+          throw new AppError(err);
+        }
+      }
     },
     signUp: {
       type: AuthPayload,
@@ -237,7 +286,7 @@ const Mutation = new GraphQLObjectType({
           });
 
           const token = jwt.sign({ email: args.email }, process.env.TOKEN_KEY, {
-            expiresIn: "1h",
+            expiresIn: '1h',
           });
 
           return {
@@ -288,11 +337,11 @@ const Mutation = new GraphQLObjectType({
           //compare password
           const result = await bcrypt.compare(args.password, user.password);
           if (!result) {
-            throw new Error("Username or password don't match");
+            throw new Error('Username or password don\'t match');
           }
           //create Token
           const token = jwt.sign({ email: args.email }, process.env.TOKEN_KEY, {
-            expiresIn: "1h",
+            expiresIn: '1h',
           });
           return {
             token,
