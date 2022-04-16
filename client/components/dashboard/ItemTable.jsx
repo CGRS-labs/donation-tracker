@@ -12,7 +12,7 @@ import AlertTitle from '@mui/material/AlertTitle';
 import useToken from '../../hooks/useToken';
 import { UserContext } from '../../hooks/userContext';
 
-export default function ItemTable({ tableData, updateTable }) {
+export default function ItemTable({ updateTable, tableData }) {
   const [pageSize, setPageSize] = useState(15);
   const { token } = useToken();
   const { user } = useContext(UserContext);
@@ -24,23 +24,39 @@ export default function ItemTable({ tableData, updateTable }) {
     const total = cellValues.row.total_received + 1;
     console.log(cellValues, 'total', cellValues.row.total_received);
 
-    try {
-      const response = await fetch(`/api/chapters/${user.chapterId}/items/${itemId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': token,
-        },
-        body: JSON.stringify({ total_received: total }),
-      });
+    const headers = {
+      'content-type': 'application/json',
+    };
+    const graphqlQuery = {
+      query: `mutation updateItem ($item_id: Int!, $total_received: Int!, $chapter_id: Int!) {
+            updateItem (item_id: $item_id, total_received: $total_received, chapter_id: $chapter_id) {
+          items {
+            name
+            total_received
+          }
+        }
+      }`,
+      variables: {
+        item_id: itemId,
+        chapter_id: user.chapterId,
+        total_received: total
+      },
+    };
 
-      if (response.ok) {
-        updateTable();
-      }
+    const options = {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify(graphqlQuery),
+    };
 
-    } catch (err) {
-      console.log(err);
-    }
+
+    fetch('http://localhost:4000/graphql', options)
+      .then(res => res.json())
+      .then(() => {
+        
+        return updateTable();
+      })
+      .catch(error => console.log(error));
   };
 
   const decrement = async (event, cellValues) => {
