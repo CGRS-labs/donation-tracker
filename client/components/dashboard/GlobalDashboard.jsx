@@ -57,7 +57,7 @@ function DashboardContent({ form, chart, table }) {
       const data = await response.json();
       if (response.ok) {
         if (mounted.current) {
-          setTableData(data.items);
+          setTableData(data.data.items);
         }
       }
     } catch (err) {

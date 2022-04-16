@@ -11,7 +11,7 @@ const PG_URI = process.env.PG_URI;
 
 const pool = new Pool({
   connectionString: PG_URI,
-  max: 6,
+  max: 5
 });
 
 module.exports = {

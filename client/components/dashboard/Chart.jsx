@@ -74,36 +74,70 @@ export default function Chart() {
 
   useEffect(async () => {
     let mounted = true;
-    try {
-      const response = await fetch('/api/chapters');
-      const data = await response.json();
-      if (response.ok) {
-        const { chapters } = data;
-        // Get Chapter item relationships whenever chapters changes
-        // TODO: Send a single request here
-        const promises = chapters.map((chapter) => fetch(`/api/chapters/${chapter.id}/items`).then(res => res.json()));
-        const results = await Promise.all(promises);
-        if (!mounted) return;
+    const headers = {
+      'content-type': 'application/json'
+    };
 
-        // Process the data 
-        // Get category counts by chapter
-        results.forEach((chapter, i) => {
-          const { chapterItems } = chapter;
-          // reduce items to count by category
-          chapters[i].catCount = chapterItems.reduce((catCount, item) => {
-            catCount[item.category] = (catCount[item.category] || 0) + item.total_received;
-            return catCount;
-          }, {});
-        });
+    const graphqlQuery = {
+      query: `query {
+        chapters {
+          name
+          id
+          items {
+            name
+            category
+            total_received
+          }
+        }
+      }`,
+    };
 
-        setChapters(chapters);
+    const options = {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify(graphqlQuery),
+      // Add Authorization
+    };
 
-      } else {
-        console.error(data);
-      }
-    } catch (err) {
-      console.error(err);
-    }
+    fetch('http://localhost:4000/graphql', options)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        
+      })
+      .catch((error) => console.log(error));
+
+
+    // try {
+    //   const response = await fetch('/api/chapters');
+    //   const data = await response.json();
+    //   if (response.ok) {
+    //     const { chapters } = data;
+    //     // Get Chapter item relationships whenever chapters changes
+    //     // TODO: Send a single request here
+    //     const promises = chapters.map((chapter) => fetch(`/api/chapters/${chapter.id}/items`).then(res => res.json()));
+    //     const results = await Promise.all(promises);
+    //     if (!mounted) return;
+
+    //     // Process the data 
+    //     // Get category counts by chapter
+    //     results.forEach((chapter, i) => {
+    //       const { chapterItems } = chapter;
+    //       // reduce items to count by category
+    //       chapters[i].catCount = chapterItems.reduce((catCount, item) => {
+    //         catCount[item.category] = (catCount[item.category] || 0) + item.total_received;
+    //         return catCount;
+    //       }, {});
+    //     });
+
+    //     setChapters(chapters);
+
+    //   } else {
+    //     console.error(data);
+    //   }
+    // } catch (err) {
+    //   console.error(err);
+    // }
 
     return () => mounted = false;
   }, []);
