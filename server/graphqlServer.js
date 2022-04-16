@@ -2,10 +2,10 @@ const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
 const schema = require('./models/graphqlSchema');
 const cors = require('cors');
-const { PrismaClient } = require('@prisma/client');
+// const { PrismaClient } = require('@prisma/client');
 const chapterMiddleware = require('./graphQLMiddlewares/chapterMiddleware');
-
-const prisma = new PrismaClient();
+const prisma = require('./models/context');
+// const prisma = new PrismaClient();
 const app = express();
 
 // global middleware
