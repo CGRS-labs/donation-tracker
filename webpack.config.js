@@ -33,16 +33,18 @@ module.exports = {
       {
         test: /\.css$/i,
         use: ['style-loader', 'css-loader'],
+        exclude: /node_modules/,
       },
       {
         test: /\.(png|svg|jpg|gif|jpe?g)$/,
-        type: 'asset/resource'
+        type: 'asset/resource',
+        exclude: /node_modules/,
       },
-      {
-        test: /\.js$/,
-        enforce: 'pre',
-        use: ['source-map-loader'],
-      },
+      // {
+      //   test: /\.js$/,
+      //   enforce: 'pre',
+      //   use: ['source-map-loader'],
+      // },
     ],
   },
   devServer: {

@@ -13,6 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // statically serve everything in the build folder on the route '/build' when using production build
 app.use('/build/bundle.js', express.static(path.join(__dirname, '../build/bundle.js')));
+app.use('/build/*', express.static(path.join(__dirname, '../build/158.bundle.js')));
 
 // send requests to appropriate router
 app.use('/api', apiRouter);
@@ -20,7 +21,7 @@ app.use('/api', apiRouter);
 // serve index.html file
 app.get('/*', (req, res, next) => {
   // TODO: Is this necessary with webpack dev server
-  return res.status(200).sendFile(path.resolve(__dirname, '../client/index.html'));
+  return res.status(200).sendFile(path.resolve(__dirname, '../build/index.html'));
 });
 
 // 404 handler
