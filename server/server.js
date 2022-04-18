@@ -11,9 +11,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-// statically serve everything in the build folder on the route '/build' when using production build
-app.use('/build/bundle.js', express.static(path.join(__dirname, '../build/bundle.js')));
-app.use('/build/*', express.static(path.join(__dirname, '../build/158.bundle.js')));
+// statically serve bundle files when using production build
+app.use('/bundle.js', express.static(path.join(__dirname, '../build/bundle.js')));
+app.use(/\/[0-9]+\.bundle.js/, express.static(path.join(__dirname, '../build/158.bundle.js')));
+
+// statically serve images
+app.use('/images', express.static(path.join(__dirname, '../client/assets/images')));
 
 // send requests to appropriate router
 app.use('/api', apiRouter);
