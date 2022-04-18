@@ -1,5 +1,7 @@
 const path = require('path');
 const express = require('express');
+const { graphQLServer, graphQLGeoMiddleWare } = require('./graphqlServer');
+const authController = require('./controllers/authController');
 require('dotenv').config();
 
 const apiRouter = require('./routes/api');
@@ -16,8 +18,11 @@ app.get('/', (req, res, next) => {
   return res.status(200).sendFile(path.resolve(__dirname, '../client/index.html'));
 });
 
-app.use('/api', apiRouter);
+// GraphQL Server and Middleware
+app.use('/graphql', graphQLGeoMiddleWare, graphQLServer);
+app.use('/api/graphql', authController.validateToken, graphQLGeoMiddleWare, graphQLServer);
 
+app.use('/api', apiRouter);
 // 404 handler
 app.use((req, res) => {
   console.log(`ERROR: 404 Bad request ${req.method} ${req.url}`);
