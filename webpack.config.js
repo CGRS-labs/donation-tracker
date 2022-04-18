@@ -50,6 +50,7 @@ module.exports = {
   devServer: {
     proxy: {
       '/api': 'http://localhost:3000',
+      '/graphql': 'http://localhost:3000'
     },
     historyApiFallback: true,
     hot: true,

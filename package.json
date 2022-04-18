@@ -5,10 +5,15 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon server/server.js",
+<<<<<<< HEAD
     "dev": "concurrently 'NODE_ENV=development webpack serve --open' 'nodemon server/server.js' 'nodemon server/graphqlServer.js'",
     "build": "concurrently 'NODE_ENV=production webpack' 'nodemon server/server.js' 'nodemon server/graphqlServer.js'",
     "win-dev": "cross-env NODE_ENV=development webpack serve --open",
     "win-build": "cross-env NODE_ENV=production webpack",
+=======
+    "dev": "concurrently 'webpack serve --open' 'nodemon server/server.js'",
+    "win-dev": "cross-env webpack serve --open",
+>>>>>>> dev
     "json-dev": "concurrently 'webpack serve --open' 'json-server --watch json-server/db.json --routes json-server/routes.json'",
     "test": "jest --detectOpenHandles",
     "gql": "nodemon server/graphqlServer.js"
