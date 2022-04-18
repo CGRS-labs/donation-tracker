@@ -35,36 +35,69 @@ export default function AddNeed({ onSubmit }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    try {
-      const response = await fetch('/api/items', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': token,
-        },
-        body: JSON.stringify({
-          name: inputs.item,
-          category: inputs.category,
-          total_needed: inputs.quantity,
-          total_received: 0,
-        }),
-      });
-
-      if (response.ok) {
-        if (mounted.current) {
-          setInputs({
-            item: '',
-            category: '',
-            quantity: 0,
-          });
+    const headers = {
+      'content-type': 'application/json',
+    };
+    const graphqlQuery = {
+      query: `mutation addNeed ($name: String!, $category: String!, $total_needed: Int!, $total_received: Int!) {
+            addNeed (name: $name, category: $category, total_needed: $total_needed, total_received: $total_received) {
+          name
         }
-        onSubmit();
-      } else {
-        console.error(await response.json());
-      }
-    } catch (err) {
-      console.error('Failed to submit', err);
-    }
+      }`,
+      variables: {
+        name: inputs.item,
+        category: inputs.category,
+        total_needed: parseInt(inputs.quantity),
+        total_received: 0
+      },
+    };
+    const options = {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify(graphqlQuery),
+    };
+
+    fetch('http://localhost:4000/graphql', options)
+      .then(res => res.json())
+      .then(data => {
+        setInputs({
+          itemId: '',
+          category: '',
+          quantity: 0,
+        });
+        onSubmit()
+      })
+      .catch(error => console.log(error));
+    // try {
+    //   const response = await fetch('/api/items', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       'Authorization': token,
+    //     },
+    //     body: JSON.stringify({
+    //       name: inputs.item,
+    //       category: inputs.category,
+    //       total_needed: inputs.quantity,
+    //       total_received: 0,
+    //     }),
+    //   });
+
+    //   if (response.ok) {
+    //     if (mounted.current) {
+    //       setInputs({
+    //         item: '',
+    //         category: '',
+    //         quantity: 0,
+    //       });
+    //     }
+    //     onSubmit();
+    //   } else {
+    //     console.error(await response.json());
+    //   }
+    // } catch (err) {
+    //   console.error('Failed to submit', err);
+    // }
   };
 
   return (

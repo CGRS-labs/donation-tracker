@@ -3,16 +3,14 @@ const db = require('../models.js');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const jwt = require('jsonwebtoken');
-const AppError = require('../utils/AppError');
-const { ConstructionOutlined } = require('@mui/icons-material');
 require('dotenv').config();
 
 
 const {
+  GraphQLError,
   GraphQLObjectType,
   GraphQLString,
   GraphQLSchema,
-  GraphQLID,
   GraphQLInt,
   GraphQLFloat,
   GraphQLList,
@@ -27,11 +25,6 @@ const AuthPayload = new GraphQLObjectType({
   }),
 });
 
-// "password" varchar(255) NOT NULL,
-// "email" varchar(255) NOT NULL UNIQUE,
-// "chapter_id" integer NOT NULL,
-// "first_name" varchar(255) NOT NULL,
-// "last_name" varchar(255) NOT NULL,
 const UserType = new GraphQLObjectType({
   name: 'User',
   fields: ( ) => ({
@@ -46,7 +39,7 @@ const UserType = new GraphQLObjectType({
         FROM chapters
         WHERE id = $1;`, [user.chapter_id])
           .then(res => res.rows[0])
-          .catch(error => console.log(error));
+          .catch(error => error);
       }
     }
   })
@@ -74,7 +67,8 @@ const ChapterType = new GraphQLObjectType({
         LEFT JOIN items i ON ci.item_id = i.id
         LEFT JOIN chapters c ON c.id = ci.chapter_id
         WHERE c.id = $1;`, [chapter.id])
-          .then(res => res.rows);
+          .then(res => res.rows)
+          .catch(err => err);
       }
     },
     users: {
@@ -82,7 +76,7 @@ const ChapterType = new GraphQLObjectType({
       resolve(chapter, args) {
         return db.query('SELECT email, first_name, last_name FROM users WHERE chapter_id = ($1);', [chapter.id])
           .then(res => res.rows)
-          .catch(error => console.log(error));
+          .catch(error => error);
       }
     }
   })
@@ -109,9 +103,16 @@ const RootQuery = new GraphQLObjectType({
       args: {
         id: {type: GraphQLInt}
       },
-      resolve(parent, args) {
-        return db.query('SELECT * FROM items WHRE id = ', args.id)
-          .then(res => res.rows[0]);
+      resolve(parent, args, context) {
+        return db.query('SELECT * FROM items WHERE id = $1', [args.id])
+          .then(res => {
+            if (!res.rows[0]) {
+              context.response.status(404);
+              throw new GraphQLError(`Error with item query: Item with id ${args.id} not found.`); 
+            }
+            return res.rows[0];
+          })
+          .catch(err => err);
       }
     },
     chapter:{
@@ -119,9 +120,16 @@ const RootQuery = new GraphQLObjectType({
       args: {
         id: {type: GraphQLInt}
       },
-      resolve(parent, args) {
+      resolve(parent, args, context) {
         return db.query('SELECT * FROM chapters WHERE id = $1', [args.id])
-          .then(res => res.rows[0]);
+          .then(res => {
+            if (!res.rows[0]) {
+              context.response.status(404);
+              throw new GraphQLError(`Error with chapter query: chapter with id ${args.id} not found.`);
+            }
+            return res.rows[0];
+          })
+          .catch(err => err);
       }
     },
     user: {
@@ -129,11 +137,16 @@ const RootQuery = new GraphQLObjectType({
       args: {
         email: { type: GraphQLString }
       },
-      resolve(parent, args) {
+      resolve(parent, args, context) {
         return db.query('SELECT * FROM users WHERE email = $1;', [args.email])
           .then(res => {
+            if (!res.rows[0]) {
+              context.response.status(404);
+              throw new GraphQLError(`Error with users query: User with email ${args.email} not found.`);
+            }
             return res.rows[0];
-          });
+          })
+          .catch(err =>  err);
       }
     },
     items: {
@@ -142,7 +155,8 @@ const RootQuery = new GraphQLObjectType({
         return db.query('SELECT * FROM items;')
           .then(res => {
             return res.rows;
-          });
+          })
+          .catch(err => err);
       }
     },
     chapters: {
@@ -151,15 +165,21 @@ const RootQuery = new GraphQLObjectType({
         return db.query('SELECT * FROM chapters;')
           .then(res => {
             return res.rows;
-          });
+          })
+          .catch(err);
       }
     },
     users: {
       type: new GraphQLList(UserType),
-      resolve(parent, args) {
+      resolve(parent, args, context) {
         return db.query('SELECT * FROM users;')
           .then(res => {
             return res.rows;
+          })
+          .catch(err => {
+            const error = new GraphQLError(`Error with users query: ${err}`);
+            context.response.status(500);
+            return error;
           });
       }
     }
@@ -200,25 +220,28 @@ const Mutation = new GraphQLObjectType({
           )
           .then((res) => {
             return res.rows[0];
-          });
+          })
+          .catch(err => err);
       },
     },
     addNeed: {
       type: ItemType,
       args: {
         name: { type: new GraphQLNonNull(GraphQLString) },
-        total_needed: { type: new GraphQLNonNull(GraphQLInt) },
         category: { type: new GraphQLNonNull(GraphQLString) },
+        total_needed: { type: new GraphQLNonNull(GraphQLInt) },
+        total_received: { type: new GraphQLNonNull(GraphQLInt) }
       },
       resolve(parent, args) {
         return db
           .query(
-            'INSERT INTO items (name, total_needed, category) VALUES ($1, $2, $3) RETURNING *;',
-            [args.name, args.total_needed, args.category]
+            'INSERT INTO items (name, category, total_needed, total_received) VALUES ($1, $2, $3, $4) RETURNING *;',
+            [args.name, args.category, args.total_needed, args.total_received]
           )
           .then((res) => {
             return res.rows[0];
-          });
+          })
+          .catch(err => err);
       },
     },
     updateItem: {
@@ -266,8 +289,7 @@ const Mutation = new GraphQLObjectType({
           return chapterItem.chapters;
         }
         catch (err) {
-          console.log(err);
-          throw new AppError(err);
+          return err;
         }
       }
     },
@@ -296,7 +318,7 @@ const Mutation = new GraphQLObjectType({
             user,
           };
         } catch (error) {
-          throw new AppError(error);
+          return error;
         }
       },
     },
@@ -318,7 +340,7 @@ const Mutation = new GraphQLObjectType({
 
           return user;
         } catch (error) {
-          throw new AppError(error);
+          return error;
         }
       },
     },
@@ -336,10 +358,17 @@ const Mutation = new GraphQLObjectType({
               email: args.email,
             },
           });
+
+          if (!user) {
+            context.response.status(404);
+            throw new GraphQLError('No user found');
+          }
+
           //compare password
           const result = await bcrypt.compare(args.password, user.password);
           if (!result) {
-            throw new Error('Username or password don\'t match');
+            context.response.status(403);
+            throw new GraphQLError('Username or password don\'t match');
           }
           //create Token
           const token = jwt.sign({ email: args.email }, process.env.TOKEN_KEY, {
@@ -351,7 +380,7 @@ const Mutation = new GraphQLObjectType({
           };
         }
         catch (error){
-          throw new AppError(error);
+          return error;
         }
       }
     },

@@ -32,7 +32,7 @@ export default function AddItem({ updateTable }) {
 
   useEffect(async () => {
 
-    
+
     const headers = {
       'content-type': 'application/json',
     };
@@ -132,7 +132,7 @@ export default function AddItem({ updateTable }) {
     try {
       const response = await fetch();
     } catch (error) {
-      
+
     }
 
     // try {

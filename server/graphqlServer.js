@@ -2,10 +2,9 @@ const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
 const schema = require('./models/graphqlSchema');
 const cors = require('cors');
-// const { PrismaClient } = require('@prisma/client');
+const { locatedError } = require('graphql');
 const chapterMiddleware = require('./graphQLMiddlewares/chapterMiddleware');
 const prisma = require('./models/context');
-// const prisma = new PrismaClient();
 const app = express();
 
 // global middleware
@@ -26,7 +25,14 @@ app.use('/graphql', graphqlHTTP(async (request, response) => ({
   context: {
     prisma,
     request,
+    response
   },
+  customFormatErrorFn: (err) => {
+    if (response.statusCode === 200) response.status(500);
+    err = locatedError(err);
+    console.warn(err);
+    return err;
+  }
 }))
 );
 
