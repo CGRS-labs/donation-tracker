@@ -4,7 +4,7 @@ const Dotenv = require('dotenv-webpack');
 
 
 module.exports = {
-  mode: 'production',
+  mode: process.env.NODE_ENV,
   entry: path.resolve(__dirname, 'client/index.js'),
   output: {
     path: path.join(__dirname, 'build'),
