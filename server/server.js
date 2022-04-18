@@ -13,7 +13,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-<<<<<<< HEAD
 // statically serve bundle files when using production build
 app.use('/bundle.js', express.static(path.join(__dirname, '../build/bundle.js')));
 app.use(/\/[0-9]+\.bundle.js/, express.static(path.join(__dirname, '../build/158.bundle.js')));
@@ -21,7 +20,11 @@ app.use(/\/[0-9]+\.bundle.js/, express.static(path.join(__dirname, '../build/158
 // statically serve images
 app.use('/images', express.static(path.join(__dirname, '../client/assets/images')));
 
-// send requests to appropriate router
+// GraphQL Server and Middleware
+app.use('/graphql', graphQLGeoMiddleWare, graphQLServer);
+app.use('/api/graphql', authController.validateToken, graphQLGeoMiddleWare, graphQLServer);
+
+// send non-graphQL requests to appropriate router
 app.use('/api', apiRouter);
 
 // serve index.html file
@@ -30,13 +33,6 @@ app.get('/*', (req, res, next) => {
   return res.status(200).sendFile(path.resolve(__dirname, '../build/index.html'));
 });
 
-=======
-// GraphQL Server and Middleware
-app.use('/graphql', graphQLGeoMiddleWare, graphQLServer);
-app.use('/api/graphql', authController.validateToken, graphQLGeoMiddleWare, graphQLServer);
-
-app.use('/api', apiRouter);
->>>>>>> dev
 // 404 handler
 app.use((req, res) => {
   console.log(`ERROR: 404 Bad request ${req.method} ${req.url}`);
