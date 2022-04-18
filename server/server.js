@@ -1,4 +1,5 @@
 const path = require('path');
+const cors = require('cors');
 const express = require('express');
 const { graphQLServer, graphQLGeoMiddleWare } = require('./graphqlServer');
 const authController = require('./controllers/authController');
@@ -9,6 +10,7 @@ const AppError = require('./utils/AppError.js');
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

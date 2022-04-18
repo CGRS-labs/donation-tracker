@@ -43,7 +43,7 @@ export default function MapPage() {
       'headers': headers,
       'body': JSON.stringify(graphqlQuery)
     };
-    fetch('http://localhost:4000/graphql', options)
+    fetch('http://localhost:3000/graphql', options)
       .then(res => res.json())
       .then(data => setMarkerData(data.data.chapters))
       .catch(error => console.log(error));
@@ -77,7 +77,7 @@ export default function MapPage() {
       'body': JSON.stringify(graphqlQuery)
     };
 
-    fetch('http://localhost:4000/graphql', options)
+    fetch('http://localhost:3000/graphql', options)
       .then(res => res.json())
       .then(data => {
         const filteredItems = data.data.items.filter((item) => {

@@ -26,10 +26,6 @@ export default function MarkerMap({
     );
   }, []);
 
-  useEffect(() => {
-    console.log(markerData);
-  }, [markerData]);
-
   const markers = useMemo(
     () =>
       markerData?.map(

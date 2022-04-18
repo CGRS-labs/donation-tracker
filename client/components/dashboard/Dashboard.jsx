@@ -56,7 +56,7 @@ function DashboardContent() {
     };
 
     try {
-      const response = await fetch('http://localhost:4000/graphql', options);
+      const response = await fetch('http://localhost:3000/graphql', options);
       const data = await response.json();
       if (response.ok) {
         if (mounted.current) {

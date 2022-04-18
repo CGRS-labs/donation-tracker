@@ -100,7 +100,7 @@ export default function Chart() {
       // Add Authorization
     };
 
-    fetch('http://localhost:4000/graphql', options)
+    fetch('http://localhost:3000/graphql', options)
       .then((res) => res.json())
       .then((data) => {
         const { chapters } = data.data;
