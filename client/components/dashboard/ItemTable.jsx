@@ -50,7 +50,7 @@ export default function ItemTable({ updateTable, tableData }) {
     };
 
 
-    fetch('http://localhost:4000/graphql', options)
+    fetch('http://localhost:3000/graphql', options)
       .then(res => res.json())
       .then(() => {
         

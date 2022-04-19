@@ -166,7 +166,7 @@ const RootQuery = new GraphQLObjectType({
           .then(res => {
             return res.rows;
           })
-          .catch(err);
+          .catch(err => err);
       }
     },
     users: {
