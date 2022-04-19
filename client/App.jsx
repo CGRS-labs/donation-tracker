@@ -22,15 +22,7 @@ import PrivateRoute from './components/layout/PrivateRoute';
 import './styles/styles.css';
 
 const App = () => {
-  /*
-    user is an obj with these key {email,
-      chapterId,
-      firstName,
-      lastName,
-    }
-    setUser is a useState of user
-    isLoading will
-  */
+  
   const { user, setUser, isLoading } = useAuth();
 
   return (

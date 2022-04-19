@@ -57,7 +57,7 @@ export default function AddNeed({ onSubmit }) {
       body: JSON.stringify(graphqlQuery),
     };
 
-    fetch('http://localhost:3000/graphql', options)
+    fetch('/graphql', options)
       .then(res => res.json())
       .then(data => {
         setInputs({
@@ -68,36 +68,6 @@ export default function AddNeed({ onSubmit }) {
         onSubmit()
       })
       .catch(error => console.log(error));
-    // try {
-    //   const response = await fetch('/api/items', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       'Authorization': token,
-    //     },
-    //     body: JSON.stringify({
-    //       name: inputs.item,
-    //       category: inputs.category,
-    //       total_needed: inputs.quantity,
-    //       total_received: 0,
-    //     }),
-    //   });
-
-    //   if (response.ok) {
-    //     if (mounted.current) {
-    //       setInputs({
-    //         item: '',
-    //         category: '',
-    //         quantity: 0,
-    //       });
-    //     }
-    //     onSubmit();
-    //   } else {
-    //     console.error(await response.json());
-    //   }
-    // } catch (err) {
-    //   console.error('Failed to submit', err);
-    // }
   };
 
   return (

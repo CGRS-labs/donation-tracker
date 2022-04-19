@@ -20,20 +20,6 @@ export default function Album() {
   React.useEffect(async () => {
     let mounted = true;
 
-    // try {
-    //   const response = await fetch('/api/chapters');
-    //   const data = await response.json();
-    //   if (response.ok)
-    //     if (mounted) {
-    //       setChapters(data.chapters);
-    //     } else {
-    //       console.error(data.error);
-    //     };
-    // } catch (err) {
-    //   console.error(err);
-    // }
-
-
     const headers = {
       'content-type': 'application/json',
     };
@@ -53,7 +39,7 @@ export default function Album() {
       'body': JSON.stringify(graphqlQuery)
     };
 
-    fetch('http://localhost:3000/graphql', options)
+    fetch('/graphql', options)
       .then(res => res.json())
       .then(data => setChapters(data.data.chapters))
       .catch(error => console.log(error));
@@ -108,10 +94,6 @@ export default function Album() {
               >
                 <CardMedia
                   component="img"
-                  sx={{
-                    // 16:9
-                    // pt: '56.25%',
-                  }}
                   image="https://source.unsplash.com/random"
                   alt="random"
                 />
@@ -127,7 +109,6 @@ export default function Album() {
                   <Link to={`/chapter/${chapter.id}`} underline="none" component={RouterLink}>
                     <Button size="small">View</Button>
                   </Link>
-                  {/* <Button size="small">Edit</Button> */}
                 </CardActions>
               </Card>
             </Grid>

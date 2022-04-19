@@ -38,52 +38,23 @@ export default function ItemTable({ updateTable, tableData }) {
       }`,
       variables: {
         item_id: itemId,
-        chapter_id: user.chapterId,
+        chapter_id: user.chapter_id || user.chapterId,
         total_received: total
       },
     };
-
     const options = {
       method: 'POST',
       headers: headers,
       body: JSON.stringify(graphqlQuery),
     };
 
-
-    fetch('http://localhost:3000/graphql', options)
+    fetch('/graphql', options)
       .then(res => res.json())
       .then(() => {
-        
         return updateTable();
       })
       .catch(error => console.log(error));
   };
-
-  // const decrement = async (event, cellValues) => {
-  //   event.preventDefault();
-
-  //   const itemId = cellValues.id;
-  //   const total = cellValues.row.total_received - 1;
-  //   console.log(cellValues, 'total', cellValues.row.total_received);
-
-  //   try {
-  //     const response = await fetch(`/api/chapters/${user.chapterId}/items/${itemId}`, {
-  //       method: 'PUT',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         'Authorization': token,
-  //       },
-  //       body: JSON.stringify({ total_received: total }),
-  //     });
-
-  //     if (response.ok) {
-  //       updateTable();
-  //     }
-
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
 
   const shipIt = async (event, cellValues) => {
     event.preventDefault();
@@ -99,20 +70,14 @@ export default function ItemTable({ updateTable, tableData }) {
       });
 
       if (response.ok) {
-        // <Alert severity="success"> // FIXME: This isn't working?!
-        //   <AlertTitle>Success</AlertTitle>
-        //   This item has been shipped — <strong>Thanks for your donation!</strong>
-        // </Alert>;
         updateTable();
       }
-
     } catch (err) {
       console.log(err);
     }
   };
 
   const columns = [
-
     { field: 'id', headerName: 'ID', width: 50 },
     { field: 'name', headerName: 'Item', width: 200 },
     { field: 'category', headerName: 'Category', width: 200 },

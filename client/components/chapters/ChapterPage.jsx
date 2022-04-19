@@ -67,36 +67,15 @@ export default function ChapterPage(props) {
       'body': JSON.stringify(graphqlQuery)
     };
 
-    fetch('http://localhost:3000/graphql', options)
+    fetch('/graphql', options)
       .then(res => res.json())
       .then(data => {
         setChapter(data.data.chapter);
         setUsers(data.data.chapter.users);
       })
       .catch(error => console.log(error));
-
-    // const response = await fetch(`/api/chapters/${id}`);
-    // const data = await response.json();
-    // if (response.ok) {
-    //   if (mounted.current) {
-    //     // setChapter(data.chapter);
-    //     setUsers(data.users);
-    //   }
-    // }
     return () => () => mounted.current = false;
   }, []);
-
-  // This is an old request that would get chapter specific needs. However, needs are now set globally
-  // so this is no longer needed.
-  // useEffect(async () => {
-  //   if (chapter.id) {
-  //     const response = await fetch(`/api/chapters/${chapter.id}/items`);
-  //     const data = await response.json();
-  //     if (response.ok) {
-  //       setItems(data.chapterItems);
-  //     }
-  //   }
-  // }, [chapter]);
 
   useEffect(async () => {
     const headers = {
@@ -121,7 +100,7 @@ export default function ChapterPage(props) {
       'body': JSON.stringify(graphqlQuery)
     };
 
-    fetch('http://localhost:4000/graphql', options)
+    fetch('/graphql', options)
       .then(res => res.json())
       .then(data => {
         const filteredItems = data.data.items.filter((item) => {
@@ -130,15 +109,6 @@ export default function ChapterPage(props) {
         setItems(filteredItems);
       })
       .catch(error => console.log(error));
-
-    // const response = await fetch('/api/items');
-    // const data = await response.json();
-    // if (response.ok) {
-    //   const items = data.items.filter((item) => {
-    //     return (item.total_needed - item.total_received) > 0;
-    //   });
-    //   setItems(items);
-    // }
   }, []);
 
   const infoCards = [

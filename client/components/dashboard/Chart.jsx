@@ -46,39 +46,11 @@ const backgroundColors = [
 export default function Chart() {
   const [chapters, setChapters] = useState([]);
 
-  // Sums items by category if needed
-  // const [categorizedItems, setCategorizedItems] = useState({});
-  // useEffect(async () => {
-  //   try {
-  //     const response = await fetch('/api/items');
-  //     const data = await response.json();
-  //     const { items } = data;
-
-  //     if (response.ok) {
-  //       // Raw item data [name, total_needed, category, total_received]
-  //       // need chapter data on this reposne to categorize by chapter
-  //       const catItems = {};
-
-  //       items.forEach(item => {
-  //         // if (!catItems[item.category]) catItems[item.category] = 0;
-  //         // else catItems[item.category]++;
-  //       });
-  //       setCategorizedItems(catItems);
-  //     } else {
-  //       console.error(data);
-  //     }
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // }, []);
-
-
   useEffect(async () => {
     let mounted = true;
     const headers = {
       'content-type': 'application/json'
     };
-
     const graphqlQuery = {
       query: `query {
         chapters {
@@ -92,7 +64,6 @@ export default function Chart() {
         }
       }`,
     };
-
     const options = {
       method: 'POST',
       headers: headers,
@@ -100,13 +71,12 @@ export default function Chart() {
       // Add Authorization
     };
 
-    fetch('http://localhost:3000/graphql', options)
+    fetch('/graphql', options)
       .then((res) => res.json())
       .then((data) => {
         const { chapters } = data.data;
         if (!mounted) return;
-
-        // Process the data 
+        // Process the data
         // Get category counts by chapter
         chapters.forEach((chapter, i) => {
           console.log(chapter);
@@ -121,7 +91,6 @@ export default function Chart() {
       }
       )
       .catch((error) => console.log(error));
-
     return () => mounted = false;
   }, []);
 

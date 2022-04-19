@@ -53,9 +53,6 @@ export default function Chart({ itemData }) {
     let mounted = true;
     if (user) {
       try {
-        // const response = await fetch(`/api/chapters/${user.chapterId}/items`);
-        // const data = await response.json();
-        // if (response.ok) {
         // Process the data get category counts by chapter
         const chapterItems = itemData;
         // reduce items to count by category
@@ -63,14 +60,11 @@ export default function Chart({ itemData }) {
           catCount[item.category] = (catCount[item.category] || 0) + item.total_received;
           return catCount;
         }, {});
-
         if (mounted) setCategorizedItems(catCount);
-        
       } catch (err) {
         console.error(err);
       }
     }
-
     return () => mounted = false;
   }, [itemData]);
 

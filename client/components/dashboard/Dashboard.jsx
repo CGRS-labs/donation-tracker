@@ -15,7 +15,6 @@ import { UserContext } from '../../hooks/userContext';
 function DashboardContent() {
 
   const [tableData, setTableData] = useState([]);
-  // const { id: chapterId } = useParams();
   const { user } = useContext(UserContext);
   const mounted = useRef(true);
 
@@ -56,7 +55,7 @@ function DashboardContent() {
     };
 
     try {
-      const response = await fetch('http://localhost:3000/graphql', options);
+      const response = await fetch('/graphql', options);
       const data = await response.json();
       if (response.ok) {
         if (mounted.current) {

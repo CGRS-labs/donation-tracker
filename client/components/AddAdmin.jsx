@@ -30,7 +30,6 @@ export default function SignUp() {
 
   // Get list of chapter ids
   useEffect(async () => {
-
     const headers = {
       'content-type': 'application/json',
     };
@@ -50,30 +49,10 @@ export default function SignUp() {
       'body': JSON.stringify(graphqlQuery)
     };
 
-    fetch('http://localhost:4000/graphql', options)
+    fetch('/graphql', options)
       .then(res => res.json())
       .then(data => setChapters(data.data.chapters))
       .catch(error => console.log(error));
-
-
-    // --------Old Request to Express Server-----------
-    // try {
-    //   const response = await fetch('/api/chapters', {
-    //     headers: {
-    //       'authorization': token,
-    //     }
-    //   });
-    //   const data = await response.json();
-
-    //   // check for response status 200-299
-    //   if (response.ok) {
-    //     setChapters(data.chapters);
-    //   } else {
-    //     console.error(data);
-    //   }
-    // } catch (err) {
-    //   console.error(err);
-    // };
   }, []);
 
   const handleChange = (event) => {
@@ -109,7 +88,7 @@ export default function SignUp() {
       body: JSON.stringify(graphqlQuery),
     };
 
-    fetch("http://localhost:3000/graphql", options)
+    fetch("/graphql", options)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
@@ -117,34 +96,6 @@ export default function SignUp() {
         navigate("/dashboard");
       })
       .catch((error) => console.log(error));
-
-    // firstName: '',
-    // lastName: '',
-    // email: '',
-    // password: '',
-    // chapterId: '',
-
-    // const response = await fetch('/api/register', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'authorization': token,
-    //   },
-    //   body: JSON.stringify(inputs),
-    // });
-
-    // if (response.ok) {
-    //   setInputs({
-    //     firstName: '',
-    //     lastName: '',
-    //     email: '',
-    //     password: '',
-    //     chapter: '',
-    //   });
-    // } else {
-    //   console.error(await response.json());
-    // }
-
   };
 
   return (

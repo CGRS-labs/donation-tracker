@@ -59,23 +59,6 @@ export default function AddItem({ updateTable }) {
       .then(res => res.json())
       .then(data => setSelectItems(data.data.items))
       .catch(error => console.log(error));
-
-
-    // try {
-    //   const response = await fetch('/api/items/');
-    //   const data = await response.json();
-
-    //   if (response.ok) {
-    //     if (mounted.current) {
-    //       setSelectItems(data.items);
-    //     }
-    //   } else {
-    //     console.error(data.error);
-    //   }
-    // } catch (err) {
-    //   console.error(err);
-    // }
-
     // Track when cleanup runs to prevent state update in handleSubmit after component unmounts
     return () => () => mounted.current = false;
   }, []);
@@ -116,7 +99,7 @@ export default function AddItem({ updateTable }) {
     };
 
 
-    fetch('http://localhost:3000/graphql', options)
+    fetch('/graphql', options)
       .then(res => res.json())
       .then(data => {
         setInputs({
@@ -134,33 +117,6 @@ export default function AddItem({ updateTable }) {
     } catch (error) {
 
     }
-
-    // try {
-
-    //   const response = await fetch(`/api/chapters/${user.chapterId}/items/`, {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       'Authorization': token
-    //     },
-    //     body: JSON.stringify(inputs),
-    //   });
-    //   if (response.ok) {
-    //     if (mounted.current) {
-    //       setInputs({
-    //         itemId: '',
-    //         category: '',
-    //         quantity: 0,
-    //       });
-    //     }
-    //     // A NEW GET REQUEST IS NEEDED TO FETCH TABLE DATA ONCE THIS ITEM IS ADDED
-    //     props.updateTable();
-    //   } else {
-    //     console.error(await response.json());
-    //   }
-    // } catch (err) {
-    //   console.error(err);
-    // }
   };
 
   const menuItems = selectItems
@@ -213,7 +169,6 @@ export default function AddItem({ updateTable }) {
               value={inputs.itemId || ''}
               input={<OutlinedInput label="Item" />}
               onChange={handleChange}
-            // disabled={menuItems.length === 0}
             >
               {menuItems.length === 0 && <MenuItem id={-1} value="None">No Items Available</MenuItem >}
               {menuItems}

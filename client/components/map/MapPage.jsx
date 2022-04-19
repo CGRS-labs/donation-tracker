@@ -8,17 +8,11 @@ export default function MapPage() {
   const [coords, setCoords] = useState([undefined, undefined]);
   const [chapter, setChapter] = useState();
   const [chapterItems, setChapterItems] = useState([]);
-
-  // Mock data
-  // import geojson from '../../../data/geojson';
-  // import cities from '../../../data/cities.json';
   const [markerData, setMarkerData] = useState([]);
 
   useEffect(async () => {
     let mounted = true;
-    // get marker data on initial load.
-    // const { chapters: markers } = await fetch('/api/chapters').then(res => res.json());
-    // setMarkerData(markers);
+
     const headers = {
       'content-type': 'application/json',
     };
@@ -43,20 +37,15 @@ export default function MapPage() {
       'headers': headers,
       'body': JSON.stringify(graphqlQuery)
     };
-    fetch('http://localhost:3000/graphql', options)
+    fetch('/graphql', options)
       .then(res => res.json())
       .then(data => setMarkerData(data.data.chapters))
       .catch(error => console.log(error));
     return () => mounted = false;
-    
+
   }, []);
 
   useEffect(async () => {
-    // This used to be a customized list of items per chapter
-    // const { items } = await fetch('/api/items').then(res => res.json());
-    // const itemList = items.filter(item => item.total_needed < item.total_received).map(item => item.name);
-    // setChapterItems(itemList);
-
     const headers = {
       'content-type': 'application/json',
     };
@@ -101,7 +90,6 @@ export default function MapPage() {
         markerData={markerData}
         setSelected={(chapter) => {
           setChapter(chapter);
-          // setChapterItems([]);
         }}
         popupInfo={chapter}
       />

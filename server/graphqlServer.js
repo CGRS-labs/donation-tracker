@@ -15,7 +15,7 @@ const graphQLGeoMiddleWare = async (req, res, next) => {
   if (req.body.query?.split(' ')[1] === 'addChapter') {
     await chapterMiddleware.getGeocode(req, res, next);
     return next();
-  } 
+  }
   else return next();
 };
 
