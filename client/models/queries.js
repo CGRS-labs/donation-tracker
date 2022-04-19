@@ -36,7 +36,7 @@ queries.chapterQuery = gql`query chapter ($id: Int!) {
           }
         }`;
 
-queries.getItems = gql`query {
+queries.getItems = gql`query items {
         items {
               id,
               name,
@@ -46,7 +46,7 @@ queries.getItems = gql`query {
         }
       }`;
 
-queries.allChapters = gql`query {
+queries.allChapters = gql`query chapters {
         chapters {
           name
           id
@@ -57,5 +57,7 @@ queries.allChapters = gql`query {
           }
         }
       }`;
+
+
 
 export default queries;

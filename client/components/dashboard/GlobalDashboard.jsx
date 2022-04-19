@@ -30,7 +30,7 @@ function DashboardContent({ form, chart, table }) {
     if (loading) return;
     getTableData();
     return () => mounted.current = false;
-  }, [loading]);
+  }, [loading, data]);
 
   const getTableData = async () => {
     if (mounted.current) {

@@ -22,7 +22,7 @@ import {
   ApolloClient,
   InMemoryCache,
   ApolloProvider,
-} from "@apollo/client";
+} from '@apollo/client';
 
 import './styles/styles.css';
 

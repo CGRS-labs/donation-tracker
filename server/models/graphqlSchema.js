@@ -8,14 +8,14 @@ const Query = require ('./graphqlQueries.js');
 const Mutations = require('./graphqlMutations.js');
 
 const {
-    GraphQLError,
-    GraphQLObjectType,
-    GraphQLString,
-    GraphQLSchema,
-    GraphQLInt,
-    GraphQLFloat,
-    GraphQLList,
-    GraphQLNonNull
+  GraphQLError,
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLSchema,
+  GraphQLInt,
+  GraphQLFloat,
+  GraphQLList,
+  GraphQLNonNull
 } = graphql;
 
 
@@ -23,4 +23,4 @@ const {
 module.exports = new GraphQLSchema ({
   query: Query,
   mutation: Mutations
-})
+});
