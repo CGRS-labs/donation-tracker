@@ -17,6 +17,7 @@ queries.login = gql`mutation login ($email: String!, $password: String!) {
 queries.updateItem = gql`mutation updateItem ($item_id: Int!, $total_received: Int!, $chapter_id: Int!) {
             updateItem (item_id: $item_id, total_received: $total_received, chapter_id: $chapter_id) {
           items {
+            id
             name
             total_received
           }

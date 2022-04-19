@@ -24,14 +24,17 @@ function DashboardContent() {
   const { data, loading, error } = useQuery(queries.chapterQuery, {
     variables: {
       id: user.chapter_id || user.chapterId
-    }
+    },
+    displayName: 'getChapter',
+    notifyOnNetworkStatusChange: true
   });
   
   useEffect(() => {
     if (loading) return <div>Loading...</div>;
+    mounted.current = true;
     updateTable();
     return () => () => mounted.current = false;
-  }, [loading]);
+  }, [loading, data]);
   
   const updateTable = async () => {
     if (loading) return <div>Loading...</div>;
