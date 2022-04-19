@@ -11,11 +11,14 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import useToken from '../../hooks/useToken';
 import { UserContext } from '../../hooks/userContext';
+import queries from '../../models/queries';
+import { useMutation } from '@apollo/client';
 
 export default function ItemTable({ updateTable, tableData }) {
   const [pageSize, setPageSize] = useState(15);
   const { token } = useToken();
   const { user } = useContext(UserContext);
+  const  [updateItem, { data, loading, error }] = useMutation(queries.updateItem);
 
   const modify = async (event, cellValues, method) => {
     event.preventDefault();

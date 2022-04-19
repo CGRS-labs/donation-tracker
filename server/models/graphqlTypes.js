@@ -67,7 +67,7 @@ const AuthPayload = new GraphQLObjectType({
           FROM chapter_items ci
           LEFT JOIN items i ON ci.item_id = i.id
           LEFT JOIN chapters c ON c.id = ci.chapter_id
-          WHERE c.id = $1;`, [chapter.id])
+          WHERE c.id = $1 ORDER BY i.id;`, [chapter.id])
             .then(res => res.rows)
             .catch(err => err);
         }

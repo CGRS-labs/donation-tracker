@@ -32,6 +32,7 @@
   },
   "homepage": "https://github.com/CGRS-labs/donation-tracker#readme",
   "dependencies": {
+    "@apollo/client": "^3.5.10",
     "@babel/polyfill": "^7.12.1",
     "@emotion/react": "^11.8.2",
     "@emotion/styled": "^11.8.1",
