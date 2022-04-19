@@ -55,7 +55,7 @@ export default function AddItem({ updateTable }) {
       'body': JSON.stringify(graphqlQuery)
     };
 
-    fetch('http://localhost:4000/graphql', options)
+    fetch('http://localhost:3000/graphql', options)
       .then(res => res.json())
       .then(data => setSelectItems(data.data.items))
       .catch(error => console.log(error));

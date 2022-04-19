@@ -38,7 +38,7 @@ export default function ItemTable({ updateTable, tableData }) {
       }`,
       variables: {
         item_id: itemId,
-        chapter_id: user.chapterId,
+        chapter_id: user.chapter_id || user.chapterId,
         total_received: total
       },
     };
