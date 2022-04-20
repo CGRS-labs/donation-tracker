@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 const graphQLGeoMiddleWare = async (req, res, next) => {
-  if (req.body.query?.split(' ')[1] === 'addChapter') {
+  if (req.body.operationName === 'addChapter') {
     await chapterMiddleware.getGeocode(req, res, next);
     return next();
   }

@@ -49,7 +49,7 @@ queries.addNeed = gql`mutation addNeed ($name: String!, $category: String!, $tot
         }
       }`;
 
-queries.chapterQuery = gql`query chapter ($id: Int!) {
+queries.chapterItemsQuery = gql`query chapterItems ($id: Int!) {
           chapter (id: $id) {
             items {
               id,
@@ -80,6 +80,38 @@ queries.chapters = gql`query chaptersNames {
         }
 }`;
 
+queries.getOneChapter = gql`query chapterInfo ($id: Int!) {
+  chapter (id: $id) {
+          name
+          street
+          city
+          state
+          zip
+          email
+          phone
+          id
+          users {
+            email
+            first_name
+            last_name
+          }
+          items {
+            id
+            name
+            total_needed
+            total_received
+            category
+          }
+        }
+
+}`;
+
+queries.addChapter = gql`mutation addChapter ($name: String!, $street: String!, $city: String!, $state: String!, $zip: String!, $phone: String!, $email: String!, $longitude: Float!, $latitude: Float!) {
+  addChapter (name: $name, street: $street, city: $city, state: $state, zip: $zip, phone: $phone, email: $email, longitude: $longitude, latitude: $latitude) {
+    id
+    name
+        }
+      }`;
 
 
 export default queries;

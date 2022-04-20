@@ -56,7 +56,7 @@ export default function AddItem({ updateTable }) {
         chapter_id: user.chapterId || user.chapter_id,
         total_received: parseInt(inputs.total_received)
       },
-      refetchQueries: [queries.chapterQuery]
+      refetchQueries: [queries.chapterItemsQuery]
     });
   };
 

@@ -21,7 +21,7 @@ function DashboardContent() {
   const mounted = useRef(true);
   
   if (!user) return;
-  const { data, loading, error } = useQuery(queries.chapterQuery, {
+  const { data, loading, error } = useQuery(queries.chapterItemsQuery, {
     variables: {
       id: user.chapter_id || user.chapterId
     },

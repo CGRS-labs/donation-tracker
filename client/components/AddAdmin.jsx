@@ -38,7 +38,7 @@ export default function SignUp() {
   useEffect(async () => {
     if (loading) return <div>Loading...</div>;
     mounted.current = true;
-    setChapters(data.chapters);
+    if (mounted.current) setChapters(data.chapters);
     return() => mounted.current = false;
   }, [loading]);
 
