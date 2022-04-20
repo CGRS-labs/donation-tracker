@@ -15,7 +15,7 @@ import queries from '../../models/queries.js';
 import categories from './categories.js';
 import useToken from '../../hooks/useToken.js';
 
-export default function AddNeed({ onSubmit }) {
+export default function AddNeed() {
   const [inputs, setInputs] = useState({
     item: '',
     category: '',

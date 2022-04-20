@@ -40,10 +40,6 @@ function DashboardContent({ form, chart, table }) {
 
   };
 
-  const onSubmit = () => {
-    getTableData();
-  };
-
   return (
     <Box sx={{ display: 'flex' }}>
       <Box
@@ -68,7 +64,7 @@ function DashboardContent({ form, chart, table }) {
                   height: 390,
                 }}
               >
-                <AddNeed onSubmit={onSubmit} />
+                <AddNeed />
               </Paper>
             </Grid>
             {/* Donation summary stats */}
