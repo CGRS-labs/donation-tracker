@@ -28,6 +28,7 @@ function DashboardContent({ form, chart, table }) {
 
   useEffect(() => {
     if (loading) return;
+    mounted.current = true;
     getTableData();
     return () => mounted.current = false;
   }, [loading, data]);

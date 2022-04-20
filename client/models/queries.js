@@ -58,6 +58,15 @@ queries.allChapters = gql`query chapters {
         }
       }`;
 
+queries.addNeed = gql`mutation addNeed ($name: String!, $category: String!, $total_needed: Int!, $total_received: Int!) {
+            addNeed (name: $name, category: $category, total_needed: $total_needed, total_received: $total_received) {
+          id
+          name
+          total_needed
+          total_received
+        }
+      }`;
+
 
 
 export default queries;
