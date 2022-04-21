@@ -12,8 +12,8 @@ function ContentBanner({ content }) {
   return (
     <Paper
       sx={{
+        minHeight: '500px',
         position: 'relative',
-        backgroundColor: 'grey.800',
         color: '#fff',
         mb: 4,
         backgroundSize: 'cover',
@@ -30,8 +30,7 @@ function ContentBanner({ content }) {
           top: 0,
           bottom: 0,
           right: 0,
-          left: 0,
-          backgroundColor: 'rgba(0,0,0,.3)',
+          left: 0
         }}
       />
       <Grid container>
@@ -62,11 +61,11 @@ function ContentBanner({ content }) {
 
 ContentBanner.propTypes = {
   content: PropTypes.shape({
-    description: PropTypes.string.isRequired,
+    description: PropTypes.string,
     image: PropTypes.string.isRequired,
     imageText: PropTypes.string.isRequired,
     linkText: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
+    title: PropTypes
   }).isRequired,
 };
 

@@ -40,6 +40,12 @@ const ResponsiveAppBar = () => {
 
   const pages = [
     {
+      text: 'Donate',
+      link: '/stripe',
+      showPublic: true,
+      showPrivate: true,
+    },
+    {
       text: 'Sign In',
       link: '/signin',
       showPublic: true,
