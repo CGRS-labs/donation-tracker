@@ -7,6 +7,8 @@ import {
 
 import Layout from './components/layout/Layout';
 import MapPage from './components/map/MapPage';
+import StripeLink from './components/StripeLink';
+import BankInfo from './components/BankInfo';
 import Homepage from './Homepage';
 import ChapterPage from './components/chapters/ChapterPage';
 import AllChaptersPage from './components/chapters/AllChaptersPage';
@@ -20,6 +22,7 @@ import useAuth from './hooks/useAuth';
 import PrivateRoute from './components/layout/PrivateRoute';
 
 import './styles/styles.css';
+
 
 const App = () => {
   /*
@@ -38,8 +41,10 @@ const App = () => {
       <UserContext.Provider value={{ user, setUser, isLoading }}>
         <Layout>
           <Routes>
+            <Route exact path={'/stripe'} element={<StripeLink />} />
+            <Route exact path={'/bank'} element={<BankInfo />} />
             <Route exact path="/" element={<Homepage />} />
-            <Route exact path={"/chapters"} element={<AllChaptersPage />} />
+            <Route exact path={'/chapters'} element={<AllChaptersPage />} />
             <Route exact path="/signin" element={<Login />} />
             <Route
               exact

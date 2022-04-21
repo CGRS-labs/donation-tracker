@@ -1,13 +1,16 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import ContentBanner from './components/layout/ContentBanner';
+import ContentBanner from '../client/components/layout/ContentBanner';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 
 const bannerImage = 'https://images.unsplash.com/photo-1529511582893-2d7e684dd128?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1633&q=80';
 const sunflowerField = 'https://images.unsplash.com/photo-1535222830855-fd60aca7e065?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80';
+
+
+
 
 function Description() {
   return (
