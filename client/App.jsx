@@ -18,8 +18,18 @@ import AddChapterPage from './components/chapters/AddChapterPage';
 import { UserContext } from './hooks/userContext';
 import useAuth from './hooks/useAuth';
 import PrivateRoute from './components/layout/PrivateRoute';
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+} from '@apollo/client';
 
 import './styles/styles.css';
+
+const client = new ApolloClient({
+  uri: '/graphql',
+  cache: new InMemoryCache()
+});
 
 const App = () => {
   
@@ -27,53 +37,55 @@ const App = () => {
 
   return (
     <Router>
-      <UserContext.Provider value={{ user, setUser, isLoading }}>
-        <Layout>
-          <Routes>
-            <Route exact path="/" element={<Homepage />} />
-            <Route exact path={"/chapters"} element={<AllChaptersPage />} />
-            <Route exact path="/signin" element={<Login />} />
-            <Route
-              exact
-              path="/signup"
-              element={
-                <PrivateRoute>
-                  <AddAdmin />
-                </PrivateRoute>
-              }
-            />
-            <Route exact path="/map" element={<MapPage />} />
-            <Route exact path="/chapter/:id" element={<ChapterPage />} />
-            <Route
-              exact
-              path="/chapter/add"
-              element={
-                <PrivateRoute>
-                  <AddChapterPage />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              exact
-              path="/chapter/dashboard"
-              element={
-                <PrivateRoute>
-                  <Dashboard />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              exact
-              path="/dashboard"
-              element={
-                <PrivateRoute>
-                  <GlobalDashboard />
-                </PrivateRoute>
-              }
-            />
-          </Routes>
-        </Layout>
-      </UserContext.Provider>
+      <ApolloProvider client={client}>
+        <UserContext.Provider value={{ user, setUser, isLoading }}>
+          <Layout>
+            <Routes>
+              <Route exact path="/" element={<Homepage />} />
+              <Route exact path={"/chapters"} element={<AllChaptersPage />} />
+              <Route exact path="/signin" element={<Login />} />
+              <Route
+                exact
+                path="/signup"
+                element={
+                  <PrivateRoute>
+                    <AddAdmin />
+                  </PrivateRoute>
+                }
+              />
+              <Route exact path="/map" element={<MapPage />} />
+              <Route exact path="/chapter/:id" element={<ChapterPage />} />
+              <Route
+                exact
+                path="/chapter/add"
+                element={
+                  <PrivateRoute>
+                    <AddChapterPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                exact
+                path="/chapter/dashboard"
+                element={
+                  <PrivateRoute>
+                    <Dashboard />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                exact
+                path="/dashboard"
+                element={
+                  <PrivateRoute>
+                    <GlobalDashboard />
+                  </PrivateRoute>
+                }
+              />
+            </Routes>
+          </Layout>
+        </UserContext.Provider>
+      </ApolloProvider>
     </Router>
   );
 };

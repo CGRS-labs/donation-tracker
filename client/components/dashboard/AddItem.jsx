@@ -9,6 +9,8 @@ import MenuItem from '@mui/material/MenuItem';
 import { InputLabel, Select } from '@mui/material';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import FormControl from '@mui/material/FormControl';
+import { useMutation, useQuery } from '@apollo/client';
+import queries from '../../models/queries.js';
 
 import categories from './categories.js';
 
@@ -17,7 +19,6 @@ import { UserContext } from '../../hooks/userContext.js';
 
 
 export default function AddItem({ updateTable }) {
-
   const [inputs, setInputs] = useState({
     itemId: '',
     category: '',
@@ -27,41 +28,17 @@ export default function AddItem({ updateTable }) {
   const { token } = useToken();
   const { user } = useContext(UserContext);
   const mounted = useRef(true);
+  const {data, loading, error} = useQuery(queries.getItems);
+  const  [updateItem, result] = useMutation(queries.updateItem);
 
   const canSave = inputs.category !== '' && inputs.itemId > -1 && inputs.total_received !== 0;
 
   useEffect(async () => {
-
-
-    const headers = {
-      'content-type': 'application/json',
-    };
-
-    const graphqlQuery = {
-      'query': `{
-        items{
-          id
-          name
-          total_needed
-          total_received
-          category
-        }
-      }`,
-    };
-
-    const options = {
-      'method': 'POST',
-      'headers': headers,
-      'body': JSON.stringify(graphqlQuery)
-    };
-
-    fetch('http://localhost:3000/graphql', options)
-      .then(res => res.json())
-      .then(data => setSelectItems(data.data.items))
-      .catch(error => console.log(error));
-    // Track when cleanup runs to prevent state update in handleSubmit after component unmounts
+    if (loading) return;
+    mounted.current = true;
+    setSelectItems(data.items);
     return () => () => mounted.current = false;
-  }, []);
+  }, [loading, data]);
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -73,50 +50,14 @@ export default function AddItem({ updateTable }) {
     if (!canSave) return;
     event.preventDefault();
 
-    const headers = {
-      'content-type': 'application/json',
-    };
-    const graphqlQuery = {
-      query: `mutation updateItem ($item_id: Int!, $total_received: Int!, $chapter_id: Int!) {
-            updateItem (item_id: $item_id, total_received: $total_received, chapter_id: $chapter_id) {
-          items {
-            name
-            total_received
-          }
-        }
-      }`,
+    return updateItem({
       variables: {
         item_id: inputs.itemId,
-        chapter_id: user.chapterId,
+        chapter_id: user.chapterId || user.chapter_id,
         total_received: parseInt(inputs.total_received)
       },
-    };
-
-    const options = {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify(graphqlQuery),
-    };
-
-
-    fetch('/graphql', options)
-      .then(res => res.json())
-      .then(data => {
-        setInputs({
-          itemId: '',
-          category: '',
-          quantity: 0,
-        });
-        return updateTable();
-      })
-      .catch(error => console.log(error));
-
-
-    try {
-      const response = await fetch();
-    } catch (error) {
-
-    }
+      refetchQueries: [queries.chapterItemsQuery]
+    });
   };
 
   const menuItems = selectItems

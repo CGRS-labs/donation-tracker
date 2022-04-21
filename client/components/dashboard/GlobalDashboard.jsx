@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
+import queries from '../../models/queries';
+import { useQuery } from '@apollo/client';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
@@ -21,52 +23,21 @@ import Chart from './Chart';
 
 function DashboardContent({ form, chart, table }) {
   const [tableData, setTableData] = useState([]);
+  const {data, loading, error} = useQuery(queries.getItems);
   const mounted = useRef(true);
 
   useEffect(() => {
+    if (loading) return;
+    mounted.current = true;
     getTableData();
     return () => mounted.current = false;
-  }, []);
+  }, [loading, data]);
 
   const getTableData = async () => {
-    const headers = {
-      'content-type': 'application/json'
-    };
-
-    const graphqlQuery = {
-      query: `query {
-        items {
-              id,
-              name,
-              total_needed,
-              total_received,
-              category
-        }
-      }`,
-    };
-
-    const options = {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify(graphqlQuery),
-      // Add Authorization
-    };
-
-    try {
-      const response = await fetch('/graphql', options);
-      const data = await response.json();
-      if (response.ok) {
-        if (mounted.current) {
-          setTableData(data.data.items);
-        }
-      }
-    } catch (err) {
-      console.error(err);
+    if (mounted.current) {
+      setTableData(data.items);
     }
-  };
 
-  const onSubmit = () => {
-    getTableData();
   };
 
   return (
@@ -93,7 +64,7 @@ function DashboardContent({ form, chart, table }) {
                   height: 390,
                 }}
               >
-                <AddNeed onSubmit={onSubmit} />
+                <AddNeed />
               </Paper>
             </Grid>
             {/* Donation summary stats */}

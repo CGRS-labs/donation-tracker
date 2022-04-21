@@ -10,6 +10,8 @@ import AddItem from './AddItem';
 import ItemTable from './ItemTable';
 import ChapterChart from './ChapterChart';
 import { UserContext } from '../../hooks/userContext';
+import queries from '../../models/queries';
+import { useQuery } from '@apollo/client';
 
 
 function DashboardContent() {
@@ -17,56 +19,31 @@ function DashboardContent() {
   const [tableData, setTableData] = useState([]);
   const { user } = useContext(UserContext);
   const mounted = useRef(true);
-
+  
+  if (!user) return;
+  const { data, loading, error } = useQuery(queries.chapterItemsQuery, {
+    variables: {
+      id: user.chapter_id || user.chapterId
+    },
+    displayName: 'getChapter',
+    notifyOnNetworkStatusChange: true
+  });
+  
   useEffect(() => {
+    if (loading) return <div>Loading...</div>;
+    mounted.current = true;
     updateTable();
     return () => () => mounted.current = false;
-  }, []);
-
+  }, [loading, data]);
+  
   const updateTable = async () => {
-    if (!user) return;
-
-    const headers = {
-      'content-type': 'application/json'
-    };
-
-    const graphqlQuery = {
-      query: `query chapter ($id: Int!) {
-          chapter (id: $id) {
-            items {
-              id,
-              name,
-              total_needed,
-              total_received,
-              category
-            }
-          }
-        }`,
-      variables: {
-        id: user.chapter_id || user.chapterId
-      },
-    };
-
-    const options = {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify(graphqlQuery),
-      // Add Authorization
-    };
-
-    try {
-      const response = await fetch('/graphql', options);
-      const data = await response.json();
-      if (response.ok) {
-        if (mounted.current) {
-          const sortedData = data.data.chapter.items.sort((a,b) => a.id - b.id);
-          setTableData(sortedData);
-        }
-      } else {
-        console.error(data);
-      }
-    } catch (err) {
-      console.error(err);
+    if (loading) return <div>Loading...</div>;
+    console.log(data);
+    if (mounted.current) {
+      const { chapter } = data;
+      setTableData(chapter.items);
+    } else {
+      console.error(data);
     }
   };
 

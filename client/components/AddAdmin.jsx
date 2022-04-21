@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -11,6 +11,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { InputLabel, Select } from '@mui/material';
+import { useQuery, useMutation } from '@apollo/client';
+import queries from '../models/queries';
 
 import useToken from '../hooks/useToken';
 
@@ -27,33 +29,18 @@ export default function SignUp() {
   });
   const [chapters, setChapters] = useState([]);
   const { token } = useToken();
+  const { data, loading, error } = useQuery(queries.chapters);
+  const [addUser, result] = useMutation(queries.addUser);
+
+  const mounted = useRef(true);
 
   // Get list of chapter ids
   useEffect(async () => {
-    const headers = {
-      'content-type': 'application/json',
-    };
-
-    const graphqlQuery = {
-      'query': `{
-        chapters{
-          name
-          id
-        }
-      }`,
-    };
-
-    const options = {
-      'method': 'POST',
-      'headers': headers,
-      'body': JSON.stringify(graphqlQuery)
-    };
-
-    fetch('/graphql', options)
-      .then(res => res.json())
-      .then(data => setChapters(data.data.chapters))
-      .catch(error => console.log(error));
-  }, []);
+    if (loading) return <div>Loading...</div>;
+    mounted.current = true;
+    if (mounted.current) setChapters(data.chapters);
+    return() => mounted.current = false;
+  }, [loading]);
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -63,16 +50,7 @@ export default function SignUp() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    const headers = {
-      "content-type": "application/json",
-    };
-    const graphqlQuery = {
-      query: `mutation addUser ($first_name: String!, $last_name: String!, $email: String!, $password: String!, $chapter_id: Int!) {
-  addUser (first_name: $first_name, last_name: $last_name, email: $email, password: $password, chapter_id: $chapter_id) {
-    first_name
-        }
-      }`,
+    return addUser({
       variables: {
         first_name: inputs.firstName,
         last_name: inputs.lastName,
@@ -80,22 +58,15 @@ export default function SignUp() {
         password: inputs.password,
         chapter_id: inputs.chapterId
       },
-    };
-
-    const options = {
-      method: "POST",
-      headers: headers,
-      body: JSON.stringify(graphqlQuery),
-    };
-
-    fetch("/graphql", options)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
+    })
+      .then(() => {
         // redirect to the dashboard
         navigate("/dashboard");
       })
-      .catch((error) => console.log(error));
+      .catch((err) => {
+        console.warn(error);
+        return <div>There was an error, please refresh and try again</div>;
+      });
   };
 
   return (

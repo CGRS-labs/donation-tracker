@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import queries from '../../models/queries';
+import { useQuery } from '@apollo/client';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,7 +12,6 @@ import {
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import categories from './categories';
-import { ContactSupportOutlined, ControlPointDuplicateRounded } from '@mui/icons-material';
 
 ChartJS.register(
   CategoryScale,
@@ -45,54 +46,29 @@ const backgroundColors = [
 
 export default function Chart() {
   const [chapters, setChapters] = useState([]);
+  const { data, loading, error } = useQuery(queries.allChapters);
 
   useEffect(async () => {
+    if (loading) return;
     let mounted = true;
-    const headers = {
-      'content-type': 'application/json'
-    };
-    const graphqlQuery = {
-      query: `query {
-        chapters {
-          name
-          id
-          items {
-            name
-            category
-            total_received
-          }
-        }
-      }`,
-    };
-    const options = {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify(graphqlQuery),
-      // Add Authorization
-    };
-
-    fetch('/graphql', options)
-      .then((res) => res.json())
-      .then((data) => {
-        const { chapters } = data.data;
-        if (!mounted) return;
-        // Process the data
-        // Get category counts by chapter
-        chapters.forEach((chapter, i) => {
-          console.log(chapter);
-          const { items } = chapter;
-          // reduce items to count by category
-          chapters[i].catCount = items.reduce((catCount, item) => {
-            catCount[item.category] = (catCount[item.category] || 0) + item.total_received;
-            return catCount;
-          }, {});
-        });
-        setChapters(chapters);
-      }
-      )
-      .catch((error) => console.log(error));
+    if (!mounted) return;
+    // Process the data
+    // Get category counts by chapter
+    const { chapters } = data;
+    const chaptersCount = [];
+    chapters.forEach((chapter, i) => {
+      chaptersCount[i] = {};
+      chaptersCount[i].name = chapter.name;
+      const { items } = chapter;
+      // reduce items to count by category
+      chaptersCount[i].catCount = items.reduce((catCount, item) => {
+        catCount[item.category] = (catCount[item.category] || 0) + item.total_received;
+        return catCount;
+      }, {});
+    });
+    setChapters(chaptersCount);
     return () => mounted = false;
-  }, []);
+  }, [loading]);
 
   const labels = chapters.map(chapter => chapter.name);
 
@@ -102,10 +78,10 @@ export default function Chart() {
     backgroundColor: backgroundColors[i % backgroundColors.length],
   }));
 
-  const data = {
+  const chartData = {
     labels,
     datasets
   };
 
-  return <Bar options={options} data={data} />;
+  return <Bar options={options} data={chartData} />;
 }

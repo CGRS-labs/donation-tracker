@@ -11,11 +11,14 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import useToken from '../../hooks/useToken';
 import { UserContext } from '../../hooks/userContext';
+import queries from '../../models/queries';
+import { useMutation } from '@apollo/client';
 
 export default function ItemTable({ updateTable, tableData }) {
   const [pageSize, setPageSize] = useState(15);
   const { token } = useToken();
   const { user } = useContext(UserContext);
+  const  [updateItem, { data, loading, error }] = useMutation(queries.updateItem);
 
   const modify = async (event, cellValues, method) => {
     event.preventDefault();
@@ -24,36 +27,13 @@ export default function ItemTable({ updateTable, tableData }) {
     const total = method === 'increment' ? 1 : -1;
     console.log(cellValues, 'total', cellValues.row.total_received);
 
-    const headers = {
-      'content-type': 'application/json',
-    };
-    const graphqlQuery = {
-      query: `mutation updateItem ($item_id: Int!, $total_received: Int!, $chapter_id: Int!) {
-            updateItem (item_id: $item_id, total_received: $total_received, chapter_id: $chapter_id) {
-          items {
-            name
-            total_received
-          }
-        }
-      }`,
+    return updateItem({
       variables: {
         item_id: itemId,
         chapter_id: user.chapter_id || user.chapterId,
-        total_received: total
+        total_received: total 
       },
-    };
-    const options = {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify(graphqlQuery),
-    };
-
-    fetch('/graphql', options)
-      .then(res => res.json())
-      .then(() => {
-        return updateTable();
-      })
-      .catch(error => console.log(error));
+    });
   };
 
   const shipIt = async (event, cellValues) => {

@@ -9,6 +9,8 @@ import WarehouseIcon from '@mui/icons-material/Warehouse';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import useToken from '../../hooks/useToken.js';
+import { useMutation } from '@apollo/client';
+import queries from '../../models/queries.js';
 
 export default function AddChapterPages() {
   const navigate = useNavigate();
@@ -21,6 +23,8 @@ export default function AddChapterPages() {
     phone: '',
     email: '',
   });
+
+  const [addChapter, {data, loading, error}] = useMutation(queries.addChapter);
 
   const mounted = useRef(true);
   // Track when clean up runs to prevent state update in handleSubmit after component unmounts
@@ -35,17 +39,7 @@ export default function AddChapterPages() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    const headers = {
-      'content-type': 'application/json',
-    };
-
-    const graphqlQuery = {
-      query: `mutation addChapter ($name: String!, $street: String!, $city: String!, $state: String!, $zip: String!, $phone: String!, $email: String!, $longitude: Float!, $latitude: Float!) {
-  addChapter (name: $name, street: $street, city: $city, state: $state, zip: $zip, phone: $phone, email: $email, longitude: $longitude, latitude: $latitude) {
-    name
-        }
-      }`,
+    return addChapter({
       variables: {
         name: inputs.name,
         street: inputs.street,
@@ -54,24 +48,16 @@ export default function AddChapterPages() {
         zip: inputs.zip,
         phone: inputs.phone,
         email: inputs.email,
-        // longitude: -82,
-        // latitude: 42,
-      },
-    };
-
-    const options = {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify(graphqlQuery),
-    };
-
-    fetch('/graphql', options)
-      .then((res) => res.json())
-      .then((data) => {
+      }
+    })
+      .then(() => {
         // redirect to the dashboard
         navigate('/dashboard');
       })
-      .catch((error) => console.log(error));
+      .catch(err => {
+        console.warn(err);
+        return <div>There was an error, please refresh and try again</div>;
+      });
   };
 
   return (

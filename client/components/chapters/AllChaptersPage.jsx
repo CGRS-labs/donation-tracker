@@ -11,42 +11,22 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { Link as RouterLink } from 'react-router-dom';
 import Link from '@mui/material/Link';
+import { useQuery } from '@apollo/client';
+import queries from '../../models/queries';
 
 
 export default function Album() {
 
   const [chapters, setChapters] = React.useState([]);
+  const { data, loading, error } = useQuery(queries.chapters);
+  const mounted = React.useRef(true);
 
   React.useEffect(async () => {
-    let mounted = true;
-
-    const headers = {
-      'content-type': 'application/json',
-    };
-
-    const graphqlQuery = {
-      'query': `{
-        chapters{
-          name
-          id
-        }
-      }`,
-    };
-
-    const options = {
-      'method': 'POST',
-      'headers': headers,
-      'body': JSON.stringify(graphqlQuery)
-    };
-
-    fetch('/graphql', options)
-      .then(res => res.json())
-      .then(data => setChapters(data.data.chapters))
-      .catch(error => console.log(error));
-
-
-    return () => mounted = false;
-  }, []);
+    if (loading) return <div>Loading...</div>;
+    mounted.current = true;
+    if (mounted.current) setChapters(data.chapters);
+    return () => mounted.current = false;
+  }, [loading]);
 
   return (
     <>

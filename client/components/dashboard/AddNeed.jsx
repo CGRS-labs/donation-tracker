@@ -9,11 +9,13 @@ import MenuItem from '@mui/material/MenuItem';
 import { InputLabel, Select } from '@mui/material';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import FormControl from '@mui/material/FormControl';
+import { useMutation, gql } from '@apollo/client';
+import queries from '../../models/queries.js';
 
 import categories from './categories.js';
 import useToken from '../../hooks/useToken.js';
 
-export default function AddNeed({ onSubmit }) {
+export default function AddNeed() {
   const [inputs, setInputs] = useState({
     item: '',
     category: '',
@@ -25,6 +27,7 @@ export default function AddNeed({ onSubmit }) {
   // Track when cleanuup runs to prevent state update in handleSubmit after component unmounts
   useEffect(() => () => mounted.current = false, []);
   const { token } = useToken();
+  const [addNeed, {data, loading, error}] = useMutation(queries.addNeed);
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -35,39 +38,44 @@ export default function AddNeed({ onSubmit }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const headers = {
-      'content-type': 'application/json',
-    };
-    const graphqlQuery = {
-      query: `mutation addNeed ($name: String!, $category: String!, $total_needed: Int!, $total_received: Int!) {
-            addNeed (name: $name, category: $category, total_needed: $total_needed, total_received: $total_received) {
-          name
-        }
-      }`,
+    return await addNeed({
       variables: {
         name: inputs.item,
         category: inputs.category,
         total_needed: parseInt(inputs.quantity),
         total_received: 0
       },
-    };
-    const options = {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify(graphqlQuery),
-    };
-
-    fetch('/graphql', options)
-      .then(res => res.json())
-      .then(data => {
+      refetchQueries: [queries.getItems],
+      update: (cache, { data: { addNeed }}) => {
+        cache.modify({
+          fields: {
+            items(existingItems = []) {
+              const newItemRef = cache.writeFragment({
+                data: addNeed,
+                fragment: gql`fragment NewItem on Item {
+                  id
+                  __typename
+                  name
+                  total_needed
+                  total_received
+                }`
+              });
+              return [...existingItems, newItemRef];
+            }
+          }
+        });
+      },
+      onQueryUpdated: (observableQuery) => {
+        return observableQuery.refetch();
+      }
+    })
+      .then(() => {
         setInputs({
           itemId: '',
           category: '',
           quantity: 0,
         });
-        onSubmit()
-      })
-      .catch(error => console.log(error));
+      });
   };
 
   return (
