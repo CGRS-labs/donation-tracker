@@ -12,7 +12,7 @@ const Sunflower = ({ height, width }) => {
         width: { width }
       }}
       alt="Sunflower"
-      src={Logo}
+      src={'http://localhost:3000/images/sunflower_white.svg'}
     />
 
   );

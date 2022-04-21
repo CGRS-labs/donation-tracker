@@ -2,7 +2,6 @@ import React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 
 const sortable = true;
-// const editable = true;
 
 const columns = [
   { field: 'id', headerName: 'id', hide: true, },

@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon server/server.js",
-    "dev": "concurrently 'webpack serve --open' 'nodemon server/server.js' 'nodemon server/graphqlServer.js'",
-    "win-dev": "cross-env webpack serve --open",
+    "dev": "concurrently 'NODE_ENV=development webpack serve --open' 'nodemon server/server.js'",
+    "build": "concurrently 'NODE_ENV=production webpack' 'nodemon server/server.js'",
+    "win-dev": "cross-env NODE_ENV=development webpack serve --open",
+    "win-build": "cross-env NODE_ENV=production webpack",
     "json-dev": "concurrently 'webpack serve --open' 'json-server --watch json-server/db.json --routes json-server/routes.json'",
     "test": "jest --detectOpenHandles",
     "gql": "nodemon server/graphqlServer.js"
@@ -30,6 +32,7 @@
   },
   "homepage": "https://github.com/CGRS-labs/donation-tracker#readme",
   "dependencies": {
+    "@apollo/client": "^3.5.10",
     "@babel/polyfill": "^7.12.1",
     "@emotion/react": "^11.8.2",
     "@emotion/styled": "^11.8.1",

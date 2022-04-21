@@ -2,8 +2,9 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 
+
 module.exports = {
-  mode: 'development',
+  mode: process.env.NODE_ENV,
   entry: path.resolve(__dirname, 'client/index.js'),
   output: {
     path: path.join(__dirname, 'build'),
@@ -32,10 +33,12 @@ module.exports = {
       {
         test: /\.css$/i,
         use: ['style-loader', 'css-loader'],
+        exclude: /node_modules/,
       },
       {
         test: /\.(png|svg|jpg|gif|jpe?g)$/,
-        type: 'asset/resource'
+        type: 'asset/resource',
+        exclude: /node_modules/,
       },
       {
         test: /\.js$/,
@@ -47,6 +50,7 @@ module.exports = {
   devServer: {
     proxy: {
       '/api': 'http://localhost:3000',
+      '/graphql': 'http://localhost:3000'
     },
     historyApiFallback: true,
     hot: true,

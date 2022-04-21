@@ -11,56 +11,22 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { Link as RouterLink } from 'react-router-dom';
 import Link from '@mui/material/Link';
+import { useQuery } from '@apollo/client';
+import queries from '../../models/queries';
 
 
 export default function Album() {
 
   const [chapters, setChapters] = React.useState([]);
+  const { data, loading, error } = useQuery(queries.chapters);
+  const mounted = React.useRef(true);
 
   React.useEffect(async () => {
-    let mounted = true;
-
-    // try {
-    //   const response = await fetch('/api/chapters');
-    //   const data = await response.json();
-    //   if (response.ok)
-    //     if (mounted) {
-    //       setChapters(data.chapters);
-    //     } else {
-    //       console.error(data.error);
-    //     };
-    // } catch (err) {
-    //   console.error(err);
-    // }
-
-
-    const headers = {
-      'content-type': 'application/json',
-    };
-
-    const graphqlQuery = {
-      'query': `{
-        chapters{
-          name
-          id
-        }
-      }`,
-    };
-
-    const options = {
-      'method': 'POST',
-      'headers': headers,
-      'body': JSON.stringify(graphqlQuery)
-    };
-
-    fetch('http://localhost:4000/graphql', options)
-      .then(res => res.json())
-      .then(data => setChapters(data.data.chapters))
-      .catch(error => console.log(error));
-
-
-    return () => mounted = false;
-  }, []);
+    if (loading) return <div>Loading...</div>;
+    mounted.current = true;
+    if (mounted.current) setChapters(data.chapters);
+    return () => mounted.current = false;
+  }, [loading]);
 
   return (
     <>
@@ -108,10 +74,6 @@ export default function Album() {
               >
                 <CardMedia
                   component="img"
-                  sx={{
-                    // 16:9
-                    // pt: '56.25%',
-                  }}
                   image="https://source.unsplash.com/random"
                   alt="random"
                 />
@@ -127,7 +89,6 @@ export default function Album() {
                   <Link to={`/chapter/${chapter.id}`} underline="none" component={RouterLink}>
                     <Button size="small">View</Button>
                   </Link>
-                  {/* <Button size="small">Edit</Button> */}
                 </CardActions>
               </Card>
             </Grid>

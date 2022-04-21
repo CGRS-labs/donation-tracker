@@ -9,9 +9,10 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-
+import queries from '../models/queries';
 import useToken from '../hooks/useToken';
 import { UserContext } from '../hooks/userContext';
+import { useMutation } from '@apollo/client';
 
 export default function Login() {
   const [inputs, setInputs] = useState({
@@ -23,45 +24,23 @@ export default function Login() {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
   const location = useLocation();
+  const [login, {data, loading, error}] = useMutation(queries.login);
 
   const handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
     setInputs(values => ({ ...values, [name]: value }));
   };
-  //change this to graphQl
-    //
   const handleSubmit = async (event) => {
-    event.preventDefault();
 
-    const graphqlQuery = {
-      query: `mutation login ($email: String!, $password: String!) {
-      login (email: $email, password: $password) {
-        user {
-          first_name
-          last_name
-          email
-          chapter_id
-        }
-        token
-      }
-    }`,
-      variables: {
+    event.preventDefault();
+    login({
+      variables:{
         email: inputs.email,
         password: inputs.password,
-      },
-    };
-
-    const options = {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(graphqlQuery),
-    };
-
-    fetch('http://localhost:4000/graphql', options)
-      .then(res => res.json())
+      }
+    })
       .then(res => {
-        console.log(res.data.login);
         setInputs({
           email: '',
           password: '',
@@ -69,8 +48,7 @@ export default function Login() {
         setToken(res.data.login.token);
         setUser({...res.data.login.user});
         navigate(location.state?.path || '/chapter/dashboard');
-      })
-      .catch(err => console.log(err));
+      });
   };
 
   return (

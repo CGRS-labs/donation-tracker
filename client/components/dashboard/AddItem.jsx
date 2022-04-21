@@ -9,6 +9,8 @@ import MenuItem from '@mui/material/MenuItem';
 import { InputLabel, Select } from '@mui/material';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import FormControl from '@mui/material/FormControl';
+import { useMutation, useQuery } from '@apollo/client';
+import queries from '../../models/queries.js';
 
 import categories from './categories.js';
 
@@ -17,7 +19,6 @@ import { UserContext } from '../../hooks/userContext.js';
 
 
 export default function AddItem({ updateTable }) {
-
   const [inputs, setInputs] = useState({
     itemId: '',
     category: '',
@@ -27,58 +28,17 @@ export default function AddItem({ updateTable }) {
   const { token } = useToken();
   const { user } = useContext(UserContext);
   const mounted = useRef(true);
+  const {data, loading, error} = useQuery(queries.getItems);
+  const  [updateItem, result] = useMutation(queries.updateItem);
 
   const canSave = inputs.category !== '' && inputs.itemId > -1 && inputs.total_received !== 0;
 
   useEffect(async () => {
-
-
-    const headers = {
-      'content-type': 'application/json',
-    };
-
-    const graphqlQuery = {
-      'query': `{
-        items{
-          id
-          name
-          total_needed
-          total_received
-          category
-        }
-      }`,
-    };
-
-    const options = {
-      'method': 'POST',
-      'headers': headers,
-      'body': JSON.stringify(graphqlQuery)
-    };
-
-    fetch('http://localhost:4000/graphql', options)
-      .then(res => res.json())
-      .then(data => setSelectItems(data.data.items))
-      .catch(error => console.log(error));
-
-
-    // try {
-    //   const response = await fetch('/api/items/');
-    //   const data = await response.json();
-
-    //   if (response.ok) {
-    //     if (mounted.current) {
-    //       setSelectItems(data.items);
-    //     }
-    //   } else {
-    //     console.error(data.error);
-    //   }
-    // } catch (err) {
-    //   console.error(err);
-    // }
-
-    // Track when cleanup runs to prevent state update in handleSubmit after component unmounts
+    if (loading) return;
+    mounted.current = true;
+    setSelectItems(data.items);
     return () => () => mounted.current = false;
-  }, []);
+  }, [loading, data]);
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -90,77 +50,14 @@ export default function AddItem({ updateTable }) {
     if (!canSave) return;
     event.preventDefault();
 
-    const headers = {
-      'content-type': 'application/json',
-    };
-    const graphqlQuery = {
-      query: `mutation updateItem ($item_id: Int!, $total_received: Int!, $chapter_id: Int!) {
-            updateItem (item_id: $item_id, total_received: $total_received, chapter_id: $chapter_id) {
-          items {
-            name
-            total_received
-          }
-        }
-      }`,
+    return updateItem({
       variables: {
         item_id: inputs.itemId,
-        chapter_id: user.chapterId,
+        chapter_id: user.chapterId || user.chapter_id,
         total_received: parseInt(inputs.total_received)
       },
-    };
-
-    const options = {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify(graphqlQuery),
-    };
-
-
-    fetch('http://localhost:4000/graphql', options)
-      .then(res => res.json())
-      .then(data => {
-        setInputs({
-          itemId: '',
-          category: '',
-          quantity: 0,
-        });
-        return updateTable();
-      })
-      .catch(error => console.log(error));
-
-
-    try {
-      const response = await fetch();
-    } catch (error) {
-
-    }
-
-    // try {
-
-    //   const response = await fetch(`/api/chapters/${user.chapterId}/items/`, {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       'Authorization': token
-    //     },
-    //     body: JSON.stringify(inputs),
-    //   });
-    //   if (response.ok) {
-    //     if (mounted.current) {
-    //       setInputs({
-    //         itemId: '',
-    //         category: '',
-    //         quantity: 0,
-    //       });
-    //     }
-    //     // A NEW GET REQUEST IS NEEDED TO FETCH TABLE DATA ONCE THIS ITEM IS ADDED
-    //     props.updateTable();
-    //   } else {
-    //     console.error(await response.json());
-    //   }
-    // } catch (err) {
-    //   console.error(err);
-    // }
+      refetchQueries: [queries.chapterItemsQuery]
+    });
   };
 
   const menuItems = selectItems
@@ -213,7 +110,6 @@ export default function AddItem({ updateTable }) {
               value={inputs.itemId || ''}
               input={<OutlinedInput label="Item" />}
               onChange={handleChange}
-            // disabled={menuItems.length === 0}
             >
               {menuItems.length === 0 && <MenuItem id={-1} value="None">No Items Available</MenuItem >}
               {menuItems}
