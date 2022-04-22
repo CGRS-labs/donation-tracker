@@ -1,0 +1,115 @@
+.userInput:focus .chat {
+    background-color: green;
+}
+
+.chat {
+    background-color: #0057b7;
+    box-shadow: 5px 10px 18px #888888;
+    height: 50px;
+    width: 50px;
+    border-radius: 100%;
+    position: fixed;
+    right: 2%;
+    top: 90%;
+    padding: 0;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    justify-content: center;
+    transition: .75s;
+    cursor: pointer;
+
+}
+
+.chat:hover {
+    background-color: #004084;
+    box-shadow: 10px 20px 36px #888888;
+}
+
+.chat.active {
+    background-color: #0057b7;
+    box-shadow: 5px 10px 18px #888888;
+    height: 400px;
+    width: 300px;
+    background-color: #0057b7;
+    border-radius: 10px;
+    padding: 10px;
+    position: fixed;
+    top: 43%;
+    right: 2%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
+}
+
+.chatCloseAndChapter {
+    display: none;
+}
+
+.chatCloseAndChapter.active {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 5px;
+}
+
+.chatCloseAndChapter p {
+    color: #fff;
+    font-size: .75em;
+    margin: auto;
+}
+
+.chatClose {
+    color: #fff;
+    cursor: pointer;
+}
+
+.chatMessages {
+    display: none;
+}
+
+.chatMessages.active {
+    /* display: block; */
+    display: flex;
+    flex-direction: column-reverse;
+    height: 75%;
+    width: 100%;
+    border-radius: 5px; 
+    padding: 10px;
+    background-color: #fff;
+    opacity: .9;
+    overflow-y: scroll;
+    overflow-wrap: break-word;
+}
+
+.chatMessage {
+    margin-bottom: 10px;
+}
+
+.chatForm {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.userInput {
+    display: none;
+}
+
+.userInput.active {
+    width: 100%;
+    height: 35px;
+    border-radius: 5px; 
+    background-color: #fff;
+    display: block;
+    outline: none;
+    border: none;
+    opacity: .9;
+    padding: 5px 15px;
+}
+
