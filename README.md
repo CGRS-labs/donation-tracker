@@ -1,5 +1,5 @@
-# Donation Tracker
-Donation tracker is a donation and chapter management system for charities.
+# Do Right Donations
+Do Right Donations is a donation and chapter management system for charities.
 
 ## Requirements
 1. A Node.js development environment.
